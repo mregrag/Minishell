@@ -6,7 +6,7 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/24 21:22:11 by mregrag           #+#    #+#             */
-/*   Updated: 2024/06/11 16:25:03 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/06/11 17:16:54 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,11 +22,11 @@ t_node	*parse_cmd(t_token **tokens)
 	cmd->cmd = malloc(sizeof(char *) * (cmd_count + 1));
 	if (!cmd->cmd)
 		return (NULL);
-	fill_cmd(cmd, tokens, cmd_count);
+	creat_cmd(cmd, tokens, cmd_count);
 	return (cmd);
 }
 
-t_node	*create_file_node(t_token *token)
+t_node	*create_file(t_token *token)
 {
 	t_node			*node;
 
@@ -64,7 +64,7 @@ t_node	*parse_redire(t_token **tokens)
 			node = new_node((*tokens)->next->type);
 			(*tokens)->next = next_token->next->next;
 			node->left = parse_redire(&tmp);
-			node->right = create_file_node((next_token->next));
+			node->right = create_file((next_token->next));
 			return (free(next_token->value), free(next_token), node);
 		}
 		*tokens = next_token;

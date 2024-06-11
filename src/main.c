@@ -6,7 +6,7 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/10 16:14:20 by mregrag           #+#    #+#             */
-/*   Updated: 2024/06/11 15:44:04 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/06/11 19:18:19 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,8 @@ int main(int argc, char **argv, char **env)
 		add_history(input);
 		tokens = tokenize_input(input);
 		tree = parse_tokens(&tokens);
+		// printf("type left  = %d\n", tree->left->type);
+		// printf("type right = %d\n", tree->right->type);
 		out = dup(STDOUT_FILENO);
 		in = dup(STDIN_FILENO);
 		executing(tree);

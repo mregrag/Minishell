@@ -6,7 +6,7 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/10 16:16:44 by mregrag           #+#    #+#             */
-/*   Updated: 2024/06/11 16:00:50 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/06/11 18:04:47 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,49 +31,42 @@
 
 #define ERROR_SYNTAX "syntax error near unexpected token"
 
-#define READ_END 0
-#define WRITE_END 1
-#define FATAL_SIGNAL 128
-#define CMD_N_FOUND 127
-#define NOT_EXEC 126
-#define INCORRECT_USAGE 258
 
 typedef enum e_token_type {
-  T_WORD,
-  T_PIPE,
-  T_IN,
-  T_OUT,
-  T_APPEND,
-  T_HERDOC,
-  NOT
+	T_WORD,
+	T_PIPE,
+	T_IN,
+	T_OUT,
+	T_APPEND,
+	T_HERDOC,
 } t_token_type;
 
 typedef struct s_token {
-  t_token_type type;
-  char *value;
-  struct s_token *next;
+	t_token_type type;
+	char *value;
+	struct s_token *next;
 } t_token;
 
 typedef struct s_env {
-  char *env;
-  struct s_env *next;
+	char *env;
+	struct s_env *next;
 } t_env;
 
 typedef struct s_node {
-  t_token_type type;
-  char **cmd;
-  int fd[2];
-  int flg;
-  int fdh;
-  struct s_node *left;
-  struct s_node *right;
+	t_token_type type;
+	char **cmd;
+	int fd[2];
+	int flg;
+	int fdh;
+	struct s_node *left;
+	struct s_node *right;
 } t_node;
 
 typedef struct s_gb {
-  int exit_status;
-  int signal;
-  char *dpath;
-  t_env *env;
+	int exit_status;
+	int signal;
+	char *dpath;
+	t_env *env;
 } t_gb;
 
 extern t_gb minish;
@@ -137,7 +130,7 @@ void quotes_error(char c);
 int append_identifier(char **line_ptr, t_token **token_list);
 
 int append_separator(t_token_type type, char **line_ptr, t_token **token_list,
-                     char *value);
+		char *value);
 
 void clear_token(t_token **lst);
 void token_add_back(t_token **lst, t_token *new_token);
@@ -188,7 +181,7 @@ t_node *parse_tokens(t_token **tokens);
 t_node *new_node(t_token_type type);
 void free_treet(t_node *node);
 t_node *create_redire(t_token **tokens, t_token *tmp);
-void fill_cmd(t_node *node, t_token **tokens, int count);
+void creat_cmd(t_node *node, t_token **tokens, int count);
 
 void exec_pipe(t_node *root);
 
@@ -198,7 +191,7 @@ void setup_signal(void);
 void init_minishell(t_gb *msh, char **envp);
 
 int ft_redir(t_node *node);
-t_node *create_file_node(t_token *token);
+t_node *create_file(t_token *token);
 int ft_open(const char *path, int oflag, mode_t mode);
 int redirections(t_node *node);
 

@@ -6,13 +6,14 @@
 #    By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/05/10 16:12:48 by mregrag           #+#    #+#              #
-#    Updated: 2024/06/09 18:07:16 by mregrag          ###   ########.fr        #
+#    Updated: 2024/06/11 18:52:50 by mregrag          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = minishell
 CC = cc
-FALGS = -Wall -Wextra -Werror  -fsanitize=address -fno-omit-frame-pointer -g2
+FSS = fsanitize=address -fno-omit-frame-pointer -g2
+FALGS = -Wall -Wextra -Werror
 HEADER = ./include/minishell.h
 RM = rm -rf
 

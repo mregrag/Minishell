@@ -6,7 +6,7 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/07 18:05:58 by mregrag           #+#    #+#             */
-/*   Updated: 2024/06/11 15:56:47 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/06/11 19:21:46 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,15 +71,6 @@ int	fd_out(t_node *node)
 	return (0);
 }
 
-ssize_t	_write_(int fildes, const char *buf, size_t nbyte)
-{
-	if (write(fildes, buf, nbyte) < 0)
-		return (print_error("minish", "write", strerror(errno), NULL),
-			exit_status(1), -1);
-	return (0);
-}
-
-
 int	handle_heredoc(char *delim)
 {
 	int		fd[2];
@@ -97,7 +88,7 @@ int	handle_heredoc(char *delim)
 		}
 		save = ft_strjoin(input, "\n");
 		(free(input), input = save);
-		_write_(fd[1], input, ft_strlen(input));
+		ft_putstr_fd(input, fd[1]);
 		(free(input), input = NULL);
 	}
 	return (close(fd[1]), fd[0]);
@@ -115,7 +106,7 @@ int	redirections(t_node *node)
 	t_node	*current;
 
 	current = node;
-	while (current)
+	while (current->left)
 	{
 		if (current->type == T_HERDOC)
 		{
