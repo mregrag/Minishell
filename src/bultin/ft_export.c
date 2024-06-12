@@ -6,19 +6,11 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/18 18:50:47 by mregrag           #+#    #+#             */
-/*   Updated: 2024/06/06 22:41:33 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/06/12 23:51:59 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
-
-static int	export_error(char *identifier)
-{
-	ft_putstr_fd("minishell: export: `", 2);
-	ft_putstr_fd(identifier, 2);
-	ft_putstr_fd("': not a valid identifier\n", 2);
-	return (1);
-}
 
 static	void	export_list(void)
 {
@@ -27,7 +19,7 @@ static	void	export_list(void)
 	env = minish.env;
 	while (env)
 	{
-		printf("declare -x %s=\"", env->env);
+		printf("declare -x %s\"", env->env);
 		printf("\n");
 		env = env->next;
 	}
@@ -72,7 +64,10 @@ int	ft_export(char **argv)
 	while (*(++argv))
 	{
 		if (!check_var(*argv))
-			exit_status(export_error(*argv));
+		{
+			print_error("minish","export", *argv, "not a valid identifier");
+			exit_status(1);
+		}
 		else
 			add_arg_to_env(*argv);
 	}

@@ -6,7 +6,7 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/24 21:22:11 by mregrag           #+#    #+#             */
-/*   Updated: 2024/06/11 17:16:54 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/06/12 00:19:22 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ t_node	*create_file(t_token *token)
 	node->cmd = malloc(sizeof(char *) * 2);
 	if (!node->cmd)
 		return (free(node), NULL);
-	node->cmd[0] = ft_expand(token->value);
+	node->cmd[0] = expand_file(token->value);
 	node->cmd[1] = NULL;
 	node->type = token->type;
 	node->left = NULL;
@@ -107,18 +107,18 @@ static int	check_syntax(t_token *tokens)
 			return (0);
 		}
 	}
-	// while (tokens != NULL)
-	// {
-	// 	if ((tokens->type >= T_IN && tokens->type <= T_HERDOC) || tokens->type == T_PIPE)
-	// 	{
-	// 		if (!tokens->next || tokens->next->type != T_WORD)
-	// 		{
-	// 			print_error("minish", "syntax error near unexpected token `newline'", NULL, NULL);
-	// 			return (0);
-	// 		}
-	// 	}
-	// 	tokens = tokens->next;
-	// }
+	while (tokens != NULL)
+	{
+		if ((tokens->type >= T_IN && tokens->type <= T_HERDOC) || tokens->type == T_PIPE)
+		{
+			if (!tokens->next || tokens->next->type != T_WORD)
+			{
+				print_error("minish", "syntax error near unexpected token `newline'", NULL, NULL);
+				return (0);
+			}
+		}
+		tokens = tokens->next;
+	}
 	return (1);
 }
 

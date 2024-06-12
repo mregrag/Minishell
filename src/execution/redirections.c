@@ -6,7 +6,7 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/07 18:05:58 by mregrag           #+#    #+#             */
-/*   Updated: 2024/06/11 19:21:46 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/06/13 00:22:37 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ int	fd_out(t_node *node)
 	return (0);
 }
 
-int	handle_heredoc(char *delim)
+int	handle_heredoc(t_node *node)
 {
 	int		fd[2];
 	char	*input;
@@ -81,7 +81,7 @@ int	handle_heredoc(char *delim)
 	while (1)
 	{
 		input = readline("> ");
-		if (!input || !ft_memcmp(input, delim, ft_strlen(input) + 1))
+		if (!input || !ft_strncmp(input, node->right->cmd[0], ft_strlen(input)))
 		{
 			free(input);
 			break ;
@@ -94,31 +94,22 @@ int	handle_heredoc(char *delim)
 	return (close(fd[1]), fd[0]);
 }
 
-static	int	handle_in_out(t_node *root)
-{
-	if (fd_in(root) < 0 || fd_out(root) < 0)
-		return (-1);
-	return (0);
-}
-
 int	redirections(t_node *node)
 {
 	t_node	*current;
 
 	current = node;
-	while (current->left)
+	while (current)
 	{
 		if (current->type == T_HERDOC)
 		{
-			current->fdh = handle_heredoc(current->right->cmd[0]);
+			current->fdh = handle_heredoc(current);
 			if (current->fdh < 0)
 				return (-1);
 		}
-		if (!current->left)
-			break;
 		current = current->left;
 	}
-	if (handle_in_out(node) < 0)
+	if (fd_in(node) < 0 || fd_out(node) < 0)
 		return (-1);
 	return (0);
 }
@@ -128,8 +119,10 @@ int	ft_redir(t_node *node)
 	if (redirections(node) < 0)
 		return (0);
 	if (node->fd[0] != 0)
+
 		if (dup2(node->fd[0], STDIN_FILENO) < 0)
 			return (0);
+	printf("fd = %d\n", node->fd[0]);
 	if (node->fd[1] != 1)
 		if (dup2(node->fd[1], STDOUT_FILENO) < 0)
 			return (0);

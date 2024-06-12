@@ -6,7 +6,7 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/10 16:16:44 by mregrag           #+#    #+#             */
-/*   Updated: 2024/06/11 18:04:47 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/06/12 22:13:15 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,7 @@ typedef struct s_gb {
 	int exit_status;
 	int signal;
 	char *dpath;
+	int	fd[2];
 	t_env *env;
 } t_gb;
 
@@ -142,8 +143,8 @@ void initialize(char **env);
 
 //------------------------------------execution------------------------------------
 
-void executing(t_node *root);
-void exec_cmd(t_node *root);
+void executing(t_node *node);
+void exec_cmd(t_node *node);
 char *get_path_command(char *cmd);
 char *find_path(char **env);
 int is_builtin(char **arg);
@@ -165,7 +166,8 @@ char *get_env_var(char *var);
 //---------------------expanding-------------------------------
 
 char *remov_quotes(char *str);
-char *ft_expand(char *str);
+char *expand_cmd(char *str);
+char *expand_heredoc(char *str);
 bool ft_is_valid_var_char(char c);
 char *handle_str(char *str, size_t *i);
 char *handle_sq(char *str, size_t *i);
@@ -183,7 +185,7 @@ void free_treet(t_node *node);
 t_node *create_redire(t_token **tokens, t_token *tmp);
 void creat_cmd(t_node *node, t_token **tokens, int count);
 
-void exec_pipe(t_node *root);
+void exec_pipe(t_node *node);
 
 //-----------------------signals------------------
 void setup_signal(void);
@@ -194,5 +196,6 @@ int ft_redir(t_node *node);
 t_node *create_file(t_token *token);
 int ft_open(const char *path, int oflag, mode_t mode);
 int redirections(t_node *node);
+char	*expand_file(char *str);
 
 #endif

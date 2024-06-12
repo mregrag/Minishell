@@ -6,7 +6,7 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/17 22:58:39 by mregrag           #+#    #+#             */
-/*   Updated: 2024/06/11 19:06:42 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/06/12 19:32:22 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ char	*get_path_command(char *cmd)
 		path = ft_strjoin(*paths, "/");
 		cmd_path = ft_strjoin(path, cmd);
 		free (path);
+		path = NULL;
 		if (access(cmd_path, F_OK | X_OK) == 0)
 			return (cmd_path);
 		free(cmd_path);
@@ -61,7 +62,6 @@ void	exec_cmd(t_node *node)
 			return ;
 		while (node->left)
 			node = node->left;
-		executing(node->left);
 	}
 	if (node->cmd && node->cmd[0] && !is_builtin(node->cmd))
 	{
@@ -70,6 +70,7 @@ void	exec_cmd(t_node *node)
 			return ;
 		child_exec(node, path, &status);
 		free(path);
+		path = NULL;
 		exit_status(WEXITSTATUS(status));
 	}
 }
