@@ -6,7 +6,7 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/10 16:16:44 by mregrag           #+#    #+#             */
-/*   Updated: 2024/06/23 19:02:08 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/06/23 22:35:41 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,8 +71,11 @@ typedef struct s_gb {
 
 extern t_gb minish;
 
+int heredoc(t_node *node);
+int	fd_heredoc(t_node *node);
 int	ft_close(int fd);
 int	ft_heredoc(t_node *node);
+int	*setup_heredocs(t_node *node, int *heredoc_count);
 pid_t	ft_fork(void);
 int	ft_pipe(int ends[2]);
 int	ft_dup2(int filde1, int filde2);
