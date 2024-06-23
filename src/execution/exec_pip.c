@@ -6,7 +6,7 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/24 22:43:10 by mregrag           #+#    #+#             */
-/*   Updated: 2024/06/13 00:20:52 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/06/23 18:42:22 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,35 +14,44 @@
 
 static	pid_t	left_pipe(t_node *node, int fd[2])
 {
-	pid_t	pd;
+	pid_t	pid;
 
-	pd = fork();
-	if (pd == 0)
+	pid = fork();
+	if (pid < 0)
+		return (-1);
+	if (pid == 0)
 	{
-		if (dup2(fd[1], STDOUT_FILENO) < 0)
+		if (ft_dup2(fd[1], STDOUT_FILENO) < 0)
 			return (-1);
-		close(fd[0]);
-		close(fd[1]);
+		if (ft_close(fd[1]) < 0)
+			return (-1);
+		if (ft_close(fd[0]) < 0)
+			return (-1);
 		executing(node);
 		exit(minish.exit_status);
 	}
-	return (pd);
+	return (pid);
 }
 
 static	pid_t	right_pipe(t_node *node, int fd[2])
 {
-	pid_t	pd;
+	pid_t	pid;
 
-	if (pd == 0)
+	pid = fork();
+	if (pid < 0)
+		return (-1);
+	if (pid == 0)
 	{
-		if (dup2(fd[0], STDIN_FILENO) < 0)
+		if (ft_dup2(fd[0], STDIN_FILENO) < 0)
 			return (-1);
-		close(fd[1]);
-		close(fd[0]);
+		if (ft_close(fd[1]) < 0)
+			return (-1);
+		if (ft_close(fd[0]) < 0)
+			return (-1);
 		executing(node);
 		exit(minish.exit_status);
 	}
-	return (pd);
+	return (pid);
 }
 
 void	exec_pipe(t_node *node)
@@ -52,7 +61,7 @@ void	exec_pipe(t_node *node)
 	int		status;
 	int		fd[2];
 
-	if (pipe(fd) < 0)
+	if (ft_pipe(fd) < 0)
 		return ;
 	pid_write = left_pipe(node->left, fd);
 	if (pid_write < 0)
@@ -60,8 +69,10 @@ void	exec_pipe(t_node *node)
 	pid_read = right_pipe(node->right, fd);
 	if (pid_read < 0)
 		return ;
-	close(fd[1]);
-	close(fd[0]);
+	if (ft_close(fd[1]) < 0)
+		return ;
+	if (ft_close(fd[0]) < 0)
+		return ;
 	waitpid(pid_read, &status, 0);
 	waitpid(pid_write, &status, 0);
 	exit_status(status);

@@ -6,7 +6,7 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/10 16:16:44 by mregrag           #+#    #+#             */
-/*   Updated: 2024/06/12 22:13:15 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/06/23 19:02:08 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,8 +28,13 @@
 #include <sys/param.h>
 #include <sys/wait.h>
 #include <unistd.h>
+#include "../lib/libft/libft.h"
+
 
 #define ERROR_SYNTAX "syntax error near unexpected token"
+
+
+
 
 
 typedef enum e_token_type {
@@ -47,17 +52,10 @@ typedef struct s_token {
 	struct s_token *next;
 } t_token;
 
-typedef struct s_env {
-	char *env;
-	struct s_env *next;
-} t_env;
 
 typedef struct s_node {
 	t_token_type type;
 	char **cmd;
-	int fd[2];
-	int flg;
-	int fdh;
 	struct s_node *left;
 	struct s_node *right;
 } t_node;
@@ -66,61 +64,40 @@ typedef struct s_gb {
 	int exit_status;
 	int signal;
 	char *dpath;
-	int	fd[2];
-	t_env *env;
+	int	input;
+	int	output;
+	t_list *env;
 } t_gb;
 
 extern t_gb minish;
 
-int ft_atoi(const char *str);
-void ft_putstr_fd(char *s, int fd);
-void ft_putchar_fd(char c, int fd);
-void ft_lstadd_back(t_env **lst, t_env *new);
-void ft_lstadd_front(t_env **lst, t_env *new);
-int ft_lstsize(t_env *lst);
-int ft_strcmp(const char *s1, const char *s2);
-int ft_strncmp(const char *s1, const char *s2, size_t n);
-char *ft_strdup(const char *s);
-char *ft_strjoin(char const *s1, char const *s2);
-char *ft_strchr(const char *s, int c);
-char *ft_strtrim(char const *s1, char const *set);
-char *ft_substr(const char *s, unsigned int start, size_t len);
-size_t ft_strlen(const char *s);
-size_t ft_strlcpy(char *dst, const char *src, size_t dstsize);
-void *ft_calloc(size_t count, size_t size);
-int ft_isspace(char c);
-char **ft_split(char const *s, char c);
+int	ft_close(int fd);
+int	ft_heredoc(t_node *node);
+pid_t	ft_fork(void);
+int	ft_pipe(int ends[2]);
+int	ft_dup2(int filde1, int filde2);
 int ft_isalpha(int c);
-int ft_isalnum(int c);
-int ft_isdigit(int c);
 char *ft_strjoin_f(char *s1, char *s2);
 int ft_lstsize_token(t_token *lst);
-int ft_memcmp(const void *s1, const void *s2, size_t n);
-char *ft_itoa(int n);
 int ft_isdollar(int c);
 int ft_issamechar(char *str, int c);
 int ft_isoddeven_char(char *str, int c);
-void *ft_memset(void *b, int c, size_t len);
-void ft_bzero(void *s, size_t n);
-t_env *ft_lstnew(char *content);
-void ft_lstclear(t_env **lst, void (*del)(void *));
 char *ft_getenv(char *key);
-void create_environment_var(char *token_str, t_env **env);
-void update_environment_var(char *var, char *new_value, t_env *env);
+void create_environment_var(char *token_str, t_list **env);
+void update_environment_var(char *var, char *new_value, t_list *env);
 void replace_one_var(char **str);
 char *replace_env_value(char **env_ptr, char *var_name, char *new_value);
-void update_env_var(char *var, char *new_value, t_env *env);
+void update_env_var(char *var, char *new_value, t_list *env);
 size_t ft_strlen_arg(char **args);
 
-void create_env_var(char *token_str, t_env **env);
-char **ft_list_to_arr(t_env *lst);
+void create_env_var(char *token_str, t_list **env);
 
-int is_env_var(char *var, t_env *env);
+int is_env_var(char *var, t_list *env);
 
 t_token *tokenize_input(char *s);
 void exit_status(int status);
 void update_env_val(char *value, char *var);
-void update_env_var(char *var, char *new_value, t_env *env);
+void update_env_var(char *var, char *new_value, t_list *env);
 
 int ft_isquotes(int c);
 int is_separator(char *s);
@@ -192,10 +169,11 @@ void setup_signal(void);
 
 void init_minishell(t_gb *msh, char **envp);
 
-int ft_redir(t_node *node);
+int redirections(t_node *node);
 t_node *create_file(t_token *token);
 int ft_open(const char *path, int oflag, mode_t mode);
 int redirections(t_node *node);
 char	*expand_file(char *str);
+void	set_fd(int in, int out);
 
 #endif

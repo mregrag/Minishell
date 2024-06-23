@@ -6,7 +6,7 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 20:13:20 by mregrag           #+#    #+#             */
-/*   Updated: 2024/06/05 19:00:37 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/06/23 16:17:15 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ void	ft_skip_spaces(char **str)
 		(*str)++;
 }
 
-int	ft_is_quote(char c)
+int	ft_isquotes(int c)
 {
 	return (c == 39 || c == 34);
 }

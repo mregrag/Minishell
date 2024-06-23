@@ -6,7 +6,7 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/17 22:58:39 by mregrag           #+#    #+#             */
-/*   Updated: 2024/06/12 19:32:22 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/06/23 17:51:50 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ void	exec_cmd(t_node *node)
 
 	if (node->type >= T_IN && node->type <= T_HERDOC)
 	{
-		if (!ft_redir(node))
+		if (!redirections(node))
 			return ;
 		while (node->left)
 			node = node->left;

@@ -6,7 +6,7 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/24 21:22:11 by mregrag           #+#    #+#             */
-/*   Updated: 2024/06/12 00:19:22 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/06/23 13:22:38 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ t_node	*build_tree(t_token **tokens)
 {
 	t_token		*tmp;
 	t_token		*next_token;
-	t_node		*pipe_node;
+	t_node		*node;
 
 	tmp = *tokens;
 	while (*tokens && (*tokens)->next)
@@ -84,13 +84,13 @@ t_node	*build_tree(t_token **tokens)
 		next_token = (*tokens)->next;
 		if ((*tokens)->next->type == T_PIPE)
 		{
-			pipe_node = new_node(T_PIPE);
+			node = new_node(T_PIPE);
 			(*tokens)->next = NULL;
-			pipe_node->left = parse_redire(&tmp);
-			pipe_node->right = build_tree(&(next_token->next));
+			node->left = parse_redire(&tmp);
+			node->right = build_tree(&(next_token->next));
 			free(next_token->value);
 			free(next_token);
-			return (pipe_node);
+			return (node);
 		}
 		*tokens = next_token;
 	}

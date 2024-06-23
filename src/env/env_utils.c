@@ -6,7 +6,7 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 16:25:14 by mregrag           #+#    #+#             */
-/*   Updated: 2024/06/05 22:09:46 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/06/23 16:08:08 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 char	*ft_getenv(char *key)
 {
 	int		i;
-	t_env	*envp;
+	t_list	*envp;
 	char	*tmp;
 	char	*value;
 
@@ -23,7 +23,7 @@ char	*ft_getenv(char *key)
 	while (envp)
 	{
 		i = 0;
-		tmp = envp->env;
+		tmp = envp->content;
 		while (key[i] && tmp[i] && (key[i] == tmp[i]))
 			i++;
 		if (!key[i] && (tmp[i] == '=' || tmp[i] == '\0'))
@@ -77,7 +77,7 @@ void	replace_one_var(char **str)
 	*str = trim;
 }
 
-void	update_env_var(char *var, char *value, t_env *env)
+void	update_env_var(char *var, char *value, t_list *env)
 {
 	int		i;
 	char	*cur_env;
@@ -85,11 +85,11 @@ void	update_env_var(char *var, char *value, t_env *env)
 	while (env)
 	{
 		i = 0;
-		cur_env = (env->env);
+		cur_env = (env->content);
 		while (var[i] && cur_env[i] && (var[i] == cur_env[i]))
 			i++;
 		if (!var[i] && (cur_env[i] == '=' || cur_env[i] == '\0' ))
-			env->env = replace_env_value(&cur_env, var, value);
+			env->content = replace_env_value(&cur_env, var, value);
 		env = env->next;
 	}
 }

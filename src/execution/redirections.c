@@ -6,129 +6,87 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/07 18:05:58 by mregrag           #+#    #+#             */
-/*   Updated: 2024/06/13 00:22:37 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/06/23 18:05:46 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-int	fd_in(t_node *node)
-{
-	int		fd;
-	t_node		*current;
-
-	fd = 0;
-	current = node;
-	while (current->left)
-	{
-		if (current->type == T_IN)
-		{
-			if (fd)
-				close(fd);
-			fd = ft_open(current->right->cmd[0], O_RDONLY, 00644);
-		}
-		else if (current->type == T_HERDOC)
-		{
-			if (fd)
-				close(fd);
-			fd = current->fdh;
-		}
-		if (fd < 0)
-			return (-1);
-		current = current->left;
-	}
-	node->fd[0] = fd;
-	return (0);
-}
-
-int	fd_out(t_node *node)
-{
-	int		fd;
-	t_node *current;
-
-	fd = 1;
-
-	current = node;
-	while (current->left)
-	{
-		if (current->type == T_OUT)
-		{
-			if (fd != 1)
-				close(fd);
-			fd = ft_open(current->right->cmd[0], (O_CREAT | O_WRONLY | O_TRUNC), 00644);
-		}
-		else if (current->type == T_APPEND)
-		{
-			if (fd != 1)
-				close(fd);
-			fd = ft_open(current->right->cmd[0], (O_CREAT | O_WRONLY | O_APPEND), 00644);
-		}
-		if (fd < 0)
-			return (-1);
-		current = current->left;
-	}
-	node->fd[1] = fd;
-	return (0);
-}
-
-int	handle_heredoc(t_node *node)
+static int	heredoc(t_node *node)
 {
 	int		fd[2];
-	char	*input;
-	char	*save;
+	char	*str;
 
-	pipe(fd);
+	if (ft_pipe(fd) < 0)
+		return (-1);
 	while (1)
 	{
-		input = readline("> ");
-		if (!input || !ft_strncmp(input, node->right->cmd[0], ft_strlen(input)))
+		str = readline("> ");
+		if (!str || ft_strcmp(str, node->right->cmd[0]) == 0)
 		{
-			free(input);
+			free(str);
 			break ;
 		}
-		save = ft_strjoin(input, "\n");
-		(free(input), input = save);
-		ft_putstr_fd(input, fd[1]);
-		(free(input), input = NULL);
+		write(fd[1], str, ft_strlen(str));
+		write(fd[1], "\n", 1);
+		free(str);
+		str = NULL;
 	}
-	return (close(fd[1]), fd[0]);
+	close(fd[1]);
+	return (fd[0]);
+}
+
+static int	redir_input(t_node *node)
+{
+	int		fd;
+	t_node	*tmp;
+
+	fd = 0;
+	tmp = node;
+	while (tmp)
+	{
+		if (tmp->type == T_IN)
+			fd = ft_open(tmp->right->cmd[0], O_RDONLY, 00644);
+		else if (tmp->type == T_HERDOC)
+			fd = heredoc(tmp);
+		if (fd < 0)
+			return (-1);
+		tmp = tmp->left;
+	}
+	if (fd != 0 && ft_dup2(fd, STDIN_FILENO) < 0)
+		return (0);
+	if (fd != 0)
+		close(fd);
+	return (0);
+}
+
+static int	redire_output(t_node *node)
+{
+	int		fd;
+	t_node	*tmp;
+
+	fd = 1;
+	tmp = node;
+	while (tmp)
+	{
+		if (tmp->type == T_OUT)
+			fd = ft_open(tmp->right->cmd[0], (O_CREAT | O_WRONLY | O_TRUNC), 00644);
+		else if (tmp->type == T_APPEND)
+			fd = ft_open(tmp->right->cmd[0], (O_CREAT | O_WRONLY | O_APPEND), 00644);
+		if (fd < 0)
+			return (-1);
+		tmp = tmp->left;
+	}
+	if (fd != 1 && ft_dup2(fd, STDOUT_FILENO) < 0)
+		return (0);
+	if (fd != 1)
+		close(fd);
+	return (0);
 }
 
 int	redirections(t_node *node)
 {
-	t_node	*current;
-
-	current = node;
-	while (current)
-	{
-		if (current->type == T_HERDOC)
-		{
-			current->fdh = handle_heredoc(current);
-			if (current->fdh < 0)
-				return (-1);
-		}
-		current = current->left;
-	}
-	if (fd_in(node) < 0 || fd_out(node) < 0)
+	if (redir_input(node) < 0 || redire_output(node) < 0)
 		return (-1);
-	return (0);
-}
-
-int	ft_redir(t_node *node)
-{
-	if (redirections(node) < 0)
-		return (0);
-	if (node->fd[0] != 0)
-
-		if (dup2(node->fd[0], STDIN_FILENO) < 0)
-			return (0);
-	printf("fd = %d\n", node->fd[0]);
-	if (node->fd[1] != 1)
-		if (dup2(node->fd[1], STDOUT_FILENO) < 0)
-			return (0);
-	if (node->fd[0] != 0)
-		close(node->fd[0]);
-	if (node->fd[1] != 1)
-		close(node->fd[1]);
 	return (1);
 }

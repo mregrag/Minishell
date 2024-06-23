@@ -6,14 +6,13 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 16:22:51 by mregrag           #+#    #+#             */
-/*   Updated: 2024/06/08 21:27:20 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/06/23 18:59:17 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
-#include <unistd.h>
 
-int	is_env_var(char *var, t_env *env)
+int	is_env_var(char *var, t_list *env)
 {
 	int		i;
 	char	*envstr;
@@ -21,7 +20,7 @@ int	is_env_var(char *var, t_env *env)
 	while (env)
 	{
 		i = 0;
-		envstr = (char *)env->env;
+		envstr = (char *)env->content;
 		while (var[i] && envstr[i] && (var[i] == envstr[i]))
 			i++;
 		if (!var[i] && (envstr[i] == '=' || !envstr[i]))
@@ -31,9 +30,9 @@ int	is_env_var(char *var, t_env *env)
 	return (0);
 }
 
-void	create_env_var(char *token_str, t_env **env)
+void	create_env_var(char *token_str, t_list **env)
 {
-	t_env	*new_var;
+	t_list	*new_var;
 	char	*new_var_str;
 
 	new_var_str = ft_strdup(token_str);
@@ -59,7 +58,7 @@ void	increment_shlvl(void)
 	}
 }
 
-void	duplicate_env(t_env **env, char **envp)
+void	duplicate_env(t_list **env, char **envp)
 {
 	char	*tmp;
 	char	buf[PATH_MAX];
@@ -83,10 +82,20 @@ void	duplicate_env(t_env **env, char **envp)
 	}
 }
 
+static	void	duplicate_fd(void)
+{
+	minish.input = dup(STDIN_FILENO);
+	minish.output = dup(STDOUT_FILENO);
+}
+
+void	set_fd(int in, int out)
+{
+	dup2(in, STDIN_FILENO);
+	dup2(out, STDOUT_FILENO);
+}
 void	init_minishell(t_gb *minish, char **envp)
 {
-	// if (!isatty(STDIN_FILENO))
-	// 	exit(EXIT_FAILURE);
+	duplicate_fd();
 	ft_bzero(minish, sizeof(t_gb));
 	duplicate_env(&minish->env, envp);
 	increment_shlvl();
