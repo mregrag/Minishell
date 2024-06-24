@@ -6,56 +6,44 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/07 18:05:58 by mregrag           #+#    #+#             */
-/*   Updated: 2024/06/23 22:50:58 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/06/24 17:47:53 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-int heredoc(t_node *node)
+int	heredoc(t_node *node)
 {
-    int     fd[2];
-    char    *str;
-    pid_t   pid;
+	int		fd[2];
+	char	*str;
+	pid_t	pid;
 
-    if (pipe(fd) < 0)
-        return (-1);
-
-    pid = fork();
-    if (pid < 0)
-    {
-        close(fd[0]);
-        close(fd[1]);
-        return (-1);
-    }
-
-    if (pid == 0)
-    {
-        close(fd[0]);
-        while (1)
-        {
-            str = readline("> ");
-            if (!str || ft_strcmp(str, node->right->cmd[0]) == 0)
-            {
-                free(str);
-                close(fd[1]);
-                exit(0);
-            }
-            write(fd[1], str, ft_strlen(str));
-            write(fd[1], "\n", 1);
-            free(str);
-        }
-    }
-    else
-    {
-        close(fd[1]);
-        waitpid(pid, NULL, 0);
-    }
-
-    return (fd[0]);
+	if (ft_pipe(fd) < 0)
+		return (-1);
+	pid = fork();
+	if (pid < 0)
+	{
+		(close(fd[0]), close(fd[1]));
+		return (-1);
+	}
+	if (pid == 0)
+	{
+		close(fd[0]);
+		while (1)
+		{
+			str = readline("> ");
+			if (!str || ft_strcmp(str, node->right->cmd[0]) == 0)
+				(free(str), close(fd[1]), exit(0));
+			ft_putendl_fd(str, fd[1]);
+			(free(str), str = NULL);
+		}
+	}
+	else
+		(close(fd[1]), waitpid(pid, NULL, 0));
+	return (fd[0]);
 }
 
-int	redir_input(t_node *node)
+static int	redir_input(t_node *node)
 {
 	int		fd;
 	t_node	*current;
@@ -72,14 +60,14 @@ int	redir_input(t_node *node)
 			return (-1);
 		current = current->left;
 	}
-	if (fd != 0 && dup2(fd, STDIN_FILENO) < 0)
+	if (fd != 0 && ft_dup2(fd, STDIN_FILENO) < 0)
 		return (0);
 	if (fd != 0)
 		close(fd);
 	return (0);
 }
 
-int	redire_output(t_node *node)
+static int	redire_output(t_node *node)
 {
 	int		fd;
 	t_node	*current;
@@ -96,7 +84,7 @@ int	redire_output(t_node *node)
 			return (-1);
 		current = current->left;
 	}
-	if (fd != 1 && dup2(fd, STDOUT_FILENO) < 0)
+	if (fd != 1 && ft_dup2(fd, STDOUT_FILENO) < 0)
 		return (0);
 	if (fd != 1)
 		close(fd);

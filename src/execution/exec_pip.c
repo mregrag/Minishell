@@ -6,7 +6,7 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/24 22:43:10 by mregrag           #+#    #+#             */
-/*   Updated: 2024/06/23 23:38:16 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/06/24 13:26:01 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,6 @@ static pid_t left_pipe(t_node *node, int fd[2])
 			return (-1);
 		if (ft_close(fd[0]) < 0)
 			return (-1);
-
 		if (heredoc_fds)
 		{
 			if (ft_dup2(heredoc_fds[heredoc_count - 1], STDIN_FILENO) < 0)

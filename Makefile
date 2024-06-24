@@ -6,7 +6,7 @@
 #    By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/05/10 16:12:48 by mregrag           #+#    #+#              #
-#    Updated: 2024/06/23 17:19:13 by mregrag          ###   ########.fr        #
+#    Updated: 2024/06/24 17:43:38 by mregrag          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,7 +14,7 @@ NAME		= minishell
 LIBFT		= libft.a
 LIBRAIRIE	= "lib/libft"
 CC		= cc
-CFLAGS		= -Wall -Wextra -Werror
+CFLAGS		= -Wall -Wextra -Werror -fsanitize=address -fno-omit-frame-pointer -g2
 HEADER		= ./include/minishell.h
 RM		= rm -rf
 
@@ -38,8 +38,7 @@ EXECUCTION	:=	src/execution/exe_utils.c \
 			src/execution/redir_utils.c \
 			src/execution/redirections.c
 
-EXPAND		:=	src/expend/clean_empty_string.c \
-			src/expend/expand_utils.c \
+EXPAND		:=	src/expend/expand_utils.c \
 			src/expend/expanding.c \
 			src/expend/remov_quets.c
 
@@ -51,6 +50,8 @@ TOKENIZING	:=	src/tokens/tokinize.c \
 			src/tokens/tokinize_utils.c \
 			src/tokens/tokinize_utils1.c
 UTILS		:=	src/utils/error_exit.c
+
+MAIN		:=	src/main.c \
 
 SRCS		:=	$(BUILTINS)\
 			$(EXECUCTION)\
@@ -67,8 +68,11 @@ all: $(NAME)
 $(LIBFT):
 	@make -C $(LIBRAIRIE)
 
+# $(NAME): $(LIBFT) $(OBJS)
+# 	@$(CC) -o $(NAME) $(OBJS) -L$(LIBRAIRIE) -lft -lreadline
+
 $(NAME): $(LIBFT) $(OBJS)
-	@$(CC) -o $(NAME) $(OBJS) -L$(LIBRAIRIE) -lft -lreadline
+	@$(CC) $(CFLAGS) -o $(NAME) $(OBJS) -L$(LIBRAIRIE) -lft -lreadline
 
 %.o: %.c $(HEADER)
 	$(CC) $(CFLAGS) -c $< -o $@

@@ -6,46 +6,37 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/18 22:09:36 by mregrag           #+#    #+#             */
-/*   Updated: 2024/05/28 16:20:01 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/06/24 16:35:48 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-static size_t	ft_strlen_unquot(char *str)
-{
-	size_t	i;
-	size_t	len;
-
-	i = 0;
-	len = 0;
-	while (str[i])
-	{
-		if (str[i] != '\'' && str[i] != '"')
-			len++;
-		i++;
-	}
-	return (len);
-}
-
 char	*remov_quotes(char *str)
-
 {
 	char	*ret;
+	char	quote;
 	size_t	i;
 	size_t	j;
 
 	i = 0;
 	j = 0;
-	ret = ft_calloc(1 + ft_strlen_unquot(str), sizeof(char));
+	ret = malloc(strlen(str) + 1);
 	if (!ret)
 		return (NULL);
 	while (str[i])
 	{
-		if (str[i] != '"' && str[i] != '\'')
-			ret[j++] = str[i];
-		i++;
+		if (str[i] == '"' || str[i] == '\'')
+		{
+			quote = str[i++];
+			while (str[i] && str[i] != quote)
+				ret[j++] = str[i++];
+			i++;
+		}
+		else
+			ret[j++] = str[i++];
 	}
-	return (free(str), str = NULL,  ret);
+	ret[j] = '\0';
+	(free(str), str = NULL);
+	return (ret);
 }
-

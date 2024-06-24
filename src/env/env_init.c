@@ -6,7 +6,7 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 16:22:51 by mregrag           #+#    #+#             */
-/*   Updated: 2024/06/23 18:59:17 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/06/24 14:30:13 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,20 +82,8 @@ void	duplicate_env(t_list **env, char **envp)
 	}
 }
 
-static	void	duplicate_fd(void)
-{
-	minish.input = dup(STDIN_FILENO);
-	minish.output = dup(STDOUT_FILENO);
-}
-
-void	set_fd(int in, int out)
-{
-	dup2(in, STDIN_FILENO);
-	dup2(out, STDOUT_FILENO);
-}
 void	init_minishell(t_gb *minish, char **envp)
 {
-	duplicate_fd();
 	ft_bzero(minish, sizeof(t_gb));
 	duplicate_env(&minish->env, envp);
 	increment_shlvl();

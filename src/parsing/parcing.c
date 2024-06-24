@@ -6,7 +6,7 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/24 21:22:11 by mregrag           #+#    #+#             */
-/*   Updated: 2024/06/23 13:22:38 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/06/24 15:11:42 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ t_node	*create_file(t_token *token)
 	node->cmd = malloc(sizeof(char *) * 2);
 	if (!node->cmd)
 		return (free(node), NULL);
-	node->cmd[0] = expand_file(token->value);
+	node->cmd[0] = token->value;
 	node->cmd[1] = NULL;
 	node->type = token->type;
 	node->left = NULL;

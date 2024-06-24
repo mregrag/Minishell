@@ -6,7 +6,7 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/10 16:16:44 by mregrag           #+#    #+#             */
-/*   Updated: 2024/06/23 22:35:41 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/06/24 17:47:24 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,12 +30,7 @@
 #include <unistd.h>
 #include "../lib/libft/libft.h"
 
-
 #define ERROR_SYNTAX "syntax error near unexpected token"
-
-
-
-
 
 typedef enum e_token_type {
 	T_WORD,
@@ -146,13 +141,10 @@ char *get_env_var(char *var);
 //---------------------expanding-------------------------------
 
 char *remov_quotes(char *str);
-char *expand_cmd(char *str);
-char *expand_heredoc(char *str);
-bool ft_is_valid_var_char(char c);
-char *handle_str(char *str, size_t *i);
-char *handle_sq(char *str, size_t *i);
-char *handle_dq(char *str, size_t *i);
-char *handle_dollar(char *str, size_t *i);
+char *ft_expand(char *str);
+char *handle_dollar(char *ret, const char *str, size_t *i);
+char *handle_quote(char *ret, const char *str, size_t *i, char quote);
+char *handle_normal(char *ret, const char *str, size_t *i);
 
 //------------------------test------------------------
 
@@ -176,7 +168,5 @@ int redirections(t_node *node);
 t_node *create_file(t_token *token);
 int ft_open(const char *path, int oflag, mode_t mode);
 int redirections(t_node *node);
-char	*expand_file(char *str);
-void	set_fd(int in, int out);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/11 22:02:39 by mregrag           #+#    #+#             */
-/*   Updated: 2024/06/05 18:26:57 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/06/24 19:12:41 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,8 +36,8 @@ t_token	*tokenize_input(char *input)
 	tokens = NULL;
 	s = ft_strtrim(input, " \t\n\v\r\f");
 	free(input);
-	if (s[0] == '$' && !ft_strchr(ft_getenv(++s), '|'))
-		s = ft_strjoin("", ft_getenv(s));
+	if (s[0] == '$')
+		s = ft_strjoin("", ++s);
 	while (*s)
 	{
 		if (ft_isspace(*s))
@@ -47,4 +47,3 @@ t_token	*tokenize_input(char *input)
 	}
 	return (tokens);
 }
-

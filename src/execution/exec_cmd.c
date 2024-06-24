@@ -6,7 +6,7 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/17 22:58:39 by mregrag           #+#    #+#             */
-/*   Updated: 2024/06/23 21:51:14 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/06/24 15:02:08 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,9 +18,9 @@ char	*get_path_command(char *cmd)
 	char	*cmd_path;
 	char	*path;
 
-	if (!ft_getenv("PATH"))
+	if (!getenv("PATH"))
 		return (print_error("minish", cmd, "No sush file or directory", NULL), NULL);
-	paths = ft_split(ft_getenv("PATH"), ':');
+	paths = ft_split(getenv("PATH"), ':');
 	while (*paths)
 	{
 		path = ft_strjoin(*paths, "/");

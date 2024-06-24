@@ -6,7 +6,7 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/24 21:23:34 by mregrag           #+#    #+#             */
-/*   Updated: 2024/06/23 16:20:36 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/06/24 15:10:13 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,7 @@ void	creat_cmd(t_node *node, t_token **tokens, int count)
 	i = 0;
 	while (i < count)
 	{
-		node->cmd[i] = expand_cmd((*tokens)->value);
+		node->cmd[i] = ft_expand((*tokens)->value);
 		tmp = *tokens;
 		*tokens = (*tokens)->next;
 		free(tmp->value);
