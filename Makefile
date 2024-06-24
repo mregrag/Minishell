@@ -6,7 +6,7 @@
 #    By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/05/10 16:12:48 by mregrag           #+#    #+#              #
-#    Updated: 2024/06/24 17:43:38 by mregrag          ###   ########.fr        #
+#    Updated: 2024/06/24 22:11:31 by mregrag          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -38,9 +38,9 @@ EXECUCTION	:=	src/execution/exe_utils.c \
 			src/execution/redir_utils.c \
 			src/execution/redirections.c
 
-EXPAND		:=	src/expend/expand_utils.c \
-			src/expend/expanding.c \
-			src/expend/remov_quets.c
+EXPANSION	:=	src/expansion/expansion_utils.c \
+			src/expansion/expansion_input.c \
+			src/expansion/expansion_heredoc.c
 
 PARSING		:=	src/parsing/parcing.c \
 			src/parsing/parcing_utils.c
@@ -55,7 +55,7 @@ MAIN		:=	src/main.c \
 
 SRCS		:=	$(BUILTINS)\
 			$(EXECUCTION)\
-			$(EXPAND)\
+			$(EXPANSION)\
 			$(PARSING)\
 			$(TOKENIZING)\
 			$(UTILS)\

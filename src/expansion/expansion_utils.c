@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   expanding.c                                        :+:      :+:    :+:   */
+/*   expansion_utils.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/05/18 21:45:53 by mregrag           #+#    #+#             */
-/*   Updated: 2024/06/24 19:07:28 by mregrag          ###   ########.fr       */
+/*   Created: 2024/05/18 21:49:59 by mregrag           #+#    #+#             */
+/*   Updated: 2024/06/24 22:06:30 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,35 @@ char	*handle_dollar(char *ret, const char *str, size_t *i)
 		return (ft_strdup(ret));
 	ret = ft_strjoin(ret, val);
 	return (free(val), ret);
+}
+
+char	*remov_quotes(char *str)
+{
+	char	*ret;
+	char	quote;
+	size_t	i;
+	size_t	j;
+
+	i = 0;
+	j = 0;
+	ret = malloc(strlen(str) + 1);
+	if (!ret)
+		return (NULL);
+	while (str[i])
+	{
+		if (str[i] == '"' || str[i] == '\'')
+		{
+			quote = str[i++];
+			while (str[i] && str[i] != quote)
+				ret[j++] = str[i++];
+			i++;
+		}
+		else
+			ret[j++] = str[i++];
+	}
+	ret[j] = '\0';
+	(free(str), str = NULL);
+	return (ret);
 }
 
 char	*handle_single_quotes(char *ret, const char *str, size_t *i)
@@ -92,25 +121,4 @@ char	*handle_normal(char *ret, const char *str, size_t *i)
 	while (str[*i] && str[*i] != '\'' && str[*i] != '"' && str[*i] != '$')
 		(*i)++;
 	return (ft_strjoin(ret, ft_substr(str, start, *i - start)));
-}
-
-char	*ft_expand(char *str)
-{
-	size_t	i;
-	char	*ret;
-
-	ret = strdup("");
-	i = 0;
-	while (str[i])
-	{
-		if (str[i] == '\'')
-			ret = handle_single_quotes(ret, str, &i);
-		else if (str[i] == '"')
-			ret = handle_double_quotes(ret, str, &i);
-		else if (str[i] == '$')
-			ret = handle_dollar(ret, str, &i);
-		else
-			ret = handle_normal(ret, str, &i);
-	}
-	return (remov_quotes(ret));
 }

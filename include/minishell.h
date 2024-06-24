@@ -6,7 +6,7 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/10 16:16:44 by mregrag           #+#    #+#             */
-/*   Updated: 2024/06/24 17:47:24 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/06/24 22:13:21 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,26 +67,18 @@ typedef struct s_gb {
 extern t_gb minish;
 
 int heredoc(t_node *node);
-int	fd_heredoc(t_node *node);
 int	ft_close(int fd);
-int	ft_heredoc(t_node *node);
 int	*setup_heredocs(t_node *node, int *heredoc_count);
 pid_t	ft_fork(void);
 int	ft_pipe(int ends[2]);
 int	ft_dup2(int filde1, int filde2);
-int ft_isalpha(int c);
-char *ft_strjoin_f(char *s1, char *s2);
 int ft_lstsize_token(t_token *lst);
-int ft_isdollar(int c);
-int ft_issamechar(char *str, int c);
-int ft_isoddeven_char(char *str, int c);
 char *ft_getenv(char *key);
 void create_environment_var(char *token_str, t_list **env);
 void update_environment_var(char *var, char *new_value, t_list *env);
 void replace_one_var(char **str);
 char *replace_env_value(char **env_ptr, char *var_name, char *new_value);
 void update_env_var(char *var, char *new_value, t_list *env);
-size_t ft_strlen_arg(char **args);
 
 void create_env_var(char *token_str, t_list **env);
 
@@ -141,10 +133,15 @@ char *get_env_var(char *var);
 //---------------------expanding-------------------------------
 
 char *remov_quotes(char *str);
-char *ft_expand(char *str);
+char	*expansion_input(char *str);
 char *handle_dollar(char *ret, const char *str, size_t *i);
 char *handle_quote(char *ret, const char *str, size_t *i, char quote);
-char *handle_normal(char *ret, const char *str, size_t *i);
+char *expansion_file(char *str);
+char	*handle_dollar(char *ret, const char *str, size_t *i);
+char	*expansion_content(char *str);
+char	*handle_single_quotes(char *ret, const char *str, size_t *i);
+char	*handle_double_quotes(char *ret, const char *str, size_t *i);
+char	*handle_normal(char *ret, const char *str, size_t *i);
 
 //------------------------test------------------------
 

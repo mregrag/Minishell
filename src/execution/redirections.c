@@ -6,7 +6,7 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/07 18:05:58 by mregrag           #+#    #+#             */
-/*   Updated: 2024/06/24 17:47:53 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/06/24 22:14:19 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ int	heredoc(t_node *node)
 			str = readline("> ");
 			if (!str || ft_strcmp(str, node->right->cmd[0]) == 0)
 				(free(str), close(fd[1]), exit(0));
-			ft_putendl_fd(str, fd[1]);
+			ft_putendl_fd(expansion_content(str), fd[1]);
 			(free(str), str = NULL);
 		}
 	}
