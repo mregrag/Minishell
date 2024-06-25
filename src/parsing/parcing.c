@@ -6,7 +6,7 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/24 21:22:11 by mregrag           #+#    #+#             */
-/*   Updated: 2024/06/25 16:29:39 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/06/25 22:48:55 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,18 +26,22 @@ t_node	*parse_cmd(t_token **tokens)
 	return (cmd);
 }
 
-t_node	*create_file(t_token *token)
+t_node	*create_file(t_token *token, t_type type)
 {
 	t_node			*node;
 
 	node = malloc(sizeof(t_node));
 	if (!node)
 		return (NULL);
-	node->cmd = malloc(sizeof(char *) * 2);
+	node->cmd = malloc(sizeof(char *) * 3);
 	if (!node->cmd)
 		return (free(node), node = NULL, NULL);
-	node->cmd[0] = expansion_file(token->value);
-	node->cmd[1] = NULL;
+	if (type == T_IN || type == T_APPEND || type == T_OUT)
+		node->cmd[0] = expansion_file(token->value);
+	else
+		node->cmd[0] = expansion_dilim(token->value);
+	node->cmd[1] = token->value;
+	node->cmd[2] = NULL;
 	node->type = token->type;
 	node->left = NULL;
 	node->right = NULL;
@@ -64,7 +68,7 @@ t_node	*parse_redire(t_token **tokens)
 			node = new_node((*tokens)->next->type);
 			(*tokens)->next = next_token->next->next;
 			node->left = parse_redire(&tmp);
-			node->right = create_file((next_token->next));
+			node->right = create_file(next_token->next, next_token->type);
 			return (free(next_token->value), free(next_token), node);
 		}
 		*tokens = next_token;
@@ -121,8 +125,6 @@ static int	check_syntax(t_token *tokens)
 	}
 	return (1);
 }
-
-
 
 t_node	*parse_tokens(t_token **tokens)
 {

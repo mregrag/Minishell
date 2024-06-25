@@ -6,7 +6,7 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/10 16:14:20 by mregrag           #+#    #+#             */
-/*   Updated: 2024/06/25 16:09:13 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/06/25 23:34:32 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,9 +16,9 @@ t_gb g_minish;
 
 int main(int argc, char **argv, char **env)
 {
-	char *input;
-	t_node *tree;
-	t_token *tokens;
+	char	*input;
+	t_node	*tree;
+	t_token	*tokens;
 	int	in;
 	int	out;
 
@@ -38,8 +38,6 @@ int main(int argc, char **argv, char **env)
 		executing(tree);
 		dup2(out, STDOUT_FILENO);
 		dup2(in, STDIN_FILENO);
-		close(in);
-		close(out);
 		free(tree);
 	}
 }

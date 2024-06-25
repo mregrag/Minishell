@@ -6,7 +6,7 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/07 18:05:58 by mregrag           #+#    #+#             */
-/*   Updated: 2024/06/25 20:09:45 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/06/25 22:44:38 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,23 @@ int	heredoc(t_node *node)
 	return (fd[0]);
 }
 
+static int check_file(t_node *node)
+{
+	t_node	*current;
+
+	current = node;
+	while (current)
+	{
+		if (current->right && !current->right->cmd[0])
+		{
+			print_error("minish", current->right->cmd[1], "ambiguous redirect", NULL);
+			return (0);
+		}
+		current = current->left;
+	}
+	return (1);
+}
+
 static int	redir_input(t_node *node)
 {
 	int		fd;
@@ -50,6 +67,8 @@ static int	redir_input(t_node *node)
 
 	fd = 0;
 	current = node;
+	if (!check_file(current))
+		return (-1);
 	while (current)
 	{
 		if (current->type == T_IN)
@@ -68,17 +87,18 @@ static int	redir_input(t_node *node)
 	return (0);
 }
 
-int	redire_output(t_node *node)
+static int	redire_output(t_node *node)
 {
 	int		fd;
 	t_node *current;
 
 	fd = 1;
-
 	current = node;
+	if (!check_file(current))
+		return (-1);
 	while (current)
 	{
-		if (current->type == T_OUT)
+		if (current->type == T_OUT || current->type == T_APPEND)
 			fd = ft_open(current->right->cmd[0], (O_CREAT | O_WRONLY | O_TRUNC), 00644);
 		else if (current->type == T_APPEND)
 			fd = ft_open(current->right->cmd[0], (O_CREAT | O_WRONLY | O_APPEND), 00644);

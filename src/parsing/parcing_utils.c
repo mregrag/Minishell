@@ -6,7 +6,7 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/24 21:23:34 by mregrag           #+#    #+#             */
-/*   Updated: 2024/06/25 16:58:48 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/06/25 22:20:58 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ t_node	*create_redire(t_token **tokens, t_token *tmp)
 	node = new_node((*tokens)->type);
 	*tokens = (*tokens)->next->next;
 	node->left = parse_redire(tokens);
-	node->right = create_file(tmp->next);
+	node->right = create_file(tmp->next, tmp->type);
 	free(tmp->value);
 	free(tmp);
 	return (node);

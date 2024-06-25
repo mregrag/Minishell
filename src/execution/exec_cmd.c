@@ -6,7 +6,7 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/17 22:58:39 by mregrag           #+#    #+#             */
-/*   Updated: 2024/06/25 20:08:04 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/06/25 23:32:56 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ char	*get_path(char *cmd)
 	char	*cmd_path;
 
 	if (!ft_getenv("PATH") && !g_minish.dpath)
-		return (print_error("minish", cmd, strerror(errno), NULL), NULL);
+		return (print_error("minish1", cmd, strerror(errno), NULL), NULL);
 	paths = ft_split(ft_getenv("PATH"), ':');
 	while (*paths)
 	{
@@ -43,8 +43,16 @@ static	void	child_exec(t_node *node, char *path, int *status)
 	{
 		if (execve(path, node->cmd, ft_list_to_arr(g_minish.env)) == -1)
 		{
-			print_error("minish", node->cmd[0], strerror(errno), NULL);
-			exit(127);
+			if (errno == ENOENT)
+			{
+				print_error("minish2", node->cmd[0], "command not found", NULL);
+				exit(127);
+			}
+			if (opendir(node->cmd[0]))
+			{
+				print_error("minish2", node->cmd[0], "is a directory", NULL);
+				exit (126);
+			}
 		}
 	}
 	waitpid(pid, status, 0);

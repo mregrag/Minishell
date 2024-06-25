@@ -6,7 +6,7 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/18 21:49:59 by mregrag           #+#    #+#             */
-/*   Updated: 2024/06/25 16:13:33 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/06/25 21:23:43 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ char	*handle_dollar(char *ret, const char *str, size_t *i)
 	val = ft_strtrim(ft_getenv(var), " \t\n\v\r\f");
 	free(var);
 	if (!val)
-		return (ft_strdup(ret));
+		return (NULL);
 	ret = ft_strjoin(ret, val);
 	return (free(val), ret);
 }

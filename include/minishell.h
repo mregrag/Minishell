@@ -6,7 +6,7 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/10 16:16:44 by mregrag           #+#    #+#             */
-/*   Updated: 2024/06/25 20:00:19 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/06/25 22:22:07 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,8 @@ t_node	*buil_tree(t_token **tokens);
 t_node	*parse_tokens(t_token **tokens);
 t_node	*new_node(t_type type);
 t_node	*create_redire(t_token **tokens, t_token *tmp);
-t_node	*create_file(t_token *token);
+// t_node	*create_file(t_token *token);
+t_node	*create_file(t_token *token, t_type type);
 void	free_treet(t_node *node);
 void	creat_cmd(t_node *node, t_token **tokens, int count);
 
@@ -136,6 +137,7 @@ char	*expansion_input(char *str);
 char	*handle_dollar(char *ret, const char *str, size_t *i);
 char	*handle_quote(char *ret, const char *str, size_t *i, char quote);
 char	*expansion_file(char *str);
+char	*expansion_dilim(char *str);
 char	*handle_dollar(char *ret, const char *str, size_t *i);
 char	*expansion_content(char *str);
 char	*handle_single_quotes(char *ret, const char *str, size_t *i);
