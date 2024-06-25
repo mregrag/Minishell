@@ -6,7 +6,7 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/18 18:49:44 by mregrag           #+#    #+#             */
-/*   Updated: 2024/06/06 23:19:29 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/06/25 20:30:41 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,13 +21,13 @@ static char	*get_dir(char **argv)
 	{
 		pwd = ft_getenv("HOME");
 		if (!pwd)
-			print_error("minish", "cd", NULL, "HOME not set");
+			print_error("g_minish", "cd", NULL, "HOME not set");
 	}
 	else if (argv[1] && ft_strncmp(argv[1], "-", 2) == 0)
 	{
 		pwd = ft_getenv("OLDPWD");
 		if (!pwd)
-			print_error("minish", "cd", NULL, "OLDPWD not set");
+			print_error("g_minish", "cd", NULL, "OLDPWD not set");
 	}
 	else
 		pwd = argv[1];
@@ -41,16 +41,16 @@ static int	update_pwd(void)
 
 	pwd = ft_getenv("PWD");
 
-	if (ft_getenv("PWD") && !is_env_var("OLDPWD", minish.env))
-		create_env_var(ft_strjoin(ft_strjoin("OLDPWD", "="), pwd), &minish.env);
-	update_env_var("OLDPWD", pwd, minish.env);
+	if (ft_getenv("PWD") && !is_env_var("OLDPWD", g_minish.env))
+		create_env_var(ft_strjoin(ft_strjoin("OLDPWD", "="), pwd), &g_minish.env);
+	update_env_var("OLDPWD", pwd, g_minish.env);
 	if (!getcwd(buf, sizeof(buf)))
 	{
 		print_error_errno("cd", "error retrieving current directory",\
 				"getcwd :  cannot access parent directories");
 		return (1);
 	}
-	update_env_var("PWD", buf, minish.env);
+	update_env_var("PWD", buf, g_minish.env);
 		return (1);
 	return (0);
 }
@@ -59,12 +59,12 @@ int	ft_cd(char **argv)
 {
 	char	*pwd;
 
-	pwd = get_dir(argv);
+	pwd = get_dir(&argv[0]);
 	if (!pwd)
 		return (EXIT_FAILURE);
 	if (chdir(pwd) == -1)
 	{
-		print_error_errno("minish", "cd", pwd);
+		print_error_errno("g_minish", "cd", pwd);
 		return (EXIT_FAILURE);
 	}
 	if (argv[1] && !ft_strcmp(argv[1], "-"))

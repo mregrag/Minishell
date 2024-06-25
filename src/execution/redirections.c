@@ -6,7 +6,7 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/07 18:05:58 by mregrag           #+#    #+#             */
-/*   Updated: 2024/06/24 22:14:19 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/06/25 20:09:45 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ int	heredoc(t_node *node)
 static int	redir_input(t_node *node)
 {
 	int		fd;
-	t_node	*current;
+	t_node		*current;
 
 	fd = 0;
 	current = node;
@@ -54,25 +54,27 @@ static int	redir_input(t_node *node)
 	{
 		if (current->type == T_IN)
 			fd = ft_open(current->right->cmd[0], O_RDONLY, 00644);
-		if (current->type == T_HERDOC)
+		else if (current->type == T_HERDOC)
 			fd = heredoc(current);
 		if (fd < 0)
 			return (-1);
 		current = current->left;
 	}
-	if (fd != 0 && ft_dup2(fd, STDIN_FILENO) < 0)
-		return (0);
+	if (fd != 0)
+		if (dup2(fd, STDIN_FILENO) < 0)
+			return (0);
 	if (fd != 0)
 		close(fd);
 	return (0);
 }
 
-static int	redire_output(t_node *node)
+int	redire_output(t_node *node)
 {
 	int		fd;
-	t_node	*current;
+	t_node *current;
 
 	fd = 1;
+
 	current = node;
 	while (current)
 	{
@@ -84,8 +86,9 @@ static int	redire_output(t_node *node)
 			return (-1);
 		current = current->left;
 	}
-	if (fd != 1 && ft_dup2(fd, STDOUT_FILENO) < 0)
-		return (0);
+	if (fd != 1)
+		if (dup2(fd, STDOUT_FILENO) < 0)
+			return (0);
 	if (fd != 1)
 		close(fd);
 	return (0);
@@ -94,6 +97,6 @@ static int	redire_output(t_node *node)
 int	redirections(t_node *node)
 {
 	if (redir_input(node) < 0 || redire_output(node) < 0)
-		return (-1);
+		return (0);
 	return (1);
 }

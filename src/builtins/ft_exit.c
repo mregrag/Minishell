@@ -6,7 +6,7 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/27 17:47:28 by mregrag           #+#    #+#             */
-/*   Updated: 2024/06/06 17:38:07 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/06/25 17:07:51 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,8 +35,14 @@ int	ft_exit(char **cmd)
 		exit_status(1);
 	}
 	else if (ft_strlen_arg(cmd) == 1)
-		printf("exit\n"), exit(0);
+	{
+		printf("exit\n");
+		exit(0);
+	}
 	else
-		printf("exit\n"), exit(ft_atoi(cmd[1]));
+	{
+		printf("exit\n");
+		exit(ft_atoi(cmd[1]));
+	}
 	return (0);
 }

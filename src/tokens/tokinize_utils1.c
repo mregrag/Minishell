@@ -6,7 +6,7 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 20:13:20 by mregrag           #+#    #+#             */
-/*   Updated: 2024/06/23 16:17:15 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/06/25 16:45:43 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,21 +40,13 @@ int	skip_quotes(char *line, size_t *i)
 	return (0);
 }
 
-void	ft_skip_spaces(char **str)
+void	skip_spaces(char **str)
 {
 	while (**str && ft_isspace(**str))
 		(*str)++;
 }
 
-int	ft_isquotes(int c)
+int	is_redirection(t_type type)
 {
-	return (c == 39 || c == 34);
-}
-
-void	quotes_error(char c)
-{
-	ft_putstr_fd("minishell: unexpected EOF while looking for matching `", 2);
-	ft_putchar_fd(c, 2);
-	ft_putchar_fd('\n', 2);
-	minish.exit_status = 258;
+    return (type >= T_IN && type <= T_HERDOC);
 }

@@ -6,7 +6,7 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/18 21:49:59 by mregrag           #+#    #+#             */
-/*   Updated: 2024/06/24 22:06:30 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/06/25 16:13:33 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ char	*handle_dollar(char *ret, const char *str, size_t *i)
 		return ((*i)++, ft_strdup(ret));
 	if (str[*i] == '?')
 	{
-		val = ft_itoa(minish.exit_status);
+		val = ft_itoa(g_minish.exit_status);
 		ret = ft_strjoin(ret, val);
 		return (free(val), (*i)++, ret);
 	}

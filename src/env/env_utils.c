@@ -6,7 +6,7 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 16:25:14 by mregrag           #+#    #+#             */
-/*   Updated: 2024/06/23 16:08:08 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/06/25 16:14:44 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ char	*ft_getenv(char *key)
 	char	*tmp;
 	char	*value;
 
-	envp = minish.env;
+	envp = g_minish.env;
 	while (envp)
 	{
 		i = 0;

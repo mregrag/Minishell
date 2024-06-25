@@ -6,13 +6,13 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/11 22:02:54 by mregrag           #+#    #+#             */
-/*   Updated: 2024/05/24 17:26:26 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/06/25 16:58:59 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-t_token	*new_token(char *value, t_token_type type)
+t_token	*new_token(char *value, t_type type)
 {
 	t_token	*token;
 
@@ -61,4 +61,17 @@ void	clear_token(t_token **lst)
 		currunt = next;
 	}
 	*lst = NULL;
+}
+
+int	ft_lstsize_token(t_token *lst)
+{
+	int	counter;
+
+	counter = 0;
+	while (lst != NULL)
+	{
+		counter++;
+		lst = lst->next;
+	}
+	return (counter);
 }

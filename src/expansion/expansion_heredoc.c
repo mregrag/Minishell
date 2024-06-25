@@ -6,7 +6,7 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 20:12:56 by mregrag           #+#    #+#             */
-/*   Updated: 2024/06/24 22:23:46 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/06/25 20:31:41 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,16 +41,6 @@ static char	*handle_quotes(char *ret, const char *str, size_t *i)
 	return (ret);
 }
 
-static char	*handle_str(char *ret, const char *str, size_t *i)
-{
-	size_t	start;
-
-	start = *i;
-	while (str[*i] && str[*i] != '\'' && str[*i] != '"')
-		(*i)++;
-	return (ft_strjoin(ret, ft_substr(str, start, *i - start)));
-}
-
 char	*expansion_file(char *str)
 {
 	size_t	i;
@@ -64,8 +54,10 @@ char	*expansion_file(char *str)
 			ret = handle_single_quotes(ret, str, &i);
 		else if (str[i] == '"')
 			ret = handle_double_quotes(ret, str, &i);
+		else if (str[i] == '$')
+			ret = handle_dollar(ret, str, &i);
 		else
-			ret = handle_str(ret, str, &i);
+			ret = handle_normal(ret, str, &i);
 	}
 	return (remov_quotes(ret));
 }

@@ -6,7 +6,7 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/24 22:43:10 by mregrag           #+#    #+#             */
-/*   Updated: 2024/06/24 13:26:01 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/06/25 16:12:42 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ static pid_t left_pipe(t_node *node, int fd[2])
 		while (tmp && (tmp->type == T_HERDOC))
 			tmp = tmp->left;
 		executing(tmp);
-		exit(minish.exit_status);
+		exit(g_minish.exit_status);
 	}
 	if (heredoc_fds)
 	{
@@ -73,7 +73,7 @@ static	pid_t	right_pipe(t_node *node, int fd[2])
 		if (ft_close(fd[0]) < 0)
 			return (-1);
 		executing(node);
-		exit(minish.exit_status);
+		exit(g_minish.exit_status);
 	}
 	return (pid);
 }

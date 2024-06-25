@@ -6,7 +6,7 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/12 18:33:04 by mregrag           #+#    #+#             */
-/*   Updated: 2024/06/06 18:18:38 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/06/25 16:14:14 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void	exit_status(int status)
 {
-	minish.exit_status = status;
+	g_minish.exit_status = status;
 }
 
 int	print_error(char *s1, char *s2, char *s3, char *message)

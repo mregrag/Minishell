@@ -6,13 +6,13 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/11 23:05:33 by mregrag           #+#    #+#             */
-/*   Updated: 2024/06/05 18:55:11 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/06/25 16:43:59 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-int	append_separator(t_token_type type, char **line, t_token **tokens, char *value)
+int	add_separator(t_type type, char **line, t_token **tokens, char *value)
 {
 	t_token	*token;
 
@@ -26,8 +26,7 @@ int	append_separator(t_token_type type, char **line, t_token **tokens, char *val
 	return (1);
 }
 
-
-int	append_identifier(char **line, t_token **tokens)
+int	process_word(char **line, t_token **tokens)
 {
 	char	*tmp;
 	char	*value;
@@ -41,7 +40,7 @@ int	append_identifier(char **line, t_token **tokens)
 		if (ft_isquotes(tmp[i]))
 		{
 			if (!skip_quotes(tmp, &i))
-				return (quotes_error(tmp[i]), 0);
+				return (print_error("minish", "unexpected EOF while looking`", NULL, NULL), 0);
 		}
 		else
 			i++;

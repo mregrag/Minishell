@@ -6,13 +6,13 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/10 16:14:20 by mregrag           #+#    #+#             */
-/*   Updated: 2024/06/24 20:02:27 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/06/25 16:09:13 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-t_gb minish;
+t_gb g_minish;
 
 int main(int argc, char **argv, char **env)
 {
@@ -24,8 +24,7 @@ int main(int argc, char **argv, char **env)
 
 	(void)argv;
 	(void)argc;
-
-	init_minishell(&minish, env);
+	init_minishell(&g_minish, env);
 	while (1)
 	{
 		input = readline("\033[1;32mminish-1.0$ \033[0m");

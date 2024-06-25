@@ -6,30 +6,27 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/17 22:58:39 by mregrag           #+#    #+#             */
-/*   Updated: 2024/06/24 15:02:08 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/06/25 20:08:04 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-char	*get_path_command(char *cmd)
+char	*get_path(char *cmd)
 {
 	char	**paths;
 	char	*cmd_path;
-	char	*path;
 
-	if (!getenv("PATH"))
-		return (print_error("minish", cmd, "No sush file or directory", NULL), NULL);
-	paths = ft_split(getenv("PATH"), ':');
+	if (!ft_getenv("PATH") && !g_minish.dpath)
+		return (print_error("minish", cmd, strerror(errno), NULL), NULL);
+	paths = ft_split(ft_getenv("PATH"), ':');
 	while (*paths)
 	{
-		path = ft_strjoin(*paths, "/");
-		cmd_path = ft_strjoin(path, cmd);
-		free (path);
-		path = NULL;
+		cmd_path = ft_strjoin(ft_strjoin(*paths, "/"), cmd);
 		if (access(cmd_path, F_OK | X_OK) == 0)
 			return (cmd_path);
 		free(cmd_path);
+		cmd_path = NULL;
 		paths++;
 	}
 	return (cmd);
@@ -43,11 +40,13 @@ static	void	child_exec(t_node *node, char *path, int *status)
 	if (pid < 0)
 		return ;
 	if (pid == 0)
-		if (execve(path, node->cmd, ft_list_to_arr(minish.env)) == -1)
+	{
+		if (execve(path, node->cmd, ft_list_to_arr(g_minish.env)) == -1)
 		{
-			print_error("minish", node->cmd[0], "command not found", NULL);
+			print_error("minish", node->cmd[0], strerror(errno), NULL);
 			exit(127);
 		}
+	}
 	waitpid(pid, status, 0);
 }
 
@@ -56,7 +55,7 @@ void	exec_cmd(t_node *node)
 	int		status;
 	char	*path;
 
-	if (node->type >= T_IN && node->type <= T_HERDOC)
+	if (is_redirection(node->type))
 	{
 		if (!redirections(node))
 			return ;
@@ -65,7 +64,7 @@ void	exec_cmd(t_node *node)
 	}
 	if (node->cmd && node->cmd[0] && !is_builtin(node->cmd))
 	{
-		path = get_path_command(node->cmd[0]);
+		path = get_path(node->cmd[0]);
 		if (!path)
 			return ;
 		child_exec(node, path, &status);

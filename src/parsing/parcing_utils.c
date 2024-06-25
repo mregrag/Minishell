@@ -6,26 +6,14 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/24 21:23:34 by mregrag           #+#    #+#             */
-/*   Updated: 2024/06/24 21:56:57 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/06/25 16:58:48 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-int	ft_lstsize_token(t_token *lst)
-{
-	int	counter;
 
-	counter = 0;
-	while (lst != NULL)
-	{
-		counter++;
-		lst = lst->next;
-	}
-	return (counter);
-}
-
-t_node	*new_node(t_token_type type)
+t_node	*new_node(t_type type)
 {
 	t_node		*node;
 

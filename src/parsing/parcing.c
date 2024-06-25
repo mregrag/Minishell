@@ -6,7 +6,7 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/24 21:22:11 by mregrag           #+#    #+#             */
-/*   Updated: 2024/06/24 22:13:44 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/06/25 16:29:39 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,12 +54,12 @@ t_node	*parse_redire(t_token **tokens)
 	if (!*tokens)
 		return (NULL);
 	tmp = *tokens;
-	if ((*tokens)->type >= T_IN && (*tokens)->type <= T_HERDOC)
+	if (is_redirection((*tokens)->type))
 		return (create_redire(tokens, tmp));
 	while (*tokens && (*tokens)->next)
 	{
 		next_token = (*tokens)->next;
-		if (next_token->type >= T_IN && next_token->type <= T_HERDOC)
+		if (is_redirection(next_token->type))
 		{
 			node = new_node((*tokens)->next->type);
 			(*tokens)->next = next_token->next->next;
@@ -121,6 +121,8 @@ static int	check_syntax(t_token *tokens)
 	}
 	return (1);
 }
+
+
 
 t_node	*parse_tokens(t_token **tokens)
 {

@@ -6,13 +6,13 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/18 18:51:07 by mregrag           #+#    #+#             */
-/*   Updated: 2024/06/23 16:05:38 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/06/25 17:10:38 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-void	delete_env_var(t_list **head, char *var)
+static void	delete_env_var(t_list **head, char *var)
 {
 	t_list	*temp;
 	t_list	*prev;
@@ -37,7 +37,7 @@ void	delete_env_var(t_list **head, char *var)
 	temp = NULL;
 }
 
-int	check_var_unset(char *var)
+static int	check_var_unset(char *var)
 {
 	if (!var || ft_strchr(var, '_'))
 		return (0);
@@ -56,7 +56,7 @@ int	ft_unset(char **args)
 	{
 		if (!check_var_unset(*args))
 			return (0);
-		delete_env_var(&minish.env, *args);
+		delete_env_var(&g_minish.env, *args);
 	}
 	return (1);
 }
