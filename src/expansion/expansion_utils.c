@@ -6,16 +6,16 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/18 21:49:59 by mregrag           #+#    #+#             */
-/*   Updated: 2024/06/25 21:23:43 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/06/26 17:29:12 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-char	*handle_dollar(char *ret, const char *str, size_t *i)
+char	*handle_dollar(char *ret, const char *str, size_t *i, t_list *env)
 {
 	char	*var;
-	char	*val;
+	char	*val = NULL;
 	size_t	start;
 
 	start = ++(*i);
@@ -32,7 +32,7 @@ char	*handle_dollar(char *ret, const char *str, size_t *i)
 	while (ft_isalnum(str[*i]) || str[*i] == '_')
 		(*i)++;
 	var = ft_substr(str, start, *i - start);
-	val = ft_strtrim(ft_getenv(var), " \t\n\v\r\f");
+	val = ft_strtrim(ft_getenv(var, env), " \t\n\v\r\f");
 	free(var);
 	if (!val)
 		return (NULL);
@@ -86,7 +86,7 @@ char	*handle_single_quotes(char *ret, const char *str, size_t *i)
 	return (ret);
 }
 
-char	*handle_double_quotes(char *ret, const char *str, size_t *i)
+char	*handle_double_quotes(char *ret, const char *str, size_t *i, t_list *env)
 {
 	char	*temp;
 	char	*content;
@@ -96,7 +96,7 @@ char	*handle_double_quotes(char *ret, const char *str, size_t *i)
 	while (str[*i] && str[*i] != '"')
 	{
 		if (str[*i] == '$')
-			temp = handle_dollar(temp, str, i);
+			temp = handle_dollar(temp, str, i, env);
 		else
 		{
 			temp = ft_strjoin(temp, ft_substr(str, *i, 1));

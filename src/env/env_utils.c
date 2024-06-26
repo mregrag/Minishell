@@ -6,24 +6,26 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 16:25:14 by mregrag           #+#    #+#             */
-/*   Updated: 2024/06/25 16:14:44 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/06/26 23:44:20 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-char	*ft_getenv(char *key)
+char	*ft_getenv(const char *key, t_list *env)
 {
 	int		i;
 	t_list	*envp;
 	char	*tmp;
 	char	*value;
 
-	envp = g_minish.env;
+	envp = env;
+	if (!key)
+		return (NULL);
 	while (envp)
 	{
 		i = 0;
-		tmp = envp->content;
+		tmp = (char *)envp->content;
 		while (key[i] && tmp[i] && (key[i] == tmp[i]))
 			i++;
 		if (!key[i] && (tmp[i] == '=' || tmp[i] == '\0'))
@@ -37,6 +39,7 @@ char	*ft_getenv(char *key)
 	}
 	return (NULL);
 }
+
 char	*replace_env_value(char **ptr, char *var, char *value)
 {
 	char	*temp;
@@ -55,27 +58,6 @@ char	*replace_env_value(char **ptr, char *var, char *value)
 	return (final);
 }
 
-void	replace_one_var(char **str)
-{
-	char	*env;
-	char	*trim;
-
-	env = ft_getenv(*str + 1);
-	if (!env)
-	{
-		free(*str);
-		*str = ft_strdup("");
-		if (!*str)
-			return ;
-		return ;
-	}
-	trim = ft_strtrim(env, " ");
-	if (!trim)
-		return ;
-	free(env);
-	free(*str);
-	*str = trim;
-}
 
 void	update_env_var(char *var, char *value, t_list *env)
 {

@@ -6,7 +6,7 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/18 18:51:07 by mregrag           #+#    #+#             */
-/*   Updated: 2024/06/25 17:10:38 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/06/26 16:43:15 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,13 +50,13 @@ static int	check_var_unset(char *var)
 	return (1);
 }
 
-int	ft_unset(char **args)
+int	ft_unset(t_node *node)
 {
-	while (*(++args))
+	while (*(++node->cmd))
 	{
-		if (!check_var_unset(*args))
+		if (!check_var_unset(*node->cmd))
 			return (0);
-		delete_env_var(&g_minish.env, *args);
+		delete_env_var(&node->env, *node->cmd);
 	}
 	return (1);
 }

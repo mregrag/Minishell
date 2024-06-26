@@ -6,7 +6,7 @@
 #    By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/05/10 16:12:48 by mregrag           #+#    #+#              #
-#    Updated: 2024/06/24 22:11:31 by mregrag          ###   ########.fr        #
+#    Updated: 2024/06/26 16:46:50 by mregrag          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -23,7 +23,6 @@ BUILTINS	:=	src/builtins/ft_cd.c \
 			src/builtins/ft_echo.c \
 			src/builtins/ft_env.c \
 			src/builtins/ft_exit.c \
-			src/builtins/ft_export.c \
 			src/builtins/ft_pwd.c \
 			src/builtins/ft_unset.c
 
@@ -40,7 +39,7 @@ EXECUCTION	:=	src/execution/exe_utils.c \
 
 EXPANSION	:=	src/expansion/expansion_utils.c \
 			src/expansion/expansion_input.c \
-			src/expansion/expansion_heredoc.c
+			src/expansion/expansion_heredoc.c \
 
 PARSING		:=	src/parsing/parcing.c \
 			src/parsing/parcing_utils.c

@@ -6,20 +6,20 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/17 22:58:39 by mregrag           #+#    #+#             */
-/*   Updated: 2024/06/25 23:32:56 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/06/26 16:08:54 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-char	*get_path(char *cmd)
+char	*get_path(char *cmd, t_list *env)
 {
 	char	**paths;
 	char	*cmd_path;
 
-	if (!ft_getenv("PATH") && !g_minish.dpath)
+	if (!ft_getenv("PATH", env))
 		return (print_error("minish1", cmd, strerror(errno), NULL), NULL);
-	paths = ft_split(ft_getenv("PATH"), ':');
+	paths = ft_split(ft_getenv("PATH", env), ':');
 	while (*paths)
 	{
 		cmd_path = ft_strjoin(ft_strjoin(*paths, "/"), cmd);
@@ -41,7 +41,7 @@ static	void	child_exec(t_node *node, char *path, int *status)
 		return ;
 	if (pid == 0)
 	{
-		if (execve(path, node->cmd, ft_list_to_arr(g_minish.env)) == -1)
+		if (execve(path, node->cmd, ft_list_to_arr(node->env)) == -1)
 		{
 			if (errno == ENOENT)
 			{
@@ -70,9 +70,9 @@ void	exec_cmd(t_node *node)
 		while (node->left)
 			node = node->left;
 	}
-	if (node->cmd && node->cmd[0] && !is_builtin(node->cmd))
+	if (node->cmd && node->cmd[0] && !is_builtin(node))
 	{
-		path = get_path(node->cmd[0]);
+		path = get_path(node->cmd[0], node->env);
 		if (!path)
 			return ;
 		child_exec(node, path, &status);

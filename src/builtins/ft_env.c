@@ -6,23 +6,23 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/18 18:50:02 by mregrag           #+#    #+#             */
-/*   Updated: 2024/06/25 17:30:39 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/06/26 22:57:01 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-int	ft_env(char **args)
+int	ft_env(t_node *node)
 {
 	t_list	*env;
 
-	env = g_minish.env;
-	if (args[1] || !is_env_var("PATH", g_minish.env))
+	env = node->env;
+	if (node->cmd[1] || !is_env_var("PATH", node->env))
 	{
-		print_error("env", args[1], "No such file or directory", NULL);
+		print_error("env", node->cmd[1], "No such file or directory", NULL);
 		return (0);
 	}
-	update_env_var("_", get_path(args[0]), g_minish.env);
+	update_env_var("_", get_path(node->cmd[0], node->env), node->env);
 	while (env)
 	{
 		if (env->content != NULL)

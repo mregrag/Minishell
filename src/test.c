@@ -6,31 +6,26 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 18:03:11 by mregrag           #+#    #+#             */
-/*   Updated: 2024/06/24 18:05:52 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/06/26 14:17:00 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdio.h>
-#include <string.h>
+#include <unistd.h>
 
-char	*ft_strchr(const char *s, int c)
+int main()
 {
-	char	ch;
+	// close(STDOUT_FILENO);
+	close(STDIN_FILENO);
+	if (isatty(STDOUT_FILENO))
+		printf("Standard output is connected to a terminal.\n");
+	else
+		printf("Standard output is not connected to a terminal.\n");
 
-	ch = (char)c;
-	while (*s)
-	{
-		if (*s == ch)
-			return ((char *)s);
-		s++;
-	}
-	if (*s == ch)
-		return ((char *)s);
-	return (NULL);
-}
-int main(int argc, char *argv[])
-{
-	strchr(NULL, 'a');
+	if (isatty(STDIN_FILENO))
+		printf("Standard input is connected to a terminal.\n");
+	else
+		printf("Standard input is not connected to a terminal.\n");
 
-	return (0);
+	return 0;
 }

@@ -6,7 +6,7 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 16:22:51 by mregrag           #+#    #+#             */
-/*   Updated: 2024/06/25 17:17:04 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/06/26 23:34:11 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,9 @@ int	is_env_var(char *var, t_list *env)
 {
 	int		i;
 	char	*envstr;
+
+	if (!*var)
+		return (0);
 
 	while (env)
 	{
@@ -44,47 +47,54 @@ void	create_env_var(char *var, t_list **env)
 	ft_lstadd_front(env, new_var);
 }
 
-void	increment_shlvl(void)
+void	increment_shlvl(t_node *node)
 {
 	char	*val;
 
-	if (!is_env_var("SHLVL", g_minish.env))
-		create_env_var("SHLVL=1", &g_minish.env);
+	if (!is_env_var("SHLVL", node->env))
+		create_env_var("SHLVL=1", &node->env);
 	else
 	{
-		val = ft_itoa(ft_atoi(ft_getenv("SHLVL")) + 1);
-		update_env_var("SHLVL", val, g_minish.env);
+		val = ft_itoa(ft_atoi(ft_getenv("SHLVL", node->env)) + 1);
+		update_env_var("SHLVL", val, node->env);
 		free(val);
 	}
 }
 
-void	duplicate_env(t_list **env, char **envp)
+void	duplicate_env(t_node *node, char **env)
 {
-	char	*tmp;
 	char	buf[PATH_MAX];
+	char	*tmp;
 
-	getcwd(buf, sizeof(buf));
-	if (!envp || !*envp)
+	if (!env || !*env)
 	{
-		g_minish.dpath = ft_strdup("/usr/gnu/bin:/usr/local/bin:/bin:/usr/bin:.");
-		create_env_var("_", &g_minish.env);
-		increment_shlvl();
-		create_env_var(ft_strjoin(ft_strjoin("PWD", "="), buf), &g_minish.env);
-		create_env_var(ft_strjoin(ft_strjoin("PATH", "="), g_minish.dpath), &g_minish.env);
+		if (getcwd(buf, sizeof(buf)))
+		{
+			tmp = ft_strjoin("PWD=", buf);
+			ft_lstadd_back(&node->env, ft_lstnew(tmp));
+		}
+		ft_lstadd_back(&node->env, ft_lstnew(ft_strdup("SHLVL=0")));
+		ft_lstadd_back(&node->env, ft_lstnew(ft_strdup("PATH=/usr/gnu/bin:/usr/local/bin:/bin:/usr/bin:.")));
+		ft_lstadd_back(&node->env, ft_lstnew(ft_strdup("_")));
 	}
-	while (*envp)
+	while (*env)
 	{
-		tmp = ft_strdup(*envp);
+		tmp = ft_strdup(*env);
 		if (!tmp)
 			exit(EXIT_FAILURE);
-		ft_lstadd_back(env, ft_lstnew(tmp));
-		envp++;
+		ft_lstadd_back(&node->env, ft_lstnew(tmp));
+		env++;
 	}
 }
 
-void	init_minishell(t_gb *g_minish, char **envp)
+t_node	*init_minishell(char **env)
 {
-	ft_bzero(g_minish, sizeof(t_gb));
-	duplicate_env(&g_minish->env, envp);
-	increment_shlvl();
+	t_node	*node;
+
+	node = (t_node *)ft_calloc(1, sizeof(t_node));
+	if (!node)
+		return (NULL);
+	duplicate_env(node, env);
+	increment_shlvl(node);
+	return (node);
 }

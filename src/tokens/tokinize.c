@@ -6,7 +6,7 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/11 22:02:39 by mregrag           #+#    #+#             */
-/*   Updated: 2024/06/25 16:36:21 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/06/26 23:49:59 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,16 +28,16 @@ static int	separator(char **line, t_token **token_list)
 		return (process_word(line, token_list));
 }
 
-t_token	*tokenize_input(char *input)
+t_token	*tokenize_input(char *input, t_node *node)
 {
 	t_token	*tokens;
 	char	*s;
 
 	tokens = NULL;
 	s = ft_strtrim(input, " \t\n\v\r\f");
-	if (s[0] == '$' && is_env_var(++s, g_minish.env))
-		if (!strchr(ft_getenv(s), '|'))
-			s = ft_strjoin("", ft_getenv(s));
+	if (s[0] == '$' && is_env_var(++s, node->env))
+		if (!strchr(ft_getenv(s, node->env), '|'))
+			s = ft_strjoin("", ft_getenv(s, node->env));
 	free(input);
 	while (*s)
 	{

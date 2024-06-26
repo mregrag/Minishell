@@ -6,7 +6,7 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/07 18:05:58 by mregrag           #+#    #+#             */
-/*   Updated: 2024/06/25 22:44:38 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/06/26 22:11:28 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ int	heredoc(t_node *node)
 			str = readline("> ");
 			if (!str || ft_strcmp(str, node->right->cmd[0]) == 0)
 				(free(str), close(fd[1]), exit(0));
-			ft_putendl_fd(expansion_content(str), fd[1]);
+			ft_putendl_fd(expansion_content(str, node->env), fd[1]);
 			(free(str), str = NULL);
 		}
 	}
@@ -99,9 +99,9 @@ static int	redire_output(t_node *node)
 	while (current)
 	{
 		if (current->type == T_OUT || current->type == T_APPEND)
-			fd = ft_open(current->right->cmd[0], (O_CREAT | O_WRONLY | O_TRUNC), 00644);
+			fd = ft_open(expansion_file(current->right->cmd[0], current->env), (O_CREAT | O_WRONLY | O_TRUNC), 00644);
 		else if (current->type == T_APPEND)
-			fd = ft_open(current->right->cmd[0], (O_CREAT | O_WRONLY | O_APPEND), 00644);
+			fd = ft_open(expansion_file(current->right->cmd[0], current->env), (O_CREAT | O_WRONLY | O_APPEND), 00644);
 		if (fd < 0)
 			return (-1);
 		current = current->left;
