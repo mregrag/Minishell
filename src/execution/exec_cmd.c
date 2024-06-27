@@ -6,7 +6,7 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/17 22:58:39 by mregrag           #+#    #+#             */
-/*   Updated: 2024/06/26 16:08:54 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/06/27 18:09:06 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@ char	*get_path(char *cmd, t_list *env)
 	char	**paths;
 	char	*cmd_path;
 
+	if (cmd[0] == '/')
+		return (ft_strdup(cmd));
 	if (!ft_getenv("PATH", env))
 		return (print_error("minish1", cmd, strerror(errno), NULL), NULL);
 	paths = ft_split(ft_getenv("PATH", env), ':');
@@ -29,7 +31,7 @@ char	*get_path(char *cmd, t_list *env)
 		cmd_path = NULL;
 		paths++;
 	}
-	return (cmd);
+	return (ft_strdup(cmd));
 }
 
 static	void	child_exec(t_node *node, char *path, int *status)
@@ -48,11 +50,13 @@ static	void	child_exec(t_node *node, char *path, int *status)
 				print_error("minish2", node->cmd[0], "command not found", NULL);
 				exit(127);
 			}
-			if (opendir(node->cmd[0]))
+			else if (opendir(node->cmd[0]))
 			{
 				print_error("minish2", node->cmd[0], "is a directory", NULL);
 				exit (126);
 			}
+			print_error("minish2", node->cmd[0], "command not found", NULL);
+			exit(127);
 		}
 	}
 	waitpid(pid, status, 0);

@@ -6,7 +6,7 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/24 21:22:11 by mregrag           #+#    #+#             */
-/*   Updated: 2024/06/26 22:24:59 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/06/27 19:33:17 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,32 +100,7 @@ t_node	*build_tree(t_token **tokens, t_list *env)
 	return (parse_redire(&tmp, env));
 }
 
-static int	check_syntax(t_token *tokens)
-{
-	if (tokens->type == T_PIPE)
-	{
-		if (!tokens->next || tokens->next->type == T_WORD)
-		{
-			print_error("minish", ERRTOKEN, NULL, NULL);
-			return (0);
-		}
-	}
-	while (tokens)
-	{
-		if (is_redirection(tokens->type) || tokens->type == T_PIPE)
-		{
-			if (!tokens->next || tokens->next->type != T_WORD)
-			{
-				print_error("minish", ERRSYNT, NULL, NULL);
-				return (0);
-			}
-		}
-		tokens = tokens->next;
-	}
-	return (1);
-}
-
-t_node *parse_tokens(t_token **tokens, t_list *env)
+t_node	*parse_tokens(t_token **tokens, t_list *env)
 {
 	if (!tokens || !*tokens)
 		return (NULL);

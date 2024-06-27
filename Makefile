@@ -6,7 +6,7 @@
 #    By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/05/10 16:12:48 by mregrag           #+#    #+#              #
-#    Updated: 2024/06/26 16:46:50 by mregrag          ###   ########.fr        #
+#    Updated: 2024/06/27 21:48:01 by mregrag          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -24,7 +24,8 @@ BUILTINS	:=	src/builtins/ft_cd.c \
 			src/builtins/ft_env.c \
 			src/builtins/ft_exit.c \
 			src/builtins/ft_pwd.c \
-			src/builtins/ft_unset.c
+			src/builtins/ft_unset.c \
+			src/builtins/ft_export.c
 
 ENV		:=	src/env/env_init.c \
 			src/env/env_utils.c \
@@ -48,7 +49,8 @@ TOKENIZING	:=	src/tokens/tokinize.c \
 			src/tokens/tokinize_lst.c \
 			src/tokens/tokinize_utils.c \
 			src/tokens/tokinize_utils1.c
-UTILS		:=	src/utils/error_exit.c
+UTILS		:=	src/utils/error_exit.c \
+			src/utils/syntax_errors.c
 
 MAIN		:=	src/main.c \
 

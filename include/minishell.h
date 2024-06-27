@@ -6,7 +6,7 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/10 16:16:44 by mregrag           #+#    #+#             */
-/*   Updated: 2024/06/26 22:24:18 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/06/27 23:48:28 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,8 @@
 # include <unistd.h>
 # include "../lib/libft/libft.h"
 
-# define ERRTOKEN "syntax error near unexpected token `|'"
+# define ERRTOKEN "syntax error near unexpected token"
+# define ERRSYNT "syntax error near unexpected token `newline'"
 # define ERRSYNT "syntax error near unexpected token `newline'"
 
 typedef enum e_type
@@ -46,13 +47,13 @@ typedef enum e_type
 typedef struct	s_env
 {
 	t_list	*env;
-
 }	t_env;
 
 typedef struct s_token
 {
 	char			*value;
 	t_type			type;
+	int			flag;
 	struct s_token	*next;
 }	t_token;
 
@@ -61,6 +62,7 @@ typedef struct s_node
 	char			**cmd;
 	t_type			type;
 	t_list			*env;
+	t_token			dilim;
 	struct s_node	*left;
 	struct s_node	*right;
 }	t_node;
@@ -155,8 +157,8 @@ void	exit_status(int status);
 
 int	deal_w_redir(t_node *node);
 int	ft_redir(t_node *node);
-// void	init_minishelll(t_node **node, char **envp);
-// void	init_minishel(t_node **node, char **env);
+
+int check_syntax(t_token *tokens);
 
 t_node *init_minishell(char **env);
 #endif

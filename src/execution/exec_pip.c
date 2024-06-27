@@ -6,7 +6,7 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/24 22:43:10 by mregrag           #+#    #+#             */
-/*   Updated: 2024/06/25 16:12:42 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/06/27 18:15:35 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,7 +97,7 @@ void	exec_pipe(t_node *node)
 		return ;
 	if (ft_close(fd[0]) < 0)
 		return ;
-	waitpid(pid_read, &status, 0);
 	waitpid(pid_write, &status, 0);
-	exit_status(status);
+	waitpid(pid_read, &status, 0);
+	exit_status(WEXITSTATUS(status));
 }
