@@ -6,7 +6,7 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/24 22:43:10 by mregrag           #+#    #+#             */
-/*   Updated: 2024/06/27 18:15:35 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/06/28 20:06:25 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ static pid_t left_pipe(t_node *node, int fd[2])
 	tmp = node;
 	i  = 0;
 	heredoc_fds = setup_heredocs(node, &heredoc_count);
-	pid = fork();
+	pid = ft_fork();
 	if (pid < 0)
 		return (-1);
 	if (pid == 0)
@@ -39,29 +39,30 @@ static pid_t left_pipe(t_node *node, int fd[2])
 			if (ft_dup2(heredoc_fds[heredoc_count - 1], STDIN_FILENO) < 0)
 				return (-1);
 			while (i < heredoc_count)
-				close(heredoc_fds[i++]);
+				if(ft_close(heredoc_fds[i++]))
+					return (-1);
 			free(heredoc_fds);
 		}
 		while (tmp && (tmp->type == T_HERDOC))
 			tmp = tmp->left;
 		executing(tmp);
-		exit(g_minish.exit_status);
+		exit(ft_atoi(ft_getenv("?", node->env)));
 	}
 	if (heredoc_fds)
 	{
 		i = 0;
 		while (i < heredoc_count)
-			close(heredoc_fds[i++]);
+			if (ft_close(heredoc_fds[i++]))
+				return (-1);
 		free(heredoc_fds);
 	}
-
 	return (pid);
 }
 static	pid_t	right_pipe(t_node *node, int fd[2])
 {
 	pid_t	pid;
 
-	pid = fork();
+	pid = ft_fork();
 	if (pid < 0)
 		return (-1);
 	if (pid == 0)
@@ -73,7 +74,7 @@ static	pid_t	right_pipe(t_node *node, int fd[2])
 		if (ft_close(fd[0]) < 0)
 			return (-1);
 		executing(node);
-		exit(g_minish.exit_status);
+		exit(ft_atoi(ft_getenv("?", node->env)));
 	}
 	return (pid);
 }
@@ -99,5 +100,5 @@ void	exec_pipe(t_node *node)
 		return ;
 	waitpid(pid_write, &status, 0);
 	waitpid(pid_read, &status, 0);
-	exit_status(WEXITSTATUS(status));
+	update_env_var("?", ft_itoa(WEXITSTATUS(status)), node);
 }

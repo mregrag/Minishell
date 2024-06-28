@@ -6,7 +6,7 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/11 23:05:33 by mregrag           #+#    #+#             */
-/*   Updated: 2024/06/25 16:43:59 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/06/28 15:20:21 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ int	process_word(char **line, t_token **tokens)
 		if (ft_isquotes(tmp[i]))
 		{
 			if (!skip_quotes(tmp, &i))
-				return (print_error("minish", "unexpected EOF while looking`", NULL, NULL), 0);
+				return (print_error("minish", "unexpected EOF `", NULL, NULL), 0);
 		}
 		else
 			i++;

@@ -6,7 +6,7 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 16:25:14 by mregrag           #+#    #+#             */
-/*   Updated: 2024/06/26 23:44:20 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/06/28 14:37:40 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,38 +40,32 @@ char	*ft_getenv(const char *key, t_list *env)
 	return (NULL);
 }
 
-char	*replace_env_value(char **ptr, char *var, char *value)
+void	update_env_var(char *var, char *value, t_node *node)
 {
-	char	*temp;
-	char	*final;
+	t_list	*current;
+	char	*new_entry;
+	char	*var_with_equals;
 
-	temp = ft_strjoin(var, "=");
-	if (!temp)
-		return (NULL);
-	final = ft_strjoin(temp, value);
-	if (!final)
-		return (NULL);
-	free(temp);
-	temp = NULL;
-	free(*ptr);
-	*ptr = NULL;
-	return (final);
-}
-
-
-void	update_env_var(char *var, char *value, t_list *env)
-{
-	int		i;
-	char	*cur_env;
-
-	while (env)
+	var_with_equals = ft_strjoin(var, "=");
+	if (!var_with_equals)
+		return ;
+	new_entry = ft_strjoin(var_with_equals, value);
+	free(var_with_equals);
+	if (!new_entry)
+		return ;
+	current = node->env;
+	while (current)
 	{
-		i = 0;
-		cur_env = (env->content);
-		while (var[i] && cur_env[i] && (var[i] == cur_env[i]))
-			i++;
-		if (!var[i] && (cur_env[i] == '=' || cur_env[i] == '\0' ))
-			env->content = replace_env_value(&cur_env, var, value);
-		env = env->next;
+		if (ft_strncmp(current->content, var, ft_strlen(var)) == 0
+				&& ((char *)current->content)[ft_strlen(var)] == '=')
+		{
+			free(current->content);
+			current->content = ft_strdup(new_entry);
+			free(new_entry);
+			return ;
+		}
+		current = current->next;
 	}
+	ft_lstadd_back(&node->env, ft_lstnew(ft_strdup(new_entry)));
+	free(new_entry);
 }

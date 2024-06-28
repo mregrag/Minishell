@@ -6,7 +6,7 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/10 16:16:44 by mregrag           #+#    #+#             */
-/*   Updated: 2024/06/27 23:48:28 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/06/28 21:38:23 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@
 # include <stdio.h>
 # include <stdlib.h>
 # include <string.h>
+# include <termios.h>
 # include <sys/param.h>
 # include <sys/wait.h>
 # include <unistd.h>
@@ -62,7 +63,6 @@ typedef struct s_node
 	char			**cmd;
 	t_type			type;
 	t_list			*env;
-	t_token			dilim;
 	struct s_node	*left;
 	struct s_node	*right;
 }	t_node;
@@ -80,6 +80,7 @@ void	clear_token(t_token **lst);
 void	token_add_back(t_token **lst, t_token *new_token);
 void	skip_spaces(char **str);
 int		process_word(char **line, t_token **tokens);
+int		process_word1(char **line, t_token **tokens);
 int		add_separator(t_type type, char **line, t_token **token, char *value);
 int		is_separator(char *s);
 int		skip_quotes(char *line, size_t *i);
@@ -108,18 +109,15 @@ int		ft_export(t_node *node);
 int		ft_unset(t_node *node);
 int		print_error(char *s1, char *s2, char *s3, char *message);
 int		print_error_errno(char *s1, char *s2, char *s3);
-char	*get_env_var(char *var);
 void	ft_pwd(void);
 
 //-----------------------------env---------------------------------
 
-int		is_env_var(char *var, t_list *env);
 void	init_minishel(t_node *node, char **env);
-void	create_env_var(char *str, t_list **env);
-void	update_env_var(char *var, char *new_value, t_list *env);
+void	create_env_var(char *var, char *value, t_node *node);
+void	update_env_var(char *var, char *new_value, t_node *node);
 void	duplicate_env(t_node *node, char **envp);
 void	increment_shlvl(t_node *node);
-char	*replace_env_value(char **env_ptr, char *var_name, char *new_value);
 char	*ft_getenv(const char *key, t_list *env);
 
 //---------------------------execution------------------------------------
@@ -137,28 +135,33 @@ int		redirections(t_node *node);
 int		ft_open(const char *path, int oflag, mode_t mode);
 pid_t	ft_fork(void);
 int 	ft_close(int fd);
+int	ft_dup(int oldfd);
+int	ft_dup2(int oldfd, int newfd);
+int	ft_pipe(int pipefd[2]);
 
-//---------------------expanding-------------------------------
+//---------------------expansion-------------------------------
 
 char	*remov_quotes(char *str);
-char	*expansion_input(char *str, t_list *env);
-char	*handle_dollar(char *ret, const char *str, size_t *i, t_list *env);
+char	*expansion_input(char *str, t_node *node);
+char	*handle_dollar(char *ret, const char *str, size_t *i, t_node *node);
 char	*handle_quote(char *ret, const char *str, size_t *i, char quote);
-char	*expansion_file(char *str, t_list *env);
+char	*expansion_file(char *str, t_node *env);
 char	*expansion_dilim(char *str);
-char	*expansion_content(char *str, t_list *env);
+char	*expansion_content(char *str, t_node *env);
 char	*handle_single_quotes(char *ret, const char *str, size_t *i);
-char	*handle_double_quotes(char *ret, const char *str, size_t *i, t_list *env);
+char	*handle_double_quotes(char *ret, const char *str, size_t *i, t_node *env);
 char	*handle_normal(char *ret, const char *str, size_t *i);
 
 //-----------------------signals------------------
 void	setup_signal(void);
 void	exit_status(int status);
+void	update_exit_status(t_node *node, int status);
 
 int	deal_w_redir(t_node *node);
 int	ft_redir(t_node *node);
 
 int check_syntax(t_token *tokens);
 
-t_node *init_minishell(char **env);
+t_node *init_minishell(char **env, int *in, int *out);
+void	reset_in_out(int in, int out);
 #endif

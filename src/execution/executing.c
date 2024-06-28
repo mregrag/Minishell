@@ -6,7 +6,7 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/17 22:24:25 by mregrag           #+#    #+#             */
-/*   Updated: 2024/06/26 23:30:39 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/06/29 00:11:03 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ void	executing(t_node *node)
 	if (!node)
 		return ;
 	if (node->type == T_WORD)
-		update_env_var("_", node->cmd[ft_strlen_arg(node->cmd) - 1], node->env);
+		update_env_var("_", node->cmd[ft_strlen_arg(node->cmd) - 1], node);
 	if (node->type == T_PIPE)
 		return (exec_pipe(node));
 	else

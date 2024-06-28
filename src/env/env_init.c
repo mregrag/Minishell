@@ -6,57 +6,40 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 16:22:51 by mregrag           #+#    #+#             */
-/*   Updated: 2024/06/26 23:34:11 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/06/28 22:19:03 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
+#include <complex.h>
+#include <unistd.h>
 
-int	is_env_var(char *var, t_list *env)
+void	create_env_var(char *var, char *value, t_node *node)
 {
-	int		i;
-	char	*envstr;
+	char	*tmp;
+	char	*var_with_equals;
 
-	if (!*var)
-		return (0);
-
-	while (env)
-	{
-		i = 0;
-		envstr = (char *)env->content;
-		while (var[i] && envstr[i] && (var[i] == envstr[i]))
-			i++;
-		if (!var[i] && (envstr[i] == '=' || !envstr[i]))
-			return (1);
-		env = env->next;
-	}
-	return (0);
-}
-
-void	create_env_var(char *var, t_list **env)
-{
-	t_list	*new_var;
-	char	*new_var_str;
-
-	new_var_str = ft_strdup(var);
-	if (new_var_str == 0)
-		exit(EXIT_FAILURE);
-	new_var = ft_lstnew(new_var_str);
-	if (new_var == 0)
-		exit(EXIT_FAILURE);
-	ft_lstadd_front(env, new_var);
+	var_with_equals = ft_strjoin(var, "=");
+	if (!var_with_equals)
+		return ;
+	tmp = ft_strjoin(var_with_equals, value);
+	free(var_with_equals);
+	if (!tmp)
+		return ;
+	ft_lstadd_back(&node->env, ft_lstnew(ft_strdup(tmp)));
+	free(tmp);
 }
 
 void	increment_shlvl(t_node *node)
 {
 	char	*val;
 
-	if (!is_env_var("SHLVL", node->env))
-		create_env_var("SHLVL=1", &node->env);
+	if (!ft_getenv("SHLVL", node->env))
+		create_env_var("SHLVL", "1",  node);
 	else
 	{
 		val = ft_itoa(ft_atoi(ft_getenv("SHLVL", node->env)) + 1);
-		update_env_var("SHLVL", val, node->env);
+		update_env_var("SHLVL", val, node);
 		free(val);
 	}
 }
@@ -69,13 +52,10 @@ void	duplicate_env(t_node *node, char **env)
 	if (!env || !*env)
 	{
 		if (getcwd(buf, sizeof(buf)))
-		{
-			tmp = ft_strjoin("PWD=", buf);
-			ft_lstadd_back(&node->env, ft_lstnew(tmp));
-		}
-		ft_lstadd_back(&node->env, ft_lstnew(ft_strdup("SHLVL=0")));
-		ft_lstadd_back(&node->env, ft_lstnew(ft_strdup("PATH=/usr/gnu/bin:/usr/local/bin:/bin:/usr/bin:.")));
-		ft_lstadd_back(&node->env, ft_lstnew(ft_strdup("_")));
+			create_env_var("PWD", buf, node);
+		create_env_var("SHLVL", "0", node);
+		create_env_var("PATH", "/usr/gnu/bin:/usr/local/bin:/bin:/usr/bin:.", node);
+		create_env_var("_", "", node);
 	}
 	while (*env)
 	{
@@ -85,9 +65,16 @@ void	duplicate_env(t_node *node, char **env)
 		ft_lstadd_back(&node->env, ft_lstnew(tmp));
 		env++;
 	}
+	create_env_var("?", "0", node);
 }
 
-t_node	*init_minishell(char **env)
+void	reset_in_out(int in, int out)
+{
+	ft_dup2(in, STDIN_FILENO);
+	ft_dup2(out, STDOUT_FILENO);
+}
+
+t_node	*init_minishell(char **env, int *in, int *out)
 {
 	t_node	*node;
 
@@ -96,5 +83,7 @@ t_node	*init_minishell(char **env)
 		return (NULL);
 	duplicate_env(node, env);
 	increment_shlvl(node);
+	*in = ft_dup(STDIN_FILENO);
+	*out = ft_dup(STDOUT_FILENO);
 	return (node);
 }

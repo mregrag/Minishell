@@ -1,6 +1,7 @@
 Makefile
-fi'le'
+file
 include
 lib
 minishell
 src
+[1;32mminish-1.0$ [0mi

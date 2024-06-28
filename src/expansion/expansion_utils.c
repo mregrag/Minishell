@@ -6,13 +6,13 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/18 21:49:59 by mregrag           #+#    #+#             */
-/*   Updated: 2024/06/27 22:13:56 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/06/28 19:41:07 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-char	*handle_dollar(char *ret, const char *str, size_t *i, t_list *env)
+char	*handle_dollar(char *ret, const char *str, size_t *i, t_node *node)
 {
 	char	*var;
 	char	*val = NULL;
@@ -23,7 +23,7 @@ char	*handle_dollar(char *ret, const char *str, size_t *i, t_list *env)
 		return ((*i)++, ft_strdup(ret));
 	if (str[*i] == '?')
 	{
-		val = ft_itoa(g_minish.exit_status);
+		val = ft_getenv("?", node->env);
 		ret = ft_strjoin(ret, val);
 		return (free(val), (*i)++, ret);
 	}
@@ -32,7 +32,7 @@ char	*handle_dollar(char *ret, const char *str, size_t *i, t_list *env)
 	while (ft_isalnum(str[*i]) || str[*i] == '_')
 		(*i)++;
 	var = ft_substr(str, start, *i - start);
-	val = ft_strtrim(ft_getenv(var, env), " \t\n\v\r\f");
+	val = ft_strtrim(ft_getenv(var, node->env), " \t\n\v\r\f");
 	free(var);
 	if (!val)
 		return (ft_strdup(""));
@@ -86,7 +86,7 @@ char	*handle_single_quotes(char *ret, const char *str, size_t *i)
 	return (ret);
 }
 
-char	*handle_double_quotes(char *ret, const char *str, size_t *i, t_list *env)
+char	*handle_double_quotes(char *ret, const char *str, size_t *i, t_node *node)
 {
 	char	*temp;
 	char	*content;
@@ -96,7 +96,7 @@ char	*handle_double_quotes(char *ret, const char *str, size_t *i, t_list *env)
 	while (str[*i] && str[*i] != '"')
 	{
 		if (str[*i] == '$')
-			temp = handle_dollar(temp, str, i, env);
+			temp = handle_dollar(temp, str, i, node);
 		else
 		{
 			temp = ft_strjoin(temp, ft_substr(str, *i, 1));

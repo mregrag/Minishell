@@ -6,7 +6,7 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/24 21:22:11 by mregrag           #+#    #+#             */
-/*   Updated: 2024/06/27 19:33:17 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/06/28 17:03:50 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ t_node	*create_file(t_token *token, t_type type, t_list *env)
 	if (!node->cmd)
 		return (NULL);
 	if (type == T_IN || type == T_APPEND || type == T_OUT)
-		node->cmd[0] = expansion_file(token->value, env);
+		node->cmd[0] = expansion_file(token->value, node);
 	else if (type == T_HERDOC)
 		node->cmd[0] = expansion_dilim(token->value);
 	node->cmd[1] = token->value;
@@ -65,7 +65,7 @@ t_node	*parse_redire(t_token **tokens, t_list *env)
 			node = new_node((*tokens)->next->type, env);
 			(*tokens)->next = next_token->next->next;
 			node->left = parse_redire(&tmp, env);
-			node->right = create_file(next_token->next, next_token->type, env);
+			node->right = create_file(next_token->next, next_token->type, node->env);
 			free(next_token->value);
 			free(next_token);
 			return (node);

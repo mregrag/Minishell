@@ -6,7 +6,7 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/24 21:23:34 by mregrag           #+#    #+#             */
-/*   Updated: 2024/06/27 17:41:18 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/06/28 18:54:46 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ t_node	*create_redire(t_token **tokens, t_token *tmp, t_list *env)
 	node = new_node((*tokens)->type, env);
 	*tokens = (*tokens)->next->next;
 	node->left = parse_redire(tokens, env);
-	node->right = create_file(tmp->next, tmp->type, env);
+	node->right = create_file(tmp->next, tmp->type, node->env);
 	free(tmp->value);
 	free(tmp);
 	return (node);
@@ -69,7 +69,7 @@ void	creat_cmd(t_node *node, t_token **tokens, int count)
 	i = 0;
 	while (i < count)
 	{
-		node->cmd[i] = expansion_input((*tokens)->value, node->env);
+		node->cmd[i] = expansion_input((*tokens)->value, node);
 		tmp = *tokens;
 		*tokens = (*tokens)->next;
 		free(tmp->value);

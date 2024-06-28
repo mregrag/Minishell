@@ -6,7 +6,7 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/17 22:58:39 by mregrag           #+#    #+#             */
-/*   Updated: 2024/06/27 18:09:06 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/06/28 22:35:03 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ static	void	child_exec(t_node *node, char *path, int *status)
 {
 	pid_t	pid;
 
-	pid = fork();
+	pid = ft_fork();
 	if (pid < 0)
 		return ;
 	if (pid == 0)
@@ -55,7 +55,7 @@ static	void	child_exec(t_node *node, char *path, int *status)
 				print_error("minish2", node->cmd[0], "is a directory", NULL);
 				exit (126);
 			}
-			print_error("minish2", node->cmd[0], "command not found", NULL);
+			print_error("minish1", node->cmd[0], "command not found", NULL);
 			exit(127);
 		}
 	}
@@ -83,5 +83,6 @@ void	exec_cmd(t_node *node)
 		free(path);
 		path = NULL;
 		exit_status(WEXITSTATUS(status));
+		update_env_var("?", ft_itoa(WEXITSTATUS(status)), node);
 	}
 }

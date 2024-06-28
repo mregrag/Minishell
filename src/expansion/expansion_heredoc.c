@@ -6,13 +6,13 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 20:12:56 by mregrag           #+#    #+#             */
-/*   Updated: 2024/06/27 16:58:56 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/06/28 16:52:30 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-static char	*handle_quotes(char *ret, const char *str, size_t *i, t_list *env)
+static char	*handle_quotes(char *ret, const char *str, size_t *i, t_node *node)
 {
 	char	quote;
 	char	*content;
@@ -25,7 +25,7 @@ static char	*handle_quotes(char *ret, const char *str, size_t *i, t_list *env)
 	while (str[*i] && str[*i] != quote)
 	{
 		if (str[*i] == '$')
-			temp = handle_dollar(temp, str, i, env);
+			temp = handle_dollar(temp, str, i, node);
 		else
 		{
 			temp = ft_strjoin(temp, ft_substr(str, *i, 1));
@@ -65,7 +65,7 @@ static char	*handle_quotes_dilim(char *ret, const char *str, size_t *i)
 	return (ret);
 }
 
-char	*expansion_file(char *str, t_list *env)
+char	*expansion_file(char *str, t_node *node)
 {
 	size_t	i;
 	char	*ret;
@@ -77,9 +77,9 @@ char	*expansion_file(char *str, t_list *env)
 		if (str[i] == '\'')
 			ret = handle_single_quotes(ret, str, &i);
 		else if (str[i] == '"')
-			ret = handle_double_quotes(ret, str, &i, env);
+			ret = handle_double_quotes(ret, str, &i, node);
 		else if (str[i] == '$')
-			ret = handle_dollar(ret, str, &i, env);
+			ret = handle_dollar(ret, str, &i, node);
 		else
 			ret = handle_normal(ret, str, &i);
 	}
@@ -115,7 +115,7 @@ char	*expansion_dilim(char *str)
 	return (remov_quotes(ret));
 }
 
-char	*expansion_content(char *str, t_list *env)
+char	*expansion_content(char *str, t_node *node)
 {
 	size_t	i;
 	char	*ret;
@@ -125,9 +125,9 @@ char	*expansion_content(char *str, t_list *env)
 	while (str[i])
 	{
 		if (str[i] == '\'' || str[i] == '"')
-			ret = handle_quotes(ret, str, &i, env);
+			ret = handle_quotes(ret, str, &i, node);
 		else if (str[i] == '$')
-			ret = handle_dollar(ret, str, &i, env);
+			ret = handle_dollar(ret, str, &i, node);
 		else
 			ret = handle_normal(ret, str, &i);
 	}

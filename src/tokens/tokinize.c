@@ -6,7 +6,7 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/11 22:02:39 by mregrag           #+#    #+#             */
-/*   Updated: 2024/06/27 22:14:27 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/06/28 15:19:32 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,9 +36,11 @@ t_token	*tokenize_input(char *input, t_node *node)
 	(void)node;
 	tokens = NULL;
 	s = ft_strtrim(input, " \t\n\v\r\f");
-	if (s[0] == '$' && s[1] && is_env_var(++s, node->env))
+	if(s[0] == '$' && s[1] && ft_getenv(++s, node->env))
 	{
-		s = ft_strjoin("", ft_getenv(s, node->env));
+		s = ft_getenv(s, node->env);
+		if (ft_strchr(s, '|'))
+			return (token_add_back(&tokens, new_token(s, T_WORD)), tokens);
 	}
 	free(input);
 	while (*s)
