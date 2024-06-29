@@ -6,7 +6,7 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/10 16:16:44 by mregrag           #+#    #+#             */
-/*   Updated: 2024/06/28 21:38:23 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/06/29 22:18:30 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,6 @@ typedef struct s_token
 {
 	char			*value;
 	t_type			type;
-	int			flag;
 	struct s_token	*next;
 }	t_token;
 
@@ -63,6 +62,7 @@ typedef struct s_node
 	char			**cmd;
 	t_type			type;
 	t_list			*env;
+	int			flag;
 	struct s_node	*left;
 	struct s_node	*right;
 }	t_node;
@@ -146,7 +146,7 @@ char	*expansion_input(char *str, t_node *node);
 char	*handle_dollar(char *ret, const char *str, size_t *i, t_node *node);
 char	*handle_quote(char *ret, const char *str, size_t *i, char quote);
 char	*expansion_file(char *str, t_node *env);
-char	*expansion_dilim(char *str);
+char	*expansion_dilim(char *str, t_node *node);
 char	*expansion_content(char *str, t_node *env);
 char	*handle_single_quotes(char *ret, const char *str, size_t *i);
 char	*handle_double_quotes(char *ret, const char *str, size_t *i, t_node *env);
@@ -162,6 +162,7 @@ int	ft_redir(t_node *node);
 
 int check_syntax(t_token *tokens);
 
-t_node *init_minishell(char **env, int *in, int *out);
-void	reset_in_out(int in, int out);
+t_node *init_minishell(char **env);
+void	reset_in_out(int *in, int *out);
+
 #endif

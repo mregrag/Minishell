@@ -6,7 +6,7 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/18 21:49:59 by mregrag           #+#    #+#             */
-/*   Updated: 2024/06/28 19:41:07 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/06/29 21:37:38 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,11 +33,11 @@ char	*handle_dollar(char *ret, const char *str, size_t *i, t_node *node)
 		(*i)++;
 	var = ft_substr(str, start, *i - start);
 	val = ft_strtrim(ft_getenv(var, node->env), " \t\n\v\r\f");
-	free(var);
+	ft_free((void *)&var);
 	if (!val)
-		return (ft_strdup(""));
+		return (ft_free(&val), NULL);
 	ret = ft_strjoin(ret, val);
-	return (free(val), ret);
+	return (ft_free((void **)&val), ret);
 }
 
 char	*remov_quotes(char *str)
@@ -47,6 +47,8 @@ char	*remov_quotes(char *str)
 	size_t	i;
 	size_t	j;
 
+	if (!str)
+		return (NULL);
 	i = 0;
 	j = 0;
 	ret = malloc(strlen(str) + 1);
@@ -65,8 +67,7 @@ char	*remov_quotes(char *str)
 			ret[j++] = str[i++];
 	}
 	ret[j] = '\0';
-	(free(str), str = NULL);
-	return (ret);
+	return (ft_free(&str), ret);
 }
 
 char	*handle_single_quotes(char *ret, const char *str, size_t *i)
@@ -82,7 +83,7 @@ char	*handle_single_quotes(char *ret, const char *str, size_t *i)
 		(*i)++;
 	content = ft_substr(str, start, *i - start);
 	ret = ft_strjoin(ret, content);
-	free(content);
+	ft_free((void **)&content);
 	return (ret);
 }
 
@@ -105,20 +106,29 @@ char	*handle_double_quotes(char *ret, const char *str, size_t *i, t_node *node)
 	}
 	if (str[*i] == '"')
 		(*i)++;
-	content = ft_strjoin("\"", temp);
-	content = ft_strjoin(content, "\"");
+	content = ft_strjoin(ft_strjoin("\"", temp), "\"");
 	ret = ft_strjoin(ret, content);
-	free(temp);
-	free(content);
+	ft_free((void **)&temp);
+	ft_free((void **)&content);
 	return (ret);
 }
 
-char	*handle_normal(char *ret, const char *str, size_t *i)
+char *handle_normal(char *ret, const char *str, size_t *i)
 {
 	size_t	start;
+	char	*substr;
+	char	*new_ret;
 
 	start = *i;
 	while (str[*i] && str[*i] != '\'' && str[*i] != '"' && str[*i] != '$')
 		(*i)++;
-	return (ft_strjoin(ret, ft_substr(str, start, *i - start)));
+	substr = ft_substr(str, start, *i - start);
+	if (!substr)
+		return (ret);
+	new_ret = ft_strjoin(ret, substr);
+	ft_free(&substr);
+	if (new_ret)
+		return (ft_free(&ret), new_ret);
+	else
+		return (ret);
 }

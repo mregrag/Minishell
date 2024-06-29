@@ -6,12 +6,11 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 16:22:51 by mregrag           #+#    #+#             */
-/*   Updated: 2024/06/28 22:19:03 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/06/29 18:58:21 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
-#include <complex.h>
 #include <unistd.h>
 
 void	create_env_var(char *var, char *value, t_node *node)
@@ -23,7 +22,7 @@ void	create_env_var(char *var, char *value, t_node *node)
 	if (!var_with_equals)
 		return ;
 	tmp = ft_strjoin(var_with_equals, value);
-	free(var_with_equals);
+	ft_free(&var_with_equals);
 	if (!tmp)
 		return ;
 	ft_lstadd_back(&node->env, ft_lstnew(ft_strdup(tmp)));
@@ -40,7 +39,7 @@ void	increment_shlvl(t_node *node)
 	{
 		val = ft_itoa(ft_atoi(ft_getenv("SHLVL", node->env)) + 1);
 		update_env_var("SHLVL", val, node);
-		free(val);
+		ft_free(&val);
 	}
 }
 
@@ -68,13 +67,15 @@ void	duplicate_env(t_node *node, char **env)
 	create_env_var("?", "0", node);
 }
 
-void	reset_in_out(int in, int out)
+void	reset_in_out(int *in, int *out)
 {
-	ft_dup2(in, STDIN_FILENO);
-	ft_dup2(out, STDOUT_FILENO);
+	ft_dup2(*in, STDIN_FILENO);
+	ft_dup2(*out, STDOUT_FILENO);
+	close(*in);
+	close(*out);
 }
 
-t_node	*init_minishell(char **env, int *in, int *out)
+t_node	*init_minishell(char **env)
 {
 	t_node	*node;
 
@@ -83,7 +84,5 @@ t_node	*init_minishell(char **env, int *in, int *out)
 		return (NULL);
 	duplicate_env(node, env);
 	increment_shlvl(node);
-	*in = ft_dup(STDIN_FILENO);
-	*out = ft_dup(STDOUT_FILENO);
 	return (node);
 }

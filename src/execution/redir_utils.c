@@ -6,7 +6,7 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/09 16:42:51 by mregrag           #+#    #+#             */
-/*   Updated: 2024/06/28 16:34:47 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/06/29 23:44:35 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,9 +35,9 @@ int	*setup_heredocs(t_node *node, int *heredoc_count)
 	}
 	*heredoc_count = count;
 	if (count == 0)
-		return NULL;
+		return (NULL);
 	if (!(heredoc_fds = malloc(sizeof(int) * count)))
-		return NULL;
+		return (NULL);
 	current = node;
 	while (i < count)
 	{
@@ -45,11 +45,11 @@ int	*setup_heredocs(t_node *node, int *heredoc_count)
 		{
 			while (--i >= 0)
 				close(heredoc_fds[i]);
-			free(heredoc_fds);
-			return NULL;
+			ft_free(&heredoc_fds);
+			return (NULL);
 		}
 		current = current->left;
 		i++;
 	}
-	return heredoc_fds;
+	return (heredoc_fds);
 }

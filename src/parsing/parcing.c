@@ -6,7 +6,7 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/24 21:22:11 by mregrag           #+#    #+#             */
-/*   Updated: 2024/06/28 17:03:50 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/06/29 22:40:57 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,9 +37,9 @@ t_node	*create_file(t_token *token, t_type type, t_list *env)
 	if (!node->cmd)
 		return (NULL);
 	if (type == T_IN || type == T_APPEND || type == T_OUT)
-		node->cmd[0] = expansion_file(token->value, node);
+		node->cmd[0] = expansion_input(token->value, node);
 	else if (type == T_HERDOC)
-		node->cmd[0] = expansion_dilim(token->value);
+		node->cmd[0] = token->value;
 	node->cmd[1] = token->value;
 	node->cmd[2] = (NULL);
 	free(token);

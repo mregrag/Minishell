@@ -6,7 +6,7 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 20:12:56 by mregrag           #+#    #+#             */
-/*   Updated: 2024/06/28 16:52:30 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/06/29 22:31:37 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ static char	*handle_quotes(char *ret, const char *str, size_t *i, t_node *node)
 	content = ft_strjoin(ft_substr(str, start, 1), temp);
 	content = ft_strjoin(content, ft_substr(str, start, 1));
 	ret = ft_strjoin(ret, content);
-	(free(temp), free(content));
+	(ft_free(&temp), ft_free(&content));
 	return (ret);
 }
 
@@ -65,40 +65,27 @@ static char	*handle_quotes_dilim(char *ret, const char *str, size_t *i)
 	return (ret);
 }
 
-char	*expansion_file(char *str, t_node *node)
-{
-	size_t	i;
-	char	*ret;
 
-	ret = strdup("");
-	i = 0;
-	while (str[i])
-	{
-		if (str[i] == '\'')
-			ret = handle_single_quotes(ret, str, &i);
-		else if (str[i] == '"')
-			ret = handle_double_quotes(ret, str, &i, node);
-		else if (str[i] == '$')
-			ret = handle_dollar(ret, str, &i, node);
-		else
-			ret = handle_normal(ret, str, &i);
-	}
-	if (!ret)
-		return (NULL);
-	return (remov_quotes(ret));
-}
-
-static char	*handle_str(char *ret, const char *str, size_t *i)
+char *handle_str(char *ret, const char *str, size_t *i)
 {
 	size_t	start;
+	char	*substr;
+	char	*new_ret;
 
 	start = *i;
 	while (str[*i] && str[*i] != '\'' && str[*i] != '"')
 		(*i)++;
-	return (ft_strjoin(ret, ft_substr(str, start, *i - start)));
+	substr = ft_substr(str, start, *i - start);
+	if (!substr)
+		return (ret);
+	new_ret = ft_strjoin(ret, substr);
+	ft_free(&substr);
+	if (new_ret)
+		return (ft_free((void **)&ret), new_ret);
+	else
+		return (ret);
 }
-
-char	*expansion_dilim(char *str)
+char	*expansion_dilim(char *str, t_node *node)
 {
 	size_t	i;
 	char	*ret;
@@ -108,7 +95,10 @@ char	*expansion_dilim(char *str)
 	while (str[i])
 	{
 		if (str[i] == '\'' || str[i] == '"')
+		{
+			node->flag = 1;
 			ret = handle_quotes_dilim(ret, str, &i);
+		}
 		else
 			ret = handle_str(ret, str, &i);
 	}
@@ -131,7 +121,5 @@ char	*expansion_content(char *str, t_node *node)
 		else
 			ret = handle_normal(ret, str, &i);
 	}
-	if (!ret)
-		return (NULL);
 	return (ret);
 }

@@ -6,7 +6,7 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/18 18:50:47 by mregrag           #+#    #+#             */
-/*   Updated: 2024/06/29 00:13:32 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/06/29 20:47:34 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ static int	check_var(const char *str)
 	i = 1;
 	if (!ft_isalpha(*str) && *str != '_')
 		return (0);
-	while (str[i] && str[i] != '=')
+	while (str[i] && str[i] != '=' && str[i] != '+')
 	{
 		if (!ft_isalnum(str[i]) && str[i] != '_')
 			return (0);
