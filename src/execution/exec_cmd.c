@@ -6,12 +6,11 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/17 22:58:39 by mregrag           #+#    #+#             */
-/*   Updated: 2024/06/29 21:13:26 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/06/30 13:59:12 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
-#include <stdio.h>
 
 char	*get_path(char *cmd, t_list *env)
 {

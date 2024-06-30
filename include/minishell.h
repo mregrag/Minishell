@@ -6,7 +6,7 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/10 16:16:44 by mregrag           #+#    #+#             */
-/*   Updated: 2024/06/29 22:18:30 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/06/30 14:31:21 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,7 +128,7 @@ void	exec_cmd(t_node *node);
 void	exec_pipe(t_node *node);
 int		is_builtin(t_node *node);
 int		heredoc(t_node *node);
-int		*setup_heredocs(t_node *node, int *heredoc_count);
+int		setup_heredoc(t_node *node);
 int		ft_pipe(int ends[2]);
 int		ft_dup2(int filde1, int filde2);
 int		redirections(t_node *node);

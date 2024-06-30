@@ -6,7 +6,7 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/07 18:05:58 by mregrag           #+#    #+#             */
-/*   Updated: 2024/06/30 00:23:00 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/06/30 13:58:22 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,30 +16,25 @@ int	heredoc(t_node *node)
 {
 	int		fd[2];
 	char	*str;
-	pid_t	pid;
 
 	if (ft_pipe(fd) < 0)
 		return (-1);
-	pid = ft_fork();
-	if (pid < 0)
-		return (ft_close(fd[0]), ft_close(fd[1]), -1);
-	if (pid == 0)
+	while (1)
 	{
-		ft_close(fd[0]);
-		while (1)
+		str = readline("> ");
+		if (!str || ft_strcmp(str, expansion_dilim(node->right->cmd[0], node)) == 0)
 		{
-			str = readline("> ");
-			if (!str || ft_strcmp(str, expansion_dilim(node->right->cmd[0], node)) == 0)
-				(free(str), close(fd[1]), exit(0));
-			if (node->flag == 1)
-				ft_putendl_fd(str, fd[1]);
-			else
-				ft_putendl_fd(expansion_content(str, node), fd[1]);
-
 			ft_free(&str);
+			break;
 		}
+		if (node->flag == 1)
+			ft_putendl_fd(str, fd[1]);
+		else
+			ft_putendl_fd(expansion_content(str, node), fd[1]);
+		ft_free(&str);
 	}
-	return ((ft_close(fd[1]), waitpid(pid, NULL, 0)), fd[0]);
+	ft_close(fd[1]);
+	return (fd[0]);
 }
 
 static int	check_file(t_node *node)
