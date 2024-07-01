@@ -6,7 +6,7 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/27 17:47:28 by mregrag           #+#    #+#             */
-/*   Updated: 2024/06/28 23:03:22 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/07/01 16:18:08 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,5 +44,5 @@ int	ft_exit(t_node *node)
 		printf("exit\n");
 		exit(ft_atoi(node->cmd[1]));
 	}
-	return (0);
+	return (1);
 }

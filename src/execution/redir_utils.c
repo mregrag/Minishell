@@ -6,7 +6,7 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/09 16:42:51 by mregrag           #+#    #+#             */
-/*   Updated: 2024/06/30 14:30:30 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/06/30 18:08:44 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,19 +22,17 @@ int	ft_open(const char *pathname, int flags, mode_t mode)
 	return (fd);
 }
 
-int	setup_heredoc(t_node *node)
+t_node	*setup_heredoc(t_node *node, int *heredoc_fd)
 {
-	int	heredoc_fd;
-
-	heredoc_fd = -1;
+	*heredoc_fd = -1;
 	while (node && node->type == T_HERDOC)
 	{
-		if (heredoc_fd != -1)
-			close(heredoc_fd);
-		heredoc_fd = heredoc(node);
-		if (heredoc_fd < 0)
-			return (-1);
+		if (*heredoc_fd != -1)
+			close(*heredoc_fd);
+		*heredoc_fd = heredoc(node);
+		if (*heredoc_fd < 0)
+			return (NULL);
 		node = node->left;
 	}
-	return (heredoc_fd);
+	return (node);
 }

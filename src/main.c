@@ -6,43 +6,65 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/10 16:14:20 by mregrag           #+#    #+#             */
-/*   Updated: 2024/06/29 18:58:37 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/07/02 00:14:52 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-t_gb g_minish;
+int	g_sig = 0;
+
+void	set_fds(int in, int out)
+{
+	dup2(in, STDIN_FILENO);
+	dup2(out, STDOUT_FILENO);
+	close(in);
+	close(out);
+}
+
+void	kep_fds(int *in, int *out)
+{
+	*in = dup(STDIN_FILENO);
+	*out = dup(STDOUT_FILENO);
+}
+
+void	cleanup(char *input, t_node *tree)
+{
+	if (input)
+		free(input);
+	if (tree)
+		free_tree(tree);
+}
 
 int main(int argc, char **argv, char **env)
 {
-    char    *input;
-    t_node  *tree;
-    t_node	*minish_env;
-    t_token *tokens;
-    int	in;
-    int	out;
+	char    *input;
+	t_node  *tree;
+	t_env	*envp;
+	t_token *tokens;
+	int		in;
+	int		out;
 
+	(void)argv;
+	(void)argc;
 
-    (void)argv;
-    (void)argc;
-
-    minish_env = init_minishell(env);
-    while (1)
-    {
-        input = readline("\033[1;32mminish-1.0$ \033[0m");
-        if (!input)
-            break;
-        add_history(input);
-        tokens = tokenize_input(input, minish_env);
-        tree = parse_tokens(&tokens, minish_env->env);
-	out = dup(STDOUT_FILENO);
-	in = dup(STDIN_FILENO);
-	executing(tree);
-	dup2(out, STDOUT_FILENO);
-	dup2(in, STDIN_FILENO);
-	close(in);
-	close(out);
-    }
-    return 0;
+	envp = init_env(env);
+	if (!envp)
+		return (1);
+	while (1)
+	{
+		sig_ign();
+		kep_fds(&in, &out);
+		input = readline("minish-1.0$ ");
+		if (!input)
+			break;
+		add_history(input);
+		tokens = tokenize_input(input, envp);
+		free(input);
+		tree = parse_tokens(&tokens, envp);
+		executing(tree);
+		g_sig = 0;
+		set_fds(in, out);
+	}
+	return 0;
 }

@@ -6,24 +6,47 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 15:47:14 by mregrag           #+#    #+#             */
-/*   Updated: 2024/06/04 22:10:18 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/06/30 23:38:34 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-static void	ctrl_c(int a)
+void	sigint_h(int sigN)
 {
-	(void)a;
-	minish.signal = 1;
-	// rl_replace_line("", 0);
-	write(1, "\n", 1);
-	rl_on_new_line();
-	rl_redisplay();
+	extern int	g_sig;
+
+	if (g_sig == 0)
+	{
+		(void)sigN;
+		printf("\n");
+		rl_on_new_line();
+		// rl_replace_line("", 0);
+		rl_redisplay();
+	}
+}
+void	sig_ign(void)
+{
+	if (signal(SIGINT, sigint_h) == SIG_ERR
+		|| signal(SIGQUIT, SIG_IGN) == SIG_ERR)
+		perror("shell -- signals err");
 }
 
-void	setup_signal(void)
+void	sig_allow(void)
 {
-	signal(SIGINT, ctrl_c);
-	signal(SIGQUIT, SIG_IGN);
+	if (signal(SIGINT, SIG_DFL) == SIG_ERR
+		|| signal(SIGQUIT, SIG_DFL) == SIG_ERR)
+		perror("shell -- signals err");
 }
+
+void	heredoc_h(int n)
+{
+	extern int	g_sig;
+
+	(void)n;
+	g_sig = 2;
+	close(STDIN_FILENO);
+}
+
+
+

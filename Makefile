@@ -6,7 +6,7 @@
 #    By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/05/10 16:12:48 by mregrag           #+#    #+#              #
-#    Updated: 2024/06/29 18:20:06 by mregrag          ###   ########.fr        #
+#    Updated: 2024/07/01 22:39:37 by mregrag          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,7 +14,9 @@ NAME		= minishell
 LIBFT		= libft.a
 LIBRAIRIE	= "lib/libft"
 CC		= cc
-CFLAGS		= -Wall -Wextra -Werror -fsanitize=address -fno-omit-frame-pointer -g2
+CFLAGS		= -Wall -Wextra -Werror -g
+LEAKS		= leaks --atExit --
+FALGS =
 HEADER		= ./include/minishell.h
 RM		= rm -rf
 
@@ -27,8 +29,8 @@ BUILTINS	:=	src/builtins/ft_cd.c \
 			src/builtins/ft_unset.c \
 			src/builtins/ft_export.c
 
-ENV		:=	src/env/env_init.c \
-			src/env/env_utils.c \
+ENV		:=	src/env/env_utils.c \
+			src/env/init_env.c \
 
 EXECUCTION	:=	src/execution/exe_utils.c \
 			src/execution/exec_builtin.c \
@@ -38,9 +40,10 @@ EXECUCTION	:=	src/execution/exe_utils.c \
 			src/execution/redir_utils.c \
 			src/execution/redirections.c
 
-EXPANSION	:=	src/expansion/expansion_utils.c \
-			src/expansion/expansion_input.c \
-			src/expansion/expansion_heredoc.c \
+EXPANSION	:=	src/expansion/expansion.c \
+			src/expansion/handle_dolar.c \
+			src/expansion/expansion_utils.c \
+			src/expansion/expansion_utils1.c
 
 PARSING		:=	src/parsing/parcing.c \
 			src/parsing/parcing_utils.c
@@ -52,13 +55,16 @@ TOKENIZING	:=	src/tokens/tokinize.c \
 UTILS		:=	src/utils/error_exit.c \
 			src/utils/syntax_errors.c
 
-MAIN		:=	src/main.c \
+MAIN		:=	src/main.c
+
+SIGNALS		:=	src/signals/signals.c
 
 SRCS		:=	$(BUILTINS)\
 			$(EXECUCTION)\
 			$(EXPANSION)\
 			$(PARSING)\
 			$(TOKENIZING)\
+			$(SIGNALS)\
 			$(UTILS)\
 			$(ENV)\
 			src/main.c

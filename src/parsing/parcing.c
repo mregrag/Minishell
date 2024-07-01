@@ -6,13 +6,13 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/24 21:22:11 by mregrag           #+#    #+#             */
-/*   Updated: 2024/06/29 22:40:57 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/07/01 19:56:05 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-t_node	*parse_cmd(t_token **tokens, t_list *env)
+t_node	*parse_cmd(t_token **tokens, t_env *env)
 {
 	int		cmd_count;
 	t_node	*cmd;
@@ -26,7 +26,7 @@ t_node	*parse_cmd(t_token **tokens, t_list *env)
 	return (cmd);
 }
 
-t_node	*create_file(t_token *token, t_type type, t_list *env)
+t_node	*create_file(t_token *token, t_type type, t_env *env)
 {
 	t_node	*node;
 
@@ -40,13 +40,12 @@ t_node	*create_file(t_token *token, t_type type, t_list *env)
 		node->cmd[0] = expansion_input(token->value, node);
 	else if (type == T_HERDOC)
 		node->cmd[0] = token->value;
-	node->cmd[1] = token->value;
-	node->cmd[2] = (NULL);
+	node->cmd[1] = (NULL);
 	free(token);
 	return (node);
 }
 
-t_node	*parse_redire(t_token **tokens, t_list *env)
+t_node	*parse_redire(t_token **tokens, t_env *env)
 {
 	t_token	*tmp;
 	t_node	*node;
@@ -75,7 +74,7 @@ t_node	*parse_redire(t_token **tokens, t_list *env)
 	return (parse_cmd(&tmp, env));
 }
 
-t_node	*build_tree(t_token **tokens, t_list *env)
+t_node	*build_tree(t_token **tokens, t_env *env)
 {
 	t_token	*tmp;
 	t_token	*next_token;
@@ -100,7 +99,7 @@ t_node	*build_tree(t_token **tokens, t_list *env)
 	return (parse_redire(&tmp, env));
 }
 
-t_node	*parse_tokens(t_token **tokens, t_list *env)
+t_node	*parse_tokens(t_token **tokens, t_env *env)
 {
 	if (!tokens || !*tokens)
 		return (NULL);

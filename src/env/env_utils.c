@@ -6,39 +6,48 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 16:25:14 by mregrag           #+#    #+#             */
-/*   Updated: 2024/06/29 16:04:16 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/07/01 21:04:13 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-char	*ft_getenv(const char *key, t_list *env)
-{
-	int		i;
-	t_list	*envp;
-	char	*tmp;
-	char	*value;
-
-	envp = env;
-	if (!key)
-		return (NULL);
-	while (envp)
-	{
-		i = 0;
-		tmp = (char *)envp->content;
-		while (key[i] && tmp[i] && (key[i] == tmp[i]))
-			i++;
-		if (!key[i] && (tmp[i] == '=' || tmp[i] == '\0'))
-		{
-			value = ft_strdup(&(tmp[i + 1]));
-			if (!value)
-				return (ft_free(&value), NULL);
-			return (value);
-		}
-		envp = envp->next;
-	}
-	return (NULL);
-}
+// int update_env_var(t_env *env, const char *name, const char *value)
+// {
+//     t_list *current;
+//     char *new_var;
+//     size_t name_len;
+//
+//     if (!env || !name || !value)
+//         return -1;
+//
+//     name_len = ft_strlen(name);
+//     new_var = ft_strjoin(ft_strjoin(name, "="), value);
+//     if (!new_var)
+//         return -1;
+//
+//     current = env->env;
+//     while (current)
+//     {
+//         if (ft_strncmp(current->content, name, name_len) == 0 &&
+//             ((char *)current->content)[name_len] == '=')
+//         {
+//             free(current->content);
+//             current->content = new_var;
+//             return 0;
+//         }
+//         current = current->next;
+//     }
+//
+//     // If we get here, the variable doesn't exist, so we add it
+//     if (ft_lstadd_back(&(env->env), ft_lstnew(new_var)) == -1)
+//     {
+//         free(new_var);
+//         return -1;
+//     }
+//
+//     return 0;
+// }
 
 void	update_env_var(char *var, char *value, t_node *node)
 {
@@ -48,7 +57,7 @@ void	update_env_var(char *var, char *value, t_node *node)
 	new_entry = ft_strjoin(ft_strjoin(var, "="), value);
 	if (!new_entry)
 		return ;
-	current = node->env;
+	current = node->env->env;
 	while (current)
 	{
 		if (ft_strncmp(current->content, var, ft_strlen(var)) == 0
@@ -60,6 +69,83 @@ void	update_env_var(char *var, char *value, t_node *node)
 		}
 		current = current->next;
 	}
-	ft_lstadd_back(&node->env, ft_lstnew(ft_strdup(new_entry)));
+	ft_lstadd_back(&node->env->env, ft_lstnew(ft_strdup(new_entry)));
 	free(new_entry);
 }
+
+char	*get_env_var(t_env *env, const char *name)
+{
+	t_list	*current;
+	char	*tmp;
+	size_t	len;
+
+	if (!env || !name)
+		return (NULL);
+	len = ft_strlen(name);
+	current = env->env;
+	while (current)
+	{
+		tmp = (char *)current->content;
+		if (ft_strncmp(tmp, name, len) == 0 && tmp[len] == '=')
+			return (ft_strdup(tmp + len + 1));
+		current = current->next;
+	}
+	return (NULL);
+}
+
+int	set_env_var(t_env *env, const char *name, const char *value)
+{
+	t_list	*current;
+	char	*new_var;
+	size_t	len;
+
+	if (!env || !name || !value)
+		return (-1);
+	len = ft_strlen(name);
+	new_var = ft_strjoin(ft_strjoin(name, "="), value);
+	if (!new_var)
+		return (-1);
+	current = env->env;
+	while (current)
+	{
+		if (ft_strncmp(current->content, name, len) == 0 && ((char *)current->content)[len] == '=')
+		{
+			free(current->content);
+			current->content = new_var;
+			return (0);
+		}
+		current = current->next;
+	}
+	ft_lstadd_back(&(env->env), ft_lstnew(new_var));
+	return (0);
+}
+
+int	unset_env_var(t_env *env, const char *name)
+{
+	t_list	*current;
+	t_list	*prev;
+	size_t	len;
+
+	if (!env || !name)
+		return (-1);
+	len = ft_strlen(name);
+	current = env->env;
+	prev = (NULL);
+	while (current)
+	{
+		if (ft_strncmp(current->content, name, len) == 0 && ((char *)current->content)[len] == '=')
+		{
+			if (prev)
+				prev->next = current->next;
+			else
+				env->env = current->next;
+			free(current->content);
+			free(current);
+			return (0);
+		}
+		prev = current;
+		current = current->next;
+	}
+	return (-1);
+}
+

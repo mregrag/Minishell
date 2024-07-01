@@ -6,27 +6,21 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/18 18:50:47 by mregrag           #+#    #+#             */
-/*   Updated: 2024/06/29 20:47:34 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/07/01 21:35:09 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-static	void	export_list(t_node *node)
+static	void	export_list(t_list *env)
 {
-	t_list	*env;
 	char	*content;
 
-	env = node->env;
 	while (env)
 	{
 		content = (char *)env->content;
-		if (content[0] != '_' || content[0] != '?')
-		{
-			printf("declare -x %s\"", content);
-			printf("\n");
-
-		}
+		if (content[0] != '?' && content[0] != '_')
+			printf("declare -x %s\"\n", content);
 		env = env->next;
 	}
 }
@@ -47,13 +41,13 @@ static int	check_var(const char *str)
 	return (1);
 }
 
-int find_char_index(const char *str, char c)
+static int	find_char_index(const char *str, char c)
 {
-	int index = 0;
+	int	index;
 
+	index = 0;
 	if (!str)
-		return -1;
-
+		return (-1);
 	while (str[index] != '\0')
 	{
 		if (str[index] == c)
@@ -65,7 +59,7 @@ int find_char_index(const char *str, char c)
 
 void	add_arg_to_env(char *argv, t_node *node)
 {
-	int	index;
+	int		index;
 	char	*value;
 	char	*var;
 
@@ -74,32 +68,34 @@ void	add_arg_to_env(char *argv, t_node *node)
 	value = ft_substr(argv, index + 1, ft_strlen(argv) - index);
 	if (ft_issamechar(value, '$'))
 		value = ft_itoa(getpid());
-	if (ft_getenv(var, node->env) && !ft_strchr(argv, '+'))
+	if (get_env_var(node->env, var) && !ft_strchr(argv, '+'))
 		update_env_var(var, value, node);
-	else if (ft_getenv(var, node->env) && argv[index - 1] == '+')
-		update_env_var(var, ft_strjoin(ft_getenv(var, node->env), value), node);
+	else if (get_env_var(node->env, var) && argv[index - 1] == '+')
+		update_env_var(var, ft_strjoin(get_env_var( node->env, var), value), node);
 	else if (ft_strchr(argv, '='))
-		create_env_var(var, value, node);
+		set_env_var(node->env, var, value);
 }
 
 int	ft_export(t_node *node)
 {
 	int		i;
 	char	**argv;
+	t_list	*env;
 
 	i = 0;
+	env = node->env->env;
 	argv = node->cmd;
 	if (!argv[1])
-		return (export_list(node), 0);
+		return (export_list(env), 1);
 	while (*(++argv))
 	{
 		if (!check_var(*argv))
 		{
-			print_error("minish","export", *argv, "not a valid identifier");
-			update_env_var("?", "1", node);
+			print_error("minish", "export", *argv, "not a valid identifier");
+			set_env_var(node->env, "?", "1");
 		}
 		else
 			add_arg_to_env(*argv, node);
 	}
-	return (0);
+	return (1);
 }

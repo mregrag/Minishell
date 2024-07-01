@@ -6,7 +6,7 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/25 01:29:14 by mregrag           #+#    #+#             */
-/*   Updated: 2024/06/29 17:26:53 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/07/01 17:15:52 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,7 @@ void		*ft_memcpy(void *dst, const void *src, size_t n);
 void		*ft_calloc(size_t count, size_t size);
 void		*ft_memmove(void *dst, const void *src, size_t len);
 void		ft_free(void *var);
+void		ft_free_array(char **arr);
 
 size_t		ft_strlen(const char *s);
 size_t		ft_strlcpy(char *dest, const char *src, size_t dstsize);

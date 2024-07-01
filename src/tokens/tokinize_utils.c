@@ -6,7 +6,7 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/11 23:05:33 by mregrag           #+#    #+#             */
-/*   Updated: 2024/06/28 15:20:21 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/07/01 22:07:41 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,8 +49,9 @@ int	process_word(char **line, t_token **tokens)
 	if (!value)
 		return (0);
 	token = new_token(value, T_WORD);
+	free (value);
 	if (!token)
-		return (free(value), 0);
+		return (0);
 	*line += i;
 	return (token_add_back(tokens, token), 1);
 }

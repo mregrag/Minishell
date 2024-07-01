@@ -6,39 +6,11 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/18 21:49:59 by mregrag           #+#    #+#             */
-/*   Updated: 2024/06/29 21:37:38 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/07/01 23:20:42 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
-
-char	*handle_dollar(char *ret, const char *str, size_t *i, t_node *node)
-{
-	char	*var;
-	char	*val = NULL;
-	size_t	start;
-
-	start = ++(*i);
-	if (ft_isdigit(str[*i]) || str[*i] == '@')
-		return ((*i)++, ft_strdup(ret));
-	if (str[*i] == '?')
-	{
-		val = ft_getenv("?", node->env);
-		ret = ft_strjoin(ret, val);
-		return (free(val), (*i)++, ret);
-	}
-	if (!(ft_isalnum(str[*i]) || str[*i] == '_'))
-		return (ft_strjoin(ret, "$"));
-	while (ft_isalnum(str[*i]) || str[*i] == '_')
-		(*i)++;
-	var = ft_substr(str, start, *i - start);
-	val = ft_strtrim(ft_getenv(var, node->env), " \t\n\v\r\f");
-	ft_free((void *)&var);
-	if (!val)
-		return (ft_free(&val), NULL);
-	ret = ft_strjoin(ret, val);
-	return (ft_free((void **)&val), ret);
-}
 
 char	*remov_quotes(char *str)
 {
@@ -70,7 +42,7 @@ char	*remov_quotes(char *str)
 	return (ft_free(&str), ret);
 }
 
-char	*handle_single_quotes(char *ret, const char *str, size_t *i)
+char	*handle_single_quotes(char *ret, char *str, size_t *i)
 {
 	size_t	start;
 	char	*content;
@@ -83,11 +55,11 @@ char	*handle_single_quotes(char *ret, const char *str, size_t *i)
 		(*i)++;
 	content = ft_substr(str, start, *i - start);
 	ret = ft_strjoin(ret, content);
-	ft_free((void **)&content);
+	ft_free(&content);
 	return (ret);
 }
 
-char	*handle_double_quotes(char *ret, const char *str, size_t *i, t_node *node)
+char	*handle_double_quotes(char *ret, char *str, size_t *i, t_node *node)
 {
 	char	*temp;
 	char	*content;
@@ -108,12 +80,12 @@ char	*handle_double_quotes(char *ret, const char *str, size_t *i, t_node *node)
 		(*i)++;
 	content = ft_strjoin(ft_strjoin("\"", temp), "\"");
 	ret = ft_strjoin(ret, content);
-	ft_free((void **)&temp);
-	ft_free((void **)&content);
+	ft_free(&temp);
+	ft_free(&content);
 	return (ret);
 }
 
-char *handle_normal(char *ret, const char *str, size_t *i)
+char	*handle_normal(char *ret, char *str, size_t *i)
 {
 	size_t	start;
 	char	*substr;

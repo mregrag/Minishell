@@ -1,18 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   expansion_heredoc.c                                :+:      :+:    :+:   */
+/*   expansion_utils1.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/06/24 20:12:56 by mregrag           #+#    #+#             */
-/*   Updated: 2024/06/29 22:31:37 by mregrag          ###   ########.fr       */
+/*   Created: 2024/07/01 16:51:41 by mregrag           #+#    #+#             */
+/*   Updated: 2024/07/01 16:52:56 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-static char	*handle_quotes(char *ret, const char *str, size_t *i, t_node *node)
+char	*handle_quotes(char *ret, char *str, size_t *i, t_node *node)
 {
 	char	quote;
 	char	*content;
@@ -41,7 +41,7 @@ static char	*handle_quotes(char *ret, const char *str, size_t *i, t_node *node)
 	return (ret);
 }
 
-static char	*handle_quotes_dilim(char *ret, const char *str, size_t *i)
+char	*handle_quotes_dilim(char *ret, const char *str, size_t *i)
 {
 	char	quote;
 	char	*content;
@@ -66,7 +66,7 @@ static char	*handle_quotes_dilim(char *ret, const char *str, size_t *i)
 }
 
 
-char *handle_str(char *ret, const char *str, size_t *i)
+char *handle_str(char *ret, char *str, size_t *i)
 {
 	size_t	start;
 	char	*substr;
@@ -84,42 +84,4 @@ char *handle_str(char *ret, const char *str, size_t *i)
 		return (ft_free((void **)&ret), new_ret);
 	else
 		return (ret);
-}
-char	*expansion_dilim(char *str, t_node *node)
-{
-	size_t	i;
-	char	*ret;
-
-	ret = strdup("");
-	i = 0;
-	while (str[i])
-	{
-		if (str[i] == '\'' || str[i] == '"')
-		{
-			node->flag = 1;
-			ret = handle_quotes_dilim(ret, str, &i);
-		}
-		else
-			ret = handle_str(ret, str, &i);
-	}
-	return (remov_quotes(ret));
-}
-
-char	*expansion_content(char *str, t_node *node)
-{
-	size_t	i;
-	char	*ret;
-
-	ret = strdup("");
-	i = 0;
-	while (str[i])
-	{
-		if (str[i] == '\'' || str[i] == '"')
-			ret = handle_quotes(ret, str, &i, node);
-		else if (str[i] == '$')
-			ret = handle_dollar(ret, str, &i, node);
-		else
-			ret = handle_normal(ret, str, &i);
-	}
-	return (ret);
 }

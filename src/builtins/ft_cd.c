@@ -6,7 +6,7 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/18 18:49:44 by mregrag           #+#    #+#             */
-/*   Updated: 2024/06/28 22:53:36 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/07/01 21:37:35 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,21 +19,15 @@ static char	*get_dir(t_node *node)
 	pwd = NULL;
 	if (!node->cmd[1])
 	{
-		pwd = ft_getenv("HOME", node->env);
+		pwd = get_env_var(node->env, "HOME");
 		if (!pwd)
-		{
-			print_error("minish", "cd", NULL, "HOME not set");
-			update_env_var("?", "1", node);
-		}
+			print_error("minish", "cd", "HOME not set", NULL);
 	}
 	else if (node->cmd[1] && ft_strncmp(node->cmd[1], "-", 2) == 0)
 	{
-		pwd = ft_getenv("OLDPWD", node->env);
+		pwd = get_env_var(node->env, "OLDPWD");
 		if (!pwd)
-		{
-			print_error("minish", "cd", NULL, "OLDPWD not set");
-			update_env_var("?", "1", node);
-		}
+			print_error("minish", "cd", "OLDPWD not set", NULL);
 	}
 	else
 		pwd = node->cmd[1];
@@ -45,10 +39,10 @@ static int	update_pwd(t_node *node)
 	char	buf[PATH_MAX];
 	char	*pwd;
 
-	pwd = ft_getenv("PWD", node->env);
-	if (!ft_getenv("OLDPWD", node->env))
-		create_env_var("OLDPWD", pwd, node);
-	update_env_var("OLDPWD", pwd, node);
+	pwd = get_env_var(node->env, "PWD");
+	if (!get_env_var(node->env, "OLDPWD"))
+		set_env_var(node->env,  "OLDPWD", pwd);
+	set_env_var(node->env,  "OLDPWD", pwd);
 	if (!getcwd(buf, sizeof(buf)))
 	{
 		print_error_errno("cd", "error retrieving current directory",\
@@ -66,15 +60,12 @@ int	ft_cd(t_node *node)
 
 	pwd = get_dir(node);
 	if (!pwd)
-		return (EXIT_FAILURE);
+		return (1);
 	if (chdir(pwd) == -1)
-	{
-		print_error_errno("minish", "cd", pwd);
-		return (EXIT_FAILURE);
-	}
+		return (print_error_errno("minish", "cd", pwd), 1);
 	if (node->cmd[1] && !ft_strcmp(node->cmd[1], "-"))
 		printf("%s\n", pwd);
 	if (update_pwd(node) == 1)
-		return (EXIT_FAILURE);
-	return (0);
+		return (1);
+	return (1);
 }

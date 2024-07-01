@@ -6,7 +6,7 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 18:03:11 by mregrag           #+#    #+#             */
-/*   Updated: 2024/06/29 17:06:10 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/07/01 14:46:13 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,52 +15,73 @@
 #include <unistd.h>
 #include <stdlib.h>
 
-void	ft_free(void *ptr)
+#include <stdio.h>
+#include <termios.h>
+#include <unistd.h>
+// Swap function
+static void ft_swap(void **a, void **b)
 {
-	void	**p;
-
-	p = (void **)ptr;
-	if (p != NULL && *p != NULL)
-	{
-		free(*p);
-		*p = NULL;
-	}
+    void *temp = *a;
+    *a = *b;
+    *b = temp;
 }
 
-char	*ft_strjoin(char const *s1, char const *s2)
+// Partition function for quicksort
+static int ft_partition(void **arr, int low, int high, int (*cmp)(const void *, const void *))
 {
-	char	*result;
-	int		i;
+    void *pivot = arr[high];
+    int i = (low - 1);
 
-	i = 0;
-	if (!s1 && !s2)
-		return (NULL);
-	if (!s1)
-		return (strdup(s2));
-	if (!s2)
-		return (strdup(s1));
-	result = malloc(sizeof(char) *(strlen(s1) + strlen(s2) + 1));
-	if (!result)
-		return (NULL);
-	while (*s1)
-		*(result + i++) = *s1++;
-	while (*s2)
-		*(result + i++) = *s2++;
-	*(result + i) = '\0';
-	return (result);
+    for (int j = low; j <= high - 1; j++)
+    {
+        if (cmp(arr[j], pivot) < 0)
+        {
+            i++;
+            ft_swap(&arr[i], &arr[j]);
+        }
+    }
+    ft_swap(&arr[i + 1], &arr[high]);
+    return (i + 1);
 }
 
-void	leak(void)
+// Recursive quicksort function
+static void ft_qsort_recursive(void **arr, int low, int high, int (*cmp)(const void *, const void *))
 {
-	system("leaks a.out");
-}
-int main()
-{
-	atexit(leak);
-	char *s;
-	s =  ft_strjoin("hello", NULL);
-	printf("s = %s\n", s);
-	ft_free(&s);
+    if (low < high)
+    {
+        int pi = ft_partition(arr, low, high, cmp);
 
-	return 0;
+        ft_qsort_recursive(arr, low, pi - 1, cmp);
+        ft_qsort_recursive(arr, pi + 1, high, cmp);
+    }
+}
+
+// Main quicksort function
+void ft_qsort(void **arr, int size, int (*cmp)(const void *, const void *))
+{
+    ft_qsort_recursive(arr, 0, size - 1, cmp);
+}
+
+// Comparison function for sorting strings
+static int compare_strings(const void *a, const void *b)
+{
+    return strcmp(*(const char **)a, *(const char **)b);
+}
+int values[] = { 'b', 'c', 'a', 'e', 't' };
+int main () {
+   int n;
+
+   printf("Before sorting the list is: \n");
+   for( n = 0 ; n < 5; n++ ) {
+      printf("%d ", values[n]);
+   }
+
+   qsort(values, 5, sizeof(int), compare_strings);
+
+   printf("\nAfter sorting the list is: \n");
+   for( n = 0 ; n < 5; n++ ) {
+      printf("%d ", values[n]);
+   }
+
+   return(0);
 }

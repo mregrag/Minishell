@@ -6,7 +6,7 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/07 18:05:58 by mregrag           #+#    #+#             */
-/*   Updated: 2024/06/30 13:58:22 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/06/30 19:08:51 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,6 +116,8 @@ static int	redire_output(t_node *node)
 		}
 		current = current->left;
 	}
+	if (fd < 0)
+		return (-1);
 	if (fd != 1)
 		if (ft_dup2(fd, STDOUT_FILENO) < 0)
 			return (0);
@@ -133,3 +135,4 @@ int	redirections(t_node *node)
 	}
 	return (1);
 }
+
