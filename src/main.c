@@ -6,7 +6,7 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/10 16:14:20 by mregrag           #+#    #+#             */
-/*   Updated: 2024/07/02 00:14:52 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/07/02 20:36:34 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,14 +26,6 @@ void	kep_fds(int *in, int *out)
 {
 	*in = dup(STDIN_FILENO);
 	*out = dup(STDOUT_FILENO);
-}
-
-void	cleanup(char *input, t_node *tree)
-{
-	if (input)
-		free(input);
-	if (tree)
-		free_tree(tree);
 }
 
 int main(int argc, char **argv, char **env)
@@ -60,7 +52,6 @@ int main(int argc, char **argv, char **env)
 			break;
 		add_history(input);
 		tokens = tokenize_input(input, envp);
-		free(input);
 		tree = parse_tokens(&tokens, envp);
 		executing(tree);
 		g_sig = 0;

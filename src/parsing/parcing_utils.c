@@ -6,7 +6,7 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/24 21:23:34 by mregrag           #+#    #+#             */
-/*   Updated: 2024/07/01 23:27:21 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/07/02 20:39:46 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,6 @@ t_node	*new_node(t_type type, t_env *env)
 	node->cmd = NULL;
 	node->left = NULL;
 	node->right = NULL;
-	node->env = env;
 	node->env = env;
 	node->flag = 0;
 	return (node);
@@ -60,7 +59,6 @@ t_node	*create_redire(t_token **tokens, t_token *tmp, t_env  *env)
 	*tokens = (*tokens)->next->next;
 	node->left = parse_redire(tokens, env);
 	node->right = create_file(tmp->next, tmp->type, node->env);
-	ft_free(tmp->value);
 	free(tmp);
 	return (node);
 }

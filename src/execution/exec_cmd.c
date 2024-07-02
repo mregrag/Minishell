@@ -6,7 +6,7 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/17 22:58:39 by mregrag           #+#    #+#             */
-/*   Updated: 2024/07/02 00:12:07 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/07/02 20:37:55 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ char	*get_path(char *cmd, t_env *env)
 		cmd_path = ft_strjoin(ft_strjoin(*paths, "/"), cmd);
 		if (access(cmd_path, F_OK | X_OK) == 0)
 			return (cmd_path);
-		ft_free(&cmd_path);
+		free(cmd_path);
 		paths++;
 	}
 	return (ft_strdup(cmd));

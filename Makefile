@@ -6,7 +6,7 @@
 #    By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/05/10 16:12:48 by mregrag           #+#    #+#              #
-#    Updated: 2024/07/01 22:39:37 by mregrag          ###   ########.fr        #
+#    Updated: 2024/07/02 20:38:50 by mregrag          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,7 +14,7 @@ NAME		= minishell
 LIBFT		= libft.a
 LIBRAIRIE	= "lib/libft"
 CC		= cc
-CFLAGS		= -Wall -Wextra -Werror -g
+CFLAGS		= -Wall -Wextra -Werror -fsanitize=address -fno-omit-frame-pointer -g2
 LEAKS		= leaks --atExit --
 FALGS =
 HEADER		= ./include/minishell.h
