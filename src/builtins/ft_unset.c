@@ -12,37 +12,6 @@
 
 #include "../../include/minishell.h"
 
-static void	delete_env_var(t_list **head, char *var)
-{
-	t_list	*temp;
-	t_list	*prev;
-	int var_len = ft_strchr(var, '=') ? ft_strchr(var, '=') - var : ft_strlen(var);
-
-	temp = *head;
-	if (temp && !ft_strncmp(temp->content, var, var_len) &&
-			(((char *)temp->content)[var_len] == '=' || ((char *)temp->content)[var_len] == '\0'))
-	{
-		*head = temp->next;
-		free(temp->content);
-		free(temp);
-		return ;
-	}
-
-	while (temp && (ft_strncmp(temp->content, var, var_len) ||
-				(((char *)temp->content)[var_len] != '=' && ((char *)temp->content)[var_len] != '\0')))
-	{
-		prev = temp;
-		temp = temp->next;
-	}
-
-	if (!temp)
-		return ;
-
-	prev->next = temp->next;
-	free(temp->content);
-	free(temp);
-}
-
 static int	check_var_unset(char *var)
 {
 	int	i;
@@ -71,7 +40,7 @@ int	ft_unset(t_node *node)
 			return (1);
 		}
 		else
-			delete_env_var(&node->env->env, *args);
+			unset_env_var(node->env, *args);
 	}
 	return (1);
 }

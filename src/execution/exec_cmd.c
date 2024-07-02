@@ -16,11 +16,13 @@ char	*get_path(char *cmd, t_env *env)
 {
 	char	**paths;
 	char	*cmd_path;
+	char	*path;
 
 	if (ft_strchr(cmd, '/'))
 		return (cmd);
-	if (get_env_var(env, "PATH"))
-		paths = ft_split(get_env_var(env, "PATH"), ':');
+	path = get_env_var(env, "PATH");
+	if (path)
+		paths = ft_split(path, ':');
 	else
 		return (NULL);
 	while (*paths)
@@ -51,8 +53,13 @@ static	void	child_exec(t_node *node)
 		execve(get_path(node->cmd[0], node->env), node->cmd, env);
 		exit(exec_err(errno, get_path(node->cmd[0], node->env), node->cmd[0]));
 	}
-	waitpid(pid, &status, 0);
-	exit_status(WEXITSTATUS(status), node);
+	else 
+	{
+		waitpid(pid, &status, 0);
+		exit(WEXITSTATUS(status));
+
+	}
+	
 }
 
 void	exec_cmd(t_node *node)

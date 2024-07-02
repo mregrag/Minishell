@@ -34,6 +34,29 @@ void	increment_shlvl(t_env *env)
 		free(shlvl_str);
 	}
 }
+bool is_var_in_env(t_env *env, const char *var_name)
+{
+    t_list *current;
+    size_t var_len;
+
+    if (!env || !var_name)
+        return false;
+
+    var_len = strlen(var_name);
+    current = env->env;
+
+    while (current)
+    {
+        if (strncmp(current->content, var_name, var_len) == 0 &&
+            ((char *)current->content)[var_len] == '=')
+        {
+            return true;
+        }
+        current = current->next;
+    }
+
+    return false;
+}
 
 t_env	*init_env(char **envp)
 {
@@ -58,10 +81,10 @@ t_env	*init_env(char **envp)
 	}
 	increment_shlvl(env);
 	set_env_var(env, "?", "1");
-	if (!get_env_var(env, "PWD"))
+	if (!is_var_in_env(env, "PWD"))
 		if (getcwd(cwd, sizeof(cwd)))
 			set_env_var(env, "PWD", cwd);
-	if (!get_env_var(env, "PATH"))
+	if (!is_var_in_env(env, "PATH"))
 		set_env_var(env, "PATH", "/usr/local/bin:/usr/bin:/bin");
 	return (env);
 }

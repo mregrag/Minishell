@@ -78,11 +78,9 @@ void	add_arg_to_env(char *argv, t_node *node)
 
 int	ft_export(t_node *node)
 {
-	int		i;
 	char	**argv;
 	t_list	*env;
 
-	i = 0;
 	env = node->env->env;
 	argv = node->cmd;
 	if (!argv[1])

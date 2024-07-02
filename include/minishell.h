@@ -181,7 +181,7 @@ int check_syntax(t_token *tokens);
 
 // t_node *init_minishell(char **env);
 void	reset_in_out(int *in, int *out);
-int	exec_err(errno_t err, char *path, char *cmd);
+int	exec_err(int err, char *path, char *cmd);
 
 void	sigint_h(int sigN);
 void	sig_ign(void);

@@ -52,10 +52,12 @@ int main(int argc, char **argv, char **env)
 			break;
 		add_history(input);
 		tokens = tokenize_input(input, envp);
+		//free(input);
 		tree = parse_tokens(&tokens, envp);
 		executing(tree);
 		g_sig = 0;
 		set_fds(in, out);
+		free_tree(tree);
 	}
 	return 0;
 }

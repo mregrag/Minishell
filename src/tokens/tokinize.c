@@ -52,5 +52,6 @@ t_token	*tokenize_input(char *input, t_env *env)
 		if (!separator(&s, &tokens))
 			return (clear_token(&tokens), free(s), NULL);
 	}
+	free(v);
 	return (tokens);
 }

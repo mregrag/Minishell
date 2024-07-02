@@ -104,9 +104,6 @@ t_node	*parse_tokens(t_token **tokens, t_env *env)
 	if (!tokens || !*tokens)
 		return (NULL);
 	if (!check_syntax(*tokens))
-	{
-		clear_token(tokens);
 		return (NULL);
-	}
 	return (build_tree(tokens, env));
 }

@@ -16,6 +16,7 @@ char	*expansion_input(char *str, t_node *node)
 {
 	size_t	i;
 	char	*ret;
+	char	*result;
 
 	ret = strdup("");
 	i = 0;
@@ -30,7 +31,8 @@ char	*expansion_input(char *str, t_node *node)
 		else
 			ret = handle_normal(ret, str, &i);
 	}
-	return (remov_quotes(ret));
+	result = remov_quotes(ret);
+	return (result);
 }
 
 char	*expansion_content(char *str, t_node *node)

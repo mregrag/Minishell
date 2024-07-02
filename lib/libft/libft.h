@@ -47,7 +47,7 @@ void		*ft_calloc(size_t count, size_t size);
 void		*ft_memmove(void *dst, const void *src, size_t len);
 void		ft_free(void *var);
 void		ft_free_array(char **arr);
-
+char	*ft_strjoin_three(char const *s1, char const *s2, char const *s3);
 size_t		ft_strlen(const char *s);
 size_t		ft_strlcpy(char *dest, const char *src, size_t dstsize);
 size_t		ft_strlcat(char *dest, const char *src, size_t dstsize);

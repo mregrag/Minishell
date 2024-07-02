@@ -45,7 +45,6 @@ void	free_tree(t_node *node)
 		}
 		free(node->cmd);
 	}
-	// free_env(node->env);
 	free_tree(node->left);
 	free_tree(node->right);
 	free(node);
@@ -74,8 +73,7 @@ void	creat_cmd(t_node *node, t_token **tokens, int count)
 		node->cmd[i] = expansion_input((*tokens)->value, node);
 		tmp = *tokens;
 		*tokens = (*tokens)->next;
-		ft_free(&tmp->value);
-		free(tmp);
+		free(&tmp->value);
 		i++;
 	}
 	node->cmd[count] = NULL;

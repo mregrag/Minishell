@@ -14,9 +14,6 @@
 
 int	ft_env(t_node *node)
 {
-	t_list	*env;
-
-	env = node->env->env;
 	if (node->cmd[1] || !get_env_var(node->env, "PATH"))
 	{
 		print_error("env", node->cmd[1], "No such file or directory", NULL);

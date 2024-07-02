@@ -40,7 +40,7 @@ static pid_t	left_pipe(t_node *node, int fd[2])
 			close(heredoc_fd);
 		}
 		executing(tmp);
-		exit(ft_atoi(get_env_var(node->env, "?")));
+		exit(1);
 	}
 	if (heredoc_fd != -1)
 		close(heredoc_fd);
@@ -73,7 +73,7 @@ static pid_t	right_pipe(t_node *node, int fd[2])
 			close(heredoc_fd);
 		}
 		executing(tmp);
-		exit(ft_atoi(get_env_var(node->env, "?")));
+		exit(2);
 	}
 	if (heredoc_fd != -1)
 		close(heredoc_fd);

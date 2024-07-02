@@ -54,7 +54,7 @@ void	update_env_var(char *var, char *value, t_node *node)
 	t_list	*current;
 	char	*new_entry;
 
-	new_entry = ft_strjoin(ft_strjoin(var, "="), value);
+	new_entry = ft_strjoin_three(var, "=", value);
 	if (!new_entry)
 		return ;
 	current = node->env->env;
@@ -102,7 +102,7 @@ int	set_env_var(t_env *env, const char *name, const char *value)
 	if (!env || !name || !value)
 		return (-1);
 	len = ft_strlen(name);
-	new_var = ft_strjoin(ft_strjoin(name, "="), value);
+	new_var = ft_strjoin_three(name, "=", value);
 	if (!new_var)
 		return (-1);
 	current = env->env;
@@ -117,7 +117,7 @@ int	set_env_var(t_env *env, const char *name, const char *value)
 		current = current->next;
 	}
 	ft_lstadd_back(&(env->env), ft_lstnew(new_var));
-	return (0);
+	return (free(new_var), 0);
 }
 
 int	unset_env_var(t_env *env, const char *name)

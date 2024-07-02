@@ -17,7 +17,7 @@ void	exit_status(int status, t_node *node)
 	set_env_var(node->env, "?", ft_itoa(status));
 }
 
-int	exec_err(errno_t err, char *path, char *cmd)
+int	exec_err(int err, char *path, char *cmd)
 {
 	struct stat	f_stat;
 	(void)err;

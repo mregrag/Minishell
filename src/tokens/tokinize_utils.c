@@ -26,32 +26,34 @@ int	add_separator(t_type type, char **line, t_token **tokens, char *value)
 	return (1);
 }
 
-int	process_word(char **line, t_token **tokens)
+int process_word(char **line, t_token **tokens)
 {
-	char	*tmp;
-	char	*value;
-	t_token	*token;
-	size_t	i;
+    char    *tmp;
+    char    *value;
+    t_token *token;
+    size_t  i;
 
-	tmp = *line;
-	i = 0;
-	while (tmp[i] && !is_separator(tmp + i))
-	{
-		if (ft_isquotes(tmp[i]))
-		{
-			if (!skip_quotes(tmp, &i))
-				return (print_error("minish", "unexpected EOF `", NULL, NULL), 0);
-		}
-		else
-			i++;
-	}
-	value = ft_substr(tmp, 0, i);
-	if (!value)
-		return (0);
-	token = new_token(value, T_WORD);
-	free (value);
-	if (!token)
-		return (0);
-	*line += i;
-	return (token_add_back(tokens, token), 1);
+    tmp = *line;
+    i = 0;
+    while (tmp[i] && !is_separator(tmp + i))
+    {
+        if (ft_isquotes(tmp[i]))
+        {
+            if (!skip_quotes(tmp, &i))
+            {
+                print_error("minish", "unexpected EOF `", NULL, NULL);
+                return 0;
+            }
+        }
+        else
+            i++;
+    }
+    value = ft_substr(tmp, 0, i);
+    if (!value)
+        return 0;
+    token = new_token(value, T_WORD);
+	free(value);
+    *line += i;
+    token_add_back(tokens, token);
+    return 1;
 }
