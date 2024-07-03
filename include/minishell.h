@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mkoualil <mkoualil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/10 16:16:44 by mregrag           #+#    #+#             */
-/*   Updated: 2024/07/03 19:55:11 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/07/03 21:33:33 by mkoualil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,11 +18,11 @@
 # include <fcntl.h>
 # include <fcntl.h>
 # include <limits.h>
+# include <stdio.h>
 # include <readline/history.h>
 # include <readline/readline.h>
 # include <stdarg.h>
 # include <stdbool.h>
-# include <stdio.h>
 # include <stdlib.h>
 # include <string.h>
 # include <termios.h>
@@ -103,7 +103,7 @@ int		ft_lstsize_token(t_token *lst);
 
 t_node *parse_cmd(t_token **tokens);
 t_node	*buil_tree(t_token **tokens);
-t_node *parse_tokens(t_token **tokens, t_env *env);
+t_node *parse_tokens(t_token **tokens);
 t_node *create_redire(t_token **tokens, t_token *tmp);
 t_node *create_file(t_token *token, t_type type);
 void	free_tree(t_node *node);
@@ -171,8 +171,8 @@ char	*handle_normal(char *ret, char *str, size_t *i);
 char	*handle_str(char *ret, char *str, size_t *i);
 
 //-----------------------signals------------------
-void	setup_signal(void);
-void	exit_status(int status, t_node *node);
+void	setup_signal(t_env *envp);
+void	exit_status(int status, t_env *env);
 void	update_exit_status(t_node *node, int status);
 
 int	deal_w_redir(t_node *node);

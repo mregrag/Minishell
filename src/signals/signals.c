@@ -3,50 +3,33 @@
 /*                                                        :::      ::::::::   */
 /*   signals.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mkoualil <mkoualil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 15:47:14 by mregrag           #+#    #+#             */
-/*   Updated: 2024/07/03 18:58:31 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/07/03 21:32:52 by mkoualil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
-
-void	sigint_h(int sigN)
+static void	ctrl_c()
 {
-	extern int	g_sig;
+	extern int g_sig;
 
-	if (g_sig == 0)
-	{
-		(void)sigN;
-		printf("\n");
-		rl_on_new_line();
-		// rl_replace_line("", 0);
-		rl_redisplay();
-	}
-}
-void	sig_ign(void)
-{
-	if (signal(SIGINT, sigint_h) == SIG_ERR
-		|| signal(SIGQUIT, SIG_IGN) == SIG_ERR)
-		perror("shell -- signals err");
+	// g_minish.exit_status = 1;
+	g_sig = 1;
+	rl_replace_line("", 0);
+	write(1, "\n", 1);
+	rl_on_new_line();
+	rl_redisplay();
+
 }
 
-void	sig_allow(void)
+void	setup_signal(t_env *envp)
 {
-	if (signal(SIGINT, SIG_DFL) == SIG_ERR
-		|| signal(SIGQUIT, SIG_DFL) == SIG_ERR)
-		perror("shell -- signals err");
+	extern int g_sig;
+
+	signal(SIGINT, ctrl_c);
+	signal(SIGQUIT, SIG_IGN);
+	if (g_sig == 1)
+		exit_status(1, envp);
 }
-
-void	heredoc_h(int n)
-{
-	extern int	g_sig;
-
-	(void)n;
-	g_sig = 2;
-	close(STDIN_FILENO);
-}
-
-
-

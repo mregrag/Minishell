@@ -3,18 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   error_exit.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mkoualil <mkoualil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/12 18:33:04 by mregrag           #+#    #+#             */
-/*   Updated: 2024/07/01 21:47:35 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/07/03 21:34:00 by mkoualil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-void	exit_status(int status, t_node *node)
+void	exit_status(int status, t_env *env)
 {
-	set_env_var(node->env, "?", ft_itoa(status));
+	set_env_var(env, "?", ft_itoa(status));
 }
 
 int	exec_err(int err, char *path, char *cmd)

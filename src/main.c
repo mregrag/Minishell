@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mkoualil <mkoualil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/10 16:14:20 by mregrag           #+#    #+#             */
-/*   Updated: 2024/07/03 19:55:18 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/07/03 21:29:02 by mkoualil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,14 +43,14 @@ int main(int argc, char **argv, char **env)
     init_env(&envp, env);
     while (1)
     {
-        sig_ign();
+        setup_signal(envp);
         kep_fds(&in, &out);
         input = readline("minish-1.0$ ");
         if (!input)
             break;
         add_history(input);
         tokens = tokenize_input(input);
-        tree = parse_tokens(&tokens, envp);
+        tree = parse_tokens(&tokens);
         executing(tree, envp);
         g_sig = 0;
         set_fds(in, out);

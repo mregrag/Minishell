@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+         #
+#    By: mkoualil <mkoualil@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/05/10 16:12:48 by mregrag           #+#    #+#              #
-#    Updated: 2024/07/03 19:52:02 by mregrag          ###   ########.fr        #
+#    Updated: 2024/07/03 21:30:11 by mkoualil         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,12 +14,13 @@ NAME		= minishell
 LIBFT		= libft.a
 LIBRAIRIE	= "lib/libft"
 CC		= cc
-CFLAGS		= -Wall -Wextra -Werror -fsanitize=address -fno-omit-frame-pointer -g2
-LEAKS		= leaks --atExit --
-FALGS =
+CFLAGS		= -Wall -Wextra -Werror
 HEADER		= ./include/minishell.h
 RM		= rm -rf
 
+
+READLINE_INC = -I$(shell brew --prefix readline)/include
+READLINE_LIB = -L$(shell brew --prefix readline)/lib -lreadline
 
 BUILTINS	:=	src/builtins/ft_cd.c \
 			src/builtins/ft_echo.c \
@@ -79,10 +80,10 @@ $(LIBFT):
 # 	@$(CC) -o $(NAME) $(OBJS) -L$(LIBRAIRIE) -lft -lreadline
 
 $(NAME): $(LIBFT) $(OBJS)
-	@$(CC) $(CFLAGS) -o $(NAME) $(OBJS) -L$(LIBRAIRIE) -lft -lreadline
+	@$(CC) $(CFLAGS) -o $(NAME) $(OBJS) -L$(LIBRAIRIE) -lft ${READLINE_LIB}
 
 %.o: %.c $(HEADER)
-	$(CC) $(CFLAGS) -c $< -o $@
+	$(CC) $(CFLAGS) ${READLINE_INC} -c $< -o $@
 
 clean:
 	@make clean -C $(LIBRAIRIE)
