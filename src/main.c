@@ -6,7 +6,7 @@
 /*   By: mkoualil <mkoualil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/10 16:14:20 by mregrag           #+#    #+#             */
-/*   Updated: 2024/07/03 21:29:02 by mkoualil         ###   ########.fr       */
+/*   Updated: 2024/07/04 00:29:04 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,32 +30,32 @@ void	kep_fds(int *in, int *out)
 
 int main(int argc, char **argv, char **env)
 {
-    char    *input;
-    t_node  *tree;
-    t_env   *envp;
-    t_token *tokens;
-    int     in;
-    int     out;
+	char    *input;
+	t_node  *tree;
+	t_env   *envp;
+	t_token *tokens;
+	int     in;
+	int     out;
 
-    (void)argv;
-    (void)argc;
+	(void)argv;
+	(void)argc;
 
-    init_env(&envp, env);
-    while (1)
-    {
-        setup_signal(envp);
-        kep_fds(&in, &out);
-        input = readline("minish-1.0$ ");
-        if (!input)
-            break;
-        add_history(input);
-        tokens = tokenize_input(input);
-        tree = parse_tokens(&tokens);
-        executing(tree, envp);
-        g_sig = 0;
-        set_fds(in, out);
-        free_tree(tree);
-        free(input);
-    }
-    return 0;
+	init_env(&envp, env);
+	while (1)
+	{
+		setup_signal(envp);
+		kep_fds(&in, &out);
+		input = readline("minish-1.0$ ");
+		if (!input)
+			break;
+		add_history(input);
+		tokens = tokenize_input(input, envp);
+		tree = parse_tokens(&tokens, envp);
+		executing(tree, envp);
+		g_sig = 0;
+		set_fds(in, out);
+		free_tree(tree);
+		free(input);
+	}
+	return 0;
 }

@@ -6,7 +6,7 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/18 18:50:02 by mregrag           #+#    #+#             */
-/*   Updated: 2024/07/03 19:24:21 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/07/03 22:19:31 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int	ft_env(t_node *node, t_env *env)
 {
-	if (node->cmd[1] || !get_env_var(node->env, "PATH"))
+	if (node->cmd[1] || !is_var_in_env(env, "PATH"))
 	{
 		print_error("env", node->cmd[1], "No such file or directory", NULL);
 		return (1);

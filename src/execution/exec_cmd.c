@@ -6,11 +6,12 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/17 22:58:39 by mregrag           #+#    #+#             */
-/*   Updated: 2024/07/03 19:44:37 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/07/03 23:46:15 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
+#include <sys/wait.h>
 
 char	*get_path(char *cmd, t_env *env)
 {
@@ -57,6 +58,7 @@ char	*get_path(char *cmd, t_env *env)
 		return (result);
 	return (ft_strdup(cmd));
 }
+
 static void	child_exec(t_node *node, t_env *env)
 {
 	char	**envp;
@@ -90,8 +92,7 @@ static void	child_exec(t_node *node, t_env *env)
 	{
 		//ft_free_array(env);
 		waitpid(pid, &status, 0);
-		// You might want to handle the exit status here
-		// For example: g_exit_status = WEXITSTATUS(status);
+		set_env_var(env, "?", ft_itoa(WEXITSTATUS(status)));
 	}
 }
 

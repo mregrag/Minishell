@@ -6,7 +6,7 @@
 /*   By: mkoualil <mkoualil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/10 16:16:44 by mregrag           #+#    #+#             */
-/*   Updated: 2024/07/03 21:33:33 by mkoualil         ###   ########.fr       */
+/*   Updated: 2024/07/04 00:24:33 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,8 +85,9 @@ int set_env_var(t_env *env, const char *name, const char *value);
 int unset_env_var(t_env *env, const char *name);
 void print_env(t_env *env);
 void free_env(t_env *env);
+int	 is_var_in_env(t_env *env, const char *var_name);
 //------------------------tokens------------------------
-t_token	*tokenize_input(char *input);
+t_token	*tokenize_input(char *input, t_env *env);
 t_token	*new_token(char *value, t_type type);
 void	clear_token(t_token **lst);
 void	token_add_back(t_token **lst, t_token *new_token);
@@ -101,15 +102,15 @@ int		ft_lstsize_token(t_token *lst);
 
 //------------------------parcing------------------------
 
-t_node *parse_cmd(t_token **tokens);
-t_node	*buil_tree(t_token **tokens);
-t_node *parse_tokens(t_token **tokens);
-t_node *create_redire(t_token **tokens, t_token *tmp);
-t_node *create_file(t_token *token, t_type type);
+t_node *parse_cmd(t_token **tokens, t_env *env);
+t_node	*buil_tree(t_token **tokens, t_env *env);
+t_node *parse_tokens(t_token **tokens, t_env *env);
+t_node *create_redire(t_token **tokens, t_token *tmp, t_env *env);
+t_node *create_file(t_token *token, t_type type, t_env *env);
 void	free_tree(t_node *node);
-void	creat_cmd(t_node *node, t_token **tokens, int count);
+void	creat_cmd(t_node *node, t_token **tokens, int count, t_env *env);
 t_node *new_node(t_type type);
-t_node *parse_redire(t_token **tokens);
+t_node *parse_redire(t_token **tokens, t_env *env);
 
 //-----------------------------bultin---------------------------------
 

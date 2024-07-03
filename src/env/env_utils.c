@@ -6,48 +6,11 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 16:25:14 by mregrag           #+#    #+#             */
-/*   Updated: 2024/07/01 21:04:13 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/07/03 23:00:20 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
-
-// int update_env_var(t_env *env, const char *name, const char *value)
-// {
-//     t_list *current;
-//     char *new_var;
-//     size_t name_len;
-//
-//     if (!env || !name || !value)
-//         return -1;
-//
-//     name_len = ft_strlen(name);
-//     new_var = ft_strjoin(ft_strjoin(name, "="), value);
-//     if (!new_var)
-//         return -1;
-//
-//     current = env->env;
-//     while (current)
-//     {
-//         if (ft_strncmp(current->content, name, name_len) == 0 &&
-//             ((char *)current->content)[name_len] == '=')
-//         {
-//             free(current->content);
-//             current->content = new_var;
-//             return 0;
-//         }
-//         current = current->next;
-//     }
-//
-//     // If we get here, the variable doesn't exist, so we add it
-//     if (ft_lstadd_back(&(env->env), ft_lstnew(new_var)) == -1)
-//     {
-//         free(new_var);
-//         return -1;
-//     }
-//
-//     return 0;
-// }
 
 void	update_env_var(char *var, char *value, t_node *node)
 {
@@ -116,8 +79,9 @@ int	set_env_var(t_env *env, const char *name, const char *value)
 		}
 		current = current->next;
 	}
-	ft_lstadd_back(&(env->env), ft_lstnew(new_var));
-	return (free(new_var), 0);
+	ft_lstadd_back(&(env->env), ft_lstnew(ft_strdup(new_var)));
+	free(new_var);
+	return (0);
 }
 
 int	unset_env_var(t_env *env, const char *name)
@@ -130,7 +94,7 @@ int	unset_env_var(t_env *env, const char *name)
 		return (-1);
 	len = ft_strlen(name);
 	current = env->env;
-	prev = (NULL);
+	prev = NULL;
 	while (current)
 	{
 		if (ft_strncmp(current->content, name, len) == 0 && ((char *)current->content)[len] == '=')
@@ -148,4 +112,3 @@ int	unset_env_var(t_env *env, const char *name)
 	}
 	return (-1);
 }
-

@@ -6,7 +6,7 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/18 18:50:47 by mregrag           #+#    #+#             */
-/*   Updated: 2024/07/03 19:28:36 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/07/03 23:33:42 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,8 +70,8 @@ void	add_arg_to_env(char *argv, t_env *env)
 		value = ft_itoa(getpid());
 	if (get_env_var(env, var) && !ft_strchr(argv, '+'))
 		set_env_var(env, var, value);
-	// else if (get_env_var(env, var) && argv[index - 1] == '+')
-	// 	update_env_var(var, ft_strjoin(get_env_var( node->env, var), value), node);
+	else if (get_env_var(env, var) && argv[index - 1] == '+')
+		set_env_var(env, var, ft_strjoin(get_env_var(env, var), value));
 	else if (ft_strchr(argv, '='))
 		set_env_var(env, var, value);
 }

@@ -6,7 +6,7 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/24 22:43:10 by mregrag           #+#    #+#             */
-/*   Updated: 2024/07/03 19:46:29 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/07/03 22:11:57 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,5 +104,5 @@ void	exec_pipe(t_node *node, t_env *env)
 	(close(fd[0]), close(fd[1]));
 	waitpid(pid_write, &status, 0);
 	waitpid(pid_read, &status, 0);
-	update_env_var("?", ft_itoa(WEXITSTATUS(status)), node);
+	set_env_var(env,  "?", ft_itoa(WEXITSTATUS(status)));
 }
