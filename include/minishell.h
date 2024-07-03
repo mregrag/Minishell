@@ -78,7 +78,8 @@ typedef struct s_gb
 
 extern t_gb	g_minish;
 t_env *copy_env(t_env *original);
-t_env *init_env(char **envp);
+//t_env *init_env(char **envp);
+void    init_env(t_env *env, char **envp);
 char *get_env_var(t_env *env, const char *name);
 int set_env_var(t_env *env, const char *name, const char *value);
 int unset_env_var(t_env *env, const char *name);

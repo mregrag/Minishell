@@ -58,36 +58,35 @@ bool is_var_in_env(t_env *env, const char *var_name)
     return false;
 }
 
-t_env	*init_env(char **envp)
+void    init_env(t_env *env, char **envp)
 {
-	t_env	*env;
-	char	*tmp;
-	char	cwd[PATH_MAX];
+    char    *tmp;
+    char    cwd[PATH_MAX];
 
-	env = (t_env *)malloc(sizeof(t_env));
-	if (!env)
-		return (NULL);
-	env->env = NULL;
-	while (*envp)
-	{
-		tmp = ft_strdup(*envp);
-		if (!tmp)
-		{
-			free_env(env);
-			return (free_env(env), NULL);
-		}
-		ft_lstadd_back(&(env->env), ft_lstnew(tmp));
-		envp++;
-	}
-	increment_shlvl(env);
-	set_env_var(env, "?", "1");
-	if (!is_var_in_env(env, "PWD"))
-		if (getcwd(cwd, sizeof(cwd)))
-			set_env_var(env, "PWD", cwd);
-	if (!is_var_in_env(env, "PATH"))
-		set_env_var(env, "PATH", "/usr/local/bin:/usr/bin:/bin");
-	return (env);
+    if (!env || !envp)
+        return;
+
+    env->env = NULL;
+    while (*envp)
+    {
+        tmp = ft_strdup(*envp);
+        if (!tmp)
+        {
+            free_env(env);
+            return;
+        }
+        ft_lstadd_back(&(env->env), ft_lstnew(tmp));
+        envp++;
+    }
+    increment_shlvl(env);
+    set_env_var(env, "?", "0");
+    if (!is_var_in_env(env, "PWD"))
+        if (getcwd(cwd, sizeof(cwd)))
+            set_env_var(env, "PWD", cwd);
+    if (!is_var_in_env(env, "PATH"))
+        set_env_var(env, "PATH", "/usr/local/bin:/usr/bin:/bin");
 }
+
 
 void	print_env(t_env *env)
 {

@@ -17,56 +17,92 @@ char	*get_path(char *cmd, t_env *env)
 	char	**paths;
 	char	*cmd_path;
 	char	*path;
+	char	*result;
+	char	*temp;
 
 	if (ft_strchr(cmd, '/'))
-		return (cmd);
+		return (ft_strdup(cmd));
 	path = get_env_var(env, "PATH");
-	if (path)
-		paths = ft_split(path, ':');
-	else
+	if (!path)
 		return (NULL);
+	paths = ft_split(path, ':');
+	if (!paths)
+		return (NULL);
+	result = NULL;
 	while (*paths)
 	{
-		cmd_path = ft_strjoin(ft_strjoin(*paths, "/"), cmd);
+		temp = ft_strjoin(*paths, "/");
+		if (!temp)
+		{
+			ft_free_array(paths);
+			return (NULL);
+		}
+		cmd_path = ft_strjoin(temp, cmd);
+		free(temp);
+		if (!cmd_path)
+		{
+			ft_free_array(paths);
+			return (NULL);
+		}
 		if (access(cmd_path, F_OK | X_OK) == 0)
-			return (cmd_path);
+		{
+			result = cmd_path;
+			break;
+		}
 		free(cmd_path);
 		paths++;
 	}
+	//ft_free_array(paths);
+	if (result)
+		return (result);
 	return (ft_strdup(cmd));
 }
-
-static	void	child_exec(t_node *node)
+static void	child_exec(t_node *node)
 {
 	char	**env;
 	pid_t	pid;
 	int		status;
+	char	*path;
 
 	env = ft_list_to_arr(node->env->env);
 	if (!env)
 		return ;
 	pid = ft_fork();
 	if (pid < 0)
+	{
+		ft_free_array(env);
 		return ;
+	}
 	if (pid == 0)
 	{
-		execve(get_path(node->cmd[0], node->env), node->cmd, env);
-		exit(exec_err(errno, get_path(node->cmd[0], node->env), node->cmd[0]));
+		path = get_path(node->cmd[0], node->env);
+		if (!path)
+		{
+			ft_free_array(env);
+			exit(exec_err(errno, NULL, node->cmd[0]));
+		}
+		execve(path, node->cmd, env);
+		free(path);
+		//ft_free_array(env);
+		exit(exec_err(errno, path, node->cmd[0]));
 	}
 	else 
 	{
+		//ft_free_array(env);
 		waitpid(pid, &status, 0);
-		exit(WEXITSTATUS(status));
-
+		// You might want to handle the exit status here
+		// For example: g_exit_status = WEXITSTATUS(status);
 	}
-	
 }
 
 void	exec_cmd(t_node *node)
 {
 	if (redirections(node))
+	{
 		while (node->left)
 			node = node->left;
+	}
 	if (node->cmd && node->cmd[0] && !is_builtin(node))
 		child_exec(node);
 }
+
