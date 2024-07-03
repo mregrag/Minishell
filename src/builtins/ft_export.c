@@ -6,7 +6,7 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/18 18:50:47 by mregrag           #+#    #+#             */
-/*   Updated: 2024/07/01 21:35:09 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/07/03 19:28:36 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ static int	find_char_index(const char *str, char c)
 	return (-1);
 }
 
-void	add_arg_to_env(char *argv, t_node *node)
+void	add_arg_to_env(char *argv, t_env *env)
 {
 	int		index;
 	char	*value;
@@ -68,32 +68,32 @@ void	add_arg_to_env(char *argv, t_node *node)
 	value = ft_substr(argv, index + 1, ft_strlen(argv) - index);
 	if (ft_issamechar(value, '$'))
 		value = ft_itoa(getpid());
-	if (get_env_var(node->env, var) && !ft_strchr(argv, '+'))
-		update_env_var(var, value, node);
-	else if (get_env_var(node->env, var) && argv[index - 1] == '+')
-		update_env_var(var, ft_strjoin(get_env_var( node->env, var), value), node);
+	if (get_env_var(env, var) && !ft_strchr(argv, '+'))
+		set_env_var(env, var, value);
+	// else if (get_env_var(env, var) && argv[index - 1] == '+')
+	// 	update_env_var(var, ft_strjoin(get_env_var( node->env, var), value), node);
 	else if (ft_strchr(argv, '='))
-		set_env_var(node->env, var, value);
+		set_env_var(env, var, value);
 }
 
-int	ft_export(t_node *node)
+int	ft_export(t_node *node, t_env *env)
 {
 	char	**argv;
-	t_list	*env;
+	t_list	*envp;
 
-	env = node->env->env;
+	envp = env->env;
 	argv = node->cmd;
 	if (!argv[1])
-		return (export_list(env), 1);
+		return (export_list(envp), 1);
 	while (*(++argv))
 	{
 		if (!check_var(*argv))
 		{
 			print_error("minish", "export", *argv, "not a valid identifier");
-			set_env_var(node->env, "?", "1");
+			set_env_var(env, "?", "1");
 		}
 		else
-			add_arg_to_env(*argv, node);
+			add_arg_to_env(*argv, env);
 	}
 	return (1);
 }

@@ -6,7 +6,7 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/10 16:16:44 by mregrag           #+#    #+#             */
-/*   Updated: 2024/07/02 00:10:56 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/07/03 19:55:11 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,14 +79,14 @@ typedef struct s_gb
 extern t_gb	g_minish;
 t_env *copy_env(t_env *original);
 //t_env *init_env(char **envp);
-void    init_env(t_env *env, char **envp);
+void    init_env(t_env **env, char **envp);
 char *get_env_var(t_env *env, const char *name);
 int set_env_var(t_env *env, const char *name, const char *value);
 int unset_env_var(t_env *env, const char *name);
 void print_env(t_env *env);
 void free_env(t_env *env);
 //------------------------tokens------------------------
-t_token	*tokenize_input(char *input, t_env *env);
+t_token	*tokenize_input(char *input);
 t_token	*new_token(char *value, t_type type);
 void	clear_token(t_token **lst);
 void	token_add_back(t_token **lst, t_token *new_token);
@@ -101,24 +101,24 @@ int		ft_lstsize_token(t_token *lst);
 
 //------------------------parcing------------------------
 
-t_node *parse_cmd(t_token **tokens, t_env *env);
+t_node *parse_cmd(t_token **tokens);
 t_node	*buil_tree(t_token **tokens);
 t_node *parse_tokens(t_token **tokens, t_env *env);
-t_node *create_redire(t_token **tokens, t_token *tmp, t_env *env);
-t_node *create_file(t_token *token, t_type type, t_env *env);
+t_node *create_redire(t_token **tokens, t_token *tmp);
+t_node *create_file(t_token *token, t_type type);
 void	free_tree(t_node *node);
 void	creat_cmd(t_node *node, t_token **tokens, int count);
-t_node *new_node(t_type type, t_env *env);
-t_node *parse_redire(t_token **tokens, t_env *env);
+t_node *new_node(t_type type);
+t_node *parse_redire(t_token **tokens);
 
 //-----------------------------bultin---------------------------------
 
-int		ft_echo(t_node *node);
-int		ft_env(t_node *node);
-int		ft_cd(t_node *node);
+int		ft_echo(t_node *node, t_env *env);
+int		ft_env(t_node *node, t_env *env);
+int		ft_cd(t_node *node, t_env *env);
 int		ft_exit(t_node *node);
-int		ft_export(t_node *node);
-int		ft_unset(t_node *node);
+int		ft_export(t_node *node, t_env *env);
+int		ft_unset(t_node *node, t_env *env);
 int		print_error(char *s1, char *s2, char *s3, char *message);
 int		print_error_errno(char *s1, char *s2, char *s3);
 int		ft_pwd(void);
@@ -139,15 +139,15 @@ char	*ft_getenv(const char *key, t_list *env);
 
 
 char	*get_path(char *cmd, t_env *env);
-void	executing(t_node *node);
-void	exec_cmd(t_node *node);
-void	exec_pipe(t_node *node);
-int		is_builtin(t_node *node);
-int		heredoc(t_node *node);
-t_node *setup_heredoc(t_node *node, int *heredoc_fd);
+void	executing(t_node *node, t_env *env);
+void	exec_cmd(t_node *node, t_env *env);
+void	exec_pipe(t_node *node, t_env *env);
+int		is_builtin(t_node *node, t_env *env);
+int		heredoc(t_node *node, t_env *env);
+t_node *setup_heredoc(t_node *node, int *heredoc_fd, t_env *env);
 int		ft_pipe(int ends[2]);
 int		ft_dup2(int filde1, int filde2);
-int		redirections(t_node *node);
+int		redirections(t_node *node, t_env *env);
 int		ft_open(const char *path, int oflag, mode_t mode);
 pid_t	ft_fork(void);
 int 	ft_close(int fd);
@@ -158,15 +158,15 @@ int	ft_pipe(int pipefd[2]);
 //---------------------expansion-------------------------------
 
 char	*remov_quotes(char *str);
-char	*expansion_input(char *str, t_node *node);
-char	*handle_dollar(char *ret, char *str, size_t *i, t_node *node);
-char	*handle_quotes(char *ret, char *str, size_t *i, t_node *node);
-char	*expansion_file(char *str, t_node *env);
-char	*expansion_dilim(char *str, t_node *node);
+char	*expansion_input(char *str, t_env *env);
+char	*handle_dollar(char *ret, char *str, size_t *i, t_env *env);
+char	*handle_quotes(char *ret, char *str, size_t *i, t_env *env);
+char	*expansion_file(char *str, t_env *env);
+char	*expansion_dilim(char *str);
 char	*handle_quotes_dilim(char *ret, const char *str, size_t *i);
-char	*expansion_content(char *str, t_node *env);
+char	*expansion_content(char *str, t_env *env);
 char	*handle_single_quotes(char *ret, char *str, size_t *i);
-char	*handle_double_quotes(char *ret, char *str, size_t *i, t_node *env);
+char	*handle_double_quotes(char *ret, char *str, size_t *i, t_env *env);
 char	*handle_normal(char *ret, char *str, size_t *i);
 char	*handle_str(char *ret, char *str, size_t *i);
 

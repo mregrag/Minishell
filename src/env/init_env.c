@@ -6,7 +6,7 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/01 18:16:01 by mregrag           #+#    #+#             */
-/*   Updated: 2024/07/01 23:09:12 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/07/03 19:02:11 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,35 +58,37 @@ bool is_var_in_env(t_env *env, const char *var_name)
     return false;
 }
 
-void    init_env(t_env *env, char **envp)
+void    init_env(t_env **env, char **envp)
 {
     char    *tmp;
     char    cwd[PATH_MAX];
 
     if (!env || !envp)
         return;
-
-    env->env = NULL;
+    *env = (t_env *)malloc(sizeof(t_env));
+    if (!*env)
+        return;
+    (*env)->env = NULL;
     while (*envp)
     {
         tmp = ft_strdup(*envp);
         if (!tmp)
         {
-            free_env(env);
+            free_env(*env);
+            *env = NULL;
             return;
         }
-        ft_lstadd_back(&(env->env), ft_lstnew(tmp));
+        ft_lstadd_back(&((*env)->env), ft_lstnew(tmp));
         envp++;
     }
-    increment_shlvl(env);
-    set_env_var(env, "?", "0");
-    if (!is_var_in_env(env, "PWD"))
+    increment_shlvl(*env);
+    set_env_var(*env, "?", "0");
+    if (!is_var_in_env(*env, "PWD"))
         if (getcwd(cwd, sizeof(cwd)))
-            set_env_var(env, "PWD", cwd);
-    if (!is_var_in_env(env, "PATH"))
-        set_env_var(env, "PATH", "/usr/local/bin:/usr/bin:/bin");
+            set_env_var(*env, "PWD", cwd);
+    if (!is_var_in_env(*env, "PATH"))
+        set_env_var(*env, "PATH", "/usr/local/bin:/usr/bin:/bin");
 }
-
 
 void	print_env(t_env *env)
 {
@@ -102,10 +104,23 @@ void	print_env(t_env *env)
 	}
 }
 
-void	free_env(t_env *env)
+void    free_env(t_env *env)
 {
-	if (!env)
-		return ;
-	ft_lstclear(&(env->env), free);
-	free(env);
+    t_list  *current;
+    t_list  *next;
+
+    if (!env)
+        return;
+
+    current = env->env;
+    while (current)
+    {
+        next = current->next;
+        free(current->content);
+        free(current);
+        current = next;
+    }
+
+    free(env);
 }
+

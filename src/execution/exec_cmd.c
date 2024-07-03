@@ -6,7 +6,7 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/17 22:58:39 by mregrag           #+#    #+#             */
-/*   Updated: 2024/07/02 20:37:55 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/07/03 19:44:37 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,36 +57,36 @@ char	*get_path(char *cmd, t_env *env)
 		return (result);
 	return (ft_strdup(cmd));
 }
-static void	child_exec(t_node *node)
+static void	child_exec(t_node *node, t_env *env)
 {
-	char	**env;
+	char	**envp;
 	pid_t	pid;
 	int		status;
 	char	*path;
 
-	env = ft_list_to_arr(node->env->env);
+	envp = ft_list_to_arr(env->env);
 	if (!env)
 		return ;
 	pid = ft_fork();
 	if (pid < 0)
 	{
-		ft_free_array(env);
+		ft_free_array(envp);
 		return ;
 	}
 	if (pid == 0)
 	{
-		path = get_path(node->cmd[0], node->env);
+		path = get_path(node->cmd[0], env);
 		if (!path)
 		{
-			ft_free_array(env);
+			ft_free_array(envp);
 			exit(exec_err(errno, NULL, node->cmd[0]));
 		}
-		execve(path, node->cmd, env);
+		execve(path, node->cmd, envp);
 		free(path);
 		//ft_free_array(env);
 		exit(exec_err(errno, path, node->cmd[0]));
 	}
-	else 
+	else
 	{
 		//ft_free_array(env);
 		waitpid(pid, &status, 0);
@@ -95,14 +95,14 @@ static void	child_exec(t_node *node)
 	}
 }
 
-void	exec_cmd(t_node *node)
+void	exec_cmd(t_node *node, t_env *env)
 {
-	if (redirections(node))
+	if (redirections(node, env))
 	{
 		while (node->left)
 			node = node->left;
 	}
-	if (node->cmd && node->cmd[0] && !is_builtin(node))
-		child_exec(node);
+	if (node->cmd && node->cmd[0] && !is_builtin(node, env))
+		child_exec(node, env);
 }
 

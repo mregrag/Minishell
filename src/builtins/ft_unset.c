@@ -6,7 +6,7 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/18 18:51:07 by mregrag           #+#    #+#             */
-/*   Updated: 2024/07/01 20:51:50 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/07/03 19:30:02 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ static int	check_var_unset(char *var)
 	return (1);
 }
 
-int	ft_unset(t_node *node)
+int	ft_unset(t_node *node, t_env *env)
 {
 	char	**args;
 
@@ -40,7 +40,7 @@ int	ft_unset(t_node *node)
 			return (1);
 		}
 		else
-			unset_env_var(node->env, *args);
+			unset_env_var(env, *args);
 	}
 	return (1);
 }

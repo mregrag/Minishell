@@ -6,13 +6,13 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/01 16:51:41 by mregrag           #+#    #+#             */
-/*   Updated: 2024/07/01 16:52:56 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/07/03 19:38:27 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-char	*handle_quotes(char *ret, char *str, size_t *i, t_node *node)
+char	*handle_quotes(char *ret, char *str, size_t *i, t_env *env)
 {
 	char	quote;
 	char	*content;
@@ -25,7 +25,7 @@ char	*handle_quotes(char *ret, char *str, size_t *i, t_node *node)
 	while (str[*i] && str[*i] != quote)
 	{
 		if (str[*i] == '$')
-			temp = handle_dollar(temp, str, i, node);
+			temp = handle_dollar(temp, str, i, env);
 		else
 		{
 			temp = ft_strjoin(temp, ft_substr(str, *i, 1));

@@ -6,7 +6,7 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/27 17:47:28 by mregrag           #+#    #+#             */
-/*   Updated: 2024/07/01 16:18:08 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/07/03 19:25:24 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ int	ft_exit(t_node *node)
 	{
 		printf("exit\n");
 		print_error("minish", node->cmd[0], "too many argument", NULL);
-		update_env_var("?", "1", node);
+		// update_env_var("?", "1", node);
 	}
 	else if (ft_strlen_arg(node->cmd) == 1)
 	{

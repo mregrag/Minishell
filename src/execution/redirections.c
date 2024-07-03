@@ -6,13 +6,13 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/07 18:05:58 by mregrag           #+#    #+#             */
-/*   Updated: 2024/06/30 19:08:51 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/07/03 19:49:09 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-int	heredoc(t_node *node)
+int	heredoc(t_node *node, t_env *env)
 {
 	int		fd[2];
 	char	*str;
@@ -22,7 +22,7 @@ int	heredoc(t_node *node)
 	while (1)
 	{
 		str = readline("> ");
-		if (!str || ft_strcmp(str, expansion_dilim(node->right->cmd[0], node)) == 0)
+		if (!str || !ft_strcmp(str, expansion_dilim(node->right->cmd[0])))
 		{
 			ft_free(&str);
 			break;
@@ -30,7 +30,7 @@ int	heredoc(t_node *node)
 		if (node->flag == 1)
 			ft_putendl_fd(str, fd[1]);
 		else
-			ft_putendl_fd(expansion_content(str, node), fd[1]);
+			ft_putendl_fd(expansion_content(str, env), fd[1]);
 		ft_free(&str);
 	}
 	ft_close(fd[1]);
@@ -56,7 +56,7 @@ static int	check_file(t_node *node)
 	return (1);
 }
 
-static int	redir_input(t_node *node)
+static int	redir_input(t_node *node, t_env *env)
 {
 	int		fd;
 	t_node	*current;
@@ -77,7 +77,7 @@ static int	redir_input(t_node *node)
 		{
 			if (fd != 0)
 				close(fd);
-			fd = heredoc(current);
+			fd = heredoc(current, env);
 		}
 		if (fd < 0)
 			return (-1);
@@ -126,11 +126,11 @@ static int	redire_output(t_node *node)
 	return (0);
 }
 
-int	redirections(t_node *node)
+int	redirections(t_node *node, t_env *env)
 {
 	if (is_redirection(node->type))
 	{
-		if (redir_input(node) < 0 || redire_output(node) < 0)
+		if (redir_input(node, env) < 0 || redire_output(node) < 0)
 			return (0);
 	}
 	return (1);
