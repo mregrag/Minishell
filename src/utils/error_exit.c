@@ -16,24 +16,26 @@ void	exit_status(int status, t_env *env)
 {
 	set_env_var(env, "?", ft_itoa(status));
 }
-
-int	exec_err(int err, char *path, char *cmd)
+int exec_err(int err, char *path, char *cmd)
 {
-	struct stat	f_stat;
-	(void)err;
+    struct stat f_stat;
+    (void)err;
 
-	stat(path, &f_stat);
-	if (S_ISDIR(f_stat.st_mode))
-		return (print_error("minish", cmd, "is a directory", NULL), 126);
-	if (ft_strchr(cmd, '/') && access(cmd, F_OK))
-		return (print_error("minish", cmd, "No such file or directory", NULL), 127);
-	else if (!access(path, F_OK) && access(path, X_OK))
-		return (print_error("minish", "Permission denied", path, NULL), 126);
-	else if (!path)
-		return (print_error("minish", "No such file or directory", path, NULL), 127);
-	else
-		return (print_error("minish",cmd, "command not found", NULL), 127);
-	return (1);
+    if (!path)
+        return (print_error("minish", cmd, "No such file or directory", NULL), 127);
+
+    if (stat(path, &f_stat) == 0)
+    {
+        if (S_ISDIR(f_stat.st_mode))
+            return (print_error("minish", cmd, "is a directory", NULL), 126);
+    }
+
+    if (ft_strchr(cmd, '/') && access(cmd, F_OK))
+        return (print_error("minish", cmd, "No such file or directory", NULL), 127);
+    else if (path && !access(path, F_OK) && access(path, X_OK))
+        return (print_error("minish", "Permission denied", path, NULL), 126);
+    else
+        return (print_error("minish", cmd, "command not found", NULL), 127);
 }
 int	print_error(char *s1, char *s2, char *s3, char *message)
 {

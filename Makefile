@@ -14,7 +14,7 @@ NAME		= minishell
 LIBFT		= libft.a
 LIBRAIRIE	= "lib/libft"
 CC		= cc
-CFLAGS		= -Wall -Wextra -Werror -fsanitize=address -fno-omit-frame-pointer -g2
+CFLAGS		= -Wall -Wextra -Werror  -g2
 HEADER		= ./include/minishell.h
 RM		= rm -rf
 
