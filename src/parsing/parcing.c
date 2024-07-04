@@ -26,23 +26,33 @@ t_node	*parse_cmd(t_token **tokens, t_env *env)
 	return (cmd);
 }
 
-t_node	*create_file(t_token *token, t_type type, t_env *env)
+t_node *create_file(t_token *token, t_type type, t_env *env)
 {
-	t_node	*node;
+    t_node *node;
 
-	node = new_node(type);
-	if (!node)
-		return (NULL);
-	node->cmd = malloc(sizeof(char *) * 3);
-	if (!node->cmd)
-		return (NULL);
-	if (type == T_IN || type == T_APPEND || type == T_OUT)
-		node->cmd[0] = expansion_input(token->value, env);
-	else if (type == T_HERDOC)
-		node->cmd[0] = expansion_dilim(token->value);
-	node->cmd[1] = (NULL);
-	free(token);
-	return (node);
+    node = new_node(type);
+    if (!node)
+        return (NULL);
+    node->cmd = malloc(sizeof(char *) * 3);
+    if (!node->cmd)
+    {
+        free(node);
+        return (NULL);
+    }
+    if (type == T_IN || type == T_APPEND || type == T_OUT)
+        node->cmd[0] = expansion_input(token->value, env);
+    else if (type == T_HERDOC)
+        node->cmd[0] = expansion_dilim(token->value);
+    if (!node->cmd[0])
+    {
+        free(node->cmd);
+        free(node);
+        return (NULL);
+    }
+    node->cmd[1] = NULL;
+    node->cmd[2] = NULL;
+    free(token);
+    return (node);
 }
 
 t_node	*parse_redire(t_token **tokens, t_env *env)

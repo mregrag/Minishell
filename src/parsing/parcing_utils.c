@@ -63,7 +63,6 @@ t_node	*create_redire(t_token **tokens, t_token *tmp, t_env *env)
 void creat_cmd(t_node *node, t_token **tokens, int count, t_env *env)
 {
     int     i;
-    t_token *tmp;
     char    *expanded;
 
     i = 0;
@@ -72,17 +71,13 @@ void creat_cmd(t_node *node, t_token **tokens, int count, t_env *env)
         expanded = expansion_input((*tokens)->value, env);
         if (!expanded)
         {
-            // Handle error: free previously allocated memory and return
             while (--i >= 0)
                 free(node->cmd[i]);
-            node->cmd = NULL;  // Set node->cmd to NULL to indicate error
+            node->cmd = NULL;
             return;
         }
         node->cmd[i] = expanded;
-        tmp = *tokens;
         *tokens = (*tokens)->next;
-        free(tmp->value);
-        free(tmp);
         i++;
     }
     node->cmd[count] = NULL;
