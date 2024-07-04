@@ -6,7 +6,7 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/18 21:49:59 by mregrag           #+#    #+#             */
-/*   Updated: 2024/07/03 19:37:52 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/07/04 20:44:53 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,10 @@
 
 char *remov_quotes(char *str)
 {
-    char    *ret;
-    char    quote;
-    size_t  i;
-    size_t  j;
+    char *ret;
+    size_t i, j;
+    int in_double_quotes = 0;
+    int in_single_quotes = 0;
 
     if (!str)
         return NULL;
@@ -33,22 +33,18 @@ char *remov_quotes(char *str)
     j = 0;
     while (str[i])
     {
-        if (str[i] == '"' || str[i] == '\'')
-        {
-            quote = str[i++];
-            while (str[i] && str[i] != quote)
-                ret[j++] = str[i++];
-            if (str[i])
-                i++;
-        }
+        if (str[i] == '"' && !in_single_quotes)
+            in_double_quotes = !in_double_quotes;
+        else if (str[i] == '\'' && !in_double_quotes)
+            in_single_quotes = !in_single_quotes;
         else
-            ret[j++] = str[i++];
+            ret[j++] = str[i];
+        i++;
     }
     ret[j] = '\0';
     free(str);
     return ret;
 }
-
 
 char	*handle_single_quotes(char *ret, char *str, size_t *i)
 {
