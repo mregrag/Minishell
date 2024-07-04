@@ -12,60 +12,58 @@
 
 #include "../../include/minishell.h"
 
-static char	*get_dir(t_node *node, t_env *env)
-{
-	char	*pwd;
+static char *get_dir(t_node *node, t_env *env) {
+    char *pwd = NULL;
 
-	pwd = NULL;
-	if (!node->cmd[1])
-	{
-		pwd = get_env_var(env, "HOME");
-		if (!pwd)
-			print_error("minish", "cd", "HOME not set", NULL);
-	}
-	else if (node->cmd[1] && ft_strncmp(node->cmd[1], "-", 2) == 0)
-	{
-		pwd = get_env_var(env, "OLDPWD");
-		if (!pwd)
-			print_error("minish", "cd", "OLDPWD not set", NULL);
-	}
-	else
-		pwd = node->cmd[1];
-	return (pwd);
+    if (!node->cmd[1]) {
+        pwd = get_env_var(env, "HOME");
+        if (!pwd)
+            print_error("minish", "cd", "HOME not set", NULL);
+    } else if (node->cmd[1] && ft_strncmp(node->cmd[1], "-", 2) == 0) {
+        pwd = get_env_var(env, "OLDPWD");
+        if (!pwd)
+            print_error("minish", "cd", "OLDPWD not set", NULL);
+    } else {
+        pwd = ft_strdup(node->cmd[1]);
+    }
+    return pwd;
 }
 
-static int	update_pwd(t_env *env)
-{
-	char	buf[PATH_MAX];
-	char	*pwd;
+static int update_pwd(t_env *env) {
+    char buf[PATH_MAX];
+    char *old_pwd = get_env_var(env, "PWD");
 
-	pwd = get_env_var(env, "PWD");
-	if (!get_env_var(env, "OLDPWD"))
-		set_env_var(env,  "OLDPWD", pwd);
-	set_env_var(env,  "OLDPWD", pwd);
-	if (!getcwd(buf, sizeof(buf)))
-	{
-		print_error_errno("cd", "error retrieving current directory",\
-				"getcwd :  cannot access parent directories");
-		return (1);
-	}
-	set_env_var(env,  "PWD", buf);
-		return (1);
-	return (0);
+    if (old_pwd) {
+        set_env_var(env, "OLDPWD", old_pwd);
+        free(old_pwd);
+    }
+
+    if (!getcwd(buf, sizeof(buf))) {
+        print_error_errno("cd", "error retrieving current directory", "getcwd :  cannot access parent directories");
+        return 1;
+    }
+    set_env_var(env, "PWD", buf);
+    return 0;
 }
 
-int	ft_cd(t_node *node, t_env *env)
-{
-	char	*pwd;
+int ft_cd(t_node *node, t_env *env) {
+    char *pwd = get_dir(node, env);
 
-	pwd = get_dir(node, env);
-	if (!pwd)
-		return (1);
-	if (chdir(pwd) == -1)
-		return (print_error_errno("minish", "cd", pwd), 1);
-	if (node->cmd[1] && !ft_strcmp(node->cmd[1], "-"))
-		printf("%s\n", pwd);
-	if (update_pwd(env) == 1)
-		return (1);
-	return (1);
+    if (!pwd)
+        return 1;
+
+    if (chdir(pwd) == -1) {
+        print_error_errno("minish", "cd", pwd);
+        free(pwd);
+        return 1;
+    }
+
+    if (node->cmd[1] && !ft_strcmp(node->cmd[1], "-"))
+        printf("%s\n", pwd);
+    if (update_pwd(env) == 1) {
+        free(pwd);
+        return 1;
+    }
+    free(pwd);
+    return 0;
 }

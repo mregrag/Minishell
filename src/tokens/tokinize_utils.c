@@ -52,7 +52,7 @@ int process_word(char **line, t_token **tokens)
     if (!value)
         return 0;
     token = new_token(value, T_WORD);
-    free(value);  // Free the value after creating the token
+    free(value);
     if (!token)
         return 0;
     *line += i;

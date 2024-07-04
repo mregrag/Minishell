@@ -56,25 +56,36 @@ static int	find_char_index(const char *str, char c)
 	}
 	return (-1);
 }
+void add_arg_to_env(char *argv, t_env *env) {
+    int index = find_char_index(argv, '=');
+    char *var = ft_substr(argv, 0, index);
+    char *trimmed_var = ft_strtrim(var, "+");
+    free(var);  // Free the initial substring result
 
-void	add_arg_to_env(char *argv, t_env *env)
-{
-	int		index;
-	char	*value;
-	char	*var;
+    char *value = ft_substr(argv, index + 1, ft_strlen(argv) - index);
 
-	index = find_char_index(argv, '=');
-	var = ft_strtrim(ft_substr(argv, 0, index), "+");
-	value = ft_substr(argv, index + 1, ft_strlen(argv) - index);
-	if (ft_issamechar(value, '$'))
-		value = ft_itoa(getpid());
-	if (get_env_var(env, var) && !ft_strchr(argv, '+'))
-		set_env_var(env, var, value);
-	else if (get_env_var(env, var) && argv[index - 1] == '+')
-		set_env_var(env, var, ft_strjoin(get_env_var(env, var), value));
-	else if (ft_strchr(argv, '='))
-		set_env_var(env, var, value);
+    if (ft_issamechar(value, '$')) {
+        free(value);  // Free previous value before reassigning
+        value = ft_itoa(getpid());
+    }
+
+    char *existing_value = get_env_var(env, trimmed_var);
+    if (existing_value && !ft_strchr(argv, '+')) {
+        set_env_var(env, trimmed_var, value);
+    } else if (existing_value && argv[index - 1] == '+') {
+        char *new_value = ft_strjoin(existing_value, value);
+        free(value);  // Free the original value before reassigning
+        set_env_var(env, trimmed_var, new_value);
+        free(new_value);  // Free the joined string after setting it
+    } else if (ft_strchr(argv, '=')) {
+        set_env_var(env, trimmed_var, value);
+    }
+
+    free(existing_value);  // Free memory allocated by get_env_var
+    free(trimmed_var);
+    free(value);
 }
+
 
 int	ft_export(t_node *node, t_env *env)
 {

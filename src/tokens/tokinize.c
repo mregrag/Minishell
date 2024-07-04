@@ -29,8 +29,7 @@ static int	separator(char **line, t_token **token_list)
 }
 
 
-t_token *tokenize_input(char *input, t_env *env)
-{
+t_token *tokenize_input(char *input, t_env *env) {
     t_token *tokens = NULL;
     char *s = ft_strtrim(input, " \t\n\v\r\f");
     char *v = NULL;
@@ -38,11 +37,9 @@ t_token *tokenize_input(char *input, t_env *env)
     if (!s)
         return NULL;
 
-    if (s[0] == '$' && is_var_in_env(env, s + 1))
-    {
+    if (s[0] == '$' && is_var_in_env(env, s + 1)) {
         v = get_env_var(env, s + 1);
-        if (v && ft_strchr(v, '|'))
-        {
+        if (v && ft_strchr(v, '|')) {
             token_add_back(&tokens, new_token(v, T_WORD));
             free(v);
             free(s);
@@ -52,12 +49,10 @@ t_token *tokenize_input(char *input, t_env *env)
     }
 
     char *current = s;
-    while (*current)
-    {
+    while (*current) {
         if (ft_isspace(*current))
             skip_spaces(&current);
-        if (!separator(&current, &tokens))
-        {
+        if (!separator(&current, &tokens)) {
             clear_token(&tokens);
             free(s);
             return NULL;
@@ -67,4 +62,3 @@ t_token *tokenize_input(char *input, t_env *env)
     free(s);
     return tokens;
 }
-

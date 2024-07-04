@@ -86,6 +86,7 @@ void	exec_pipe(t_node *node, t_env *env)
 	pid_t	pid_write;
 	int		status;
 	int		fd[2];
+	char		*exit_status;
 
 	if (ft_pipe(fd) < 0)
 		return ;
@@ -104,5 +105,11 @@ void	exec_pipe(t_node *node, t_env *env)
 	(close(fd[0]), close(fd[1]));
 	waitpid(pid_write, &status, 0);
 	waitpid(pid_read, &status, 0);
-	set_env_var(env,  "?", ft_itoa(WEXITSTATUS(status)));
+	exit_status = ft_itoa(WEXITSTATUS(status));
+	if (exit_status)
+	{
+		set_env_var(env, "?", exit_status);
+		free(exit_status);
+	}
+
 }

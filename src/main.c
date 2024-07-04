@@ -22,14 +22,13 @@ void	set_fds(int in, int out)
 	close(out);
 }
 
-void	kep_fds(int *in, int *out)
+void	keep_fds(int *in, int *out)
 {
 	*in = dup(STDIN_FILENO);
 	*out = dup(STDOUT_FILENO);
 }
 
-int main(int argc, char **argv, char **env)
-{
+int main(int argc, char **argv, char **env) {
     char    *input;
     t_node  *tree;
     t_env   *envp;
@@ -41,24 +40,29 @@ int main(int argc, char **argv, char **env)
     (void)argc;
 
     init_env(&envp, env);
-    while (1)
-    {
+    while (1) {
         setup_signal(envp);
-        kep_fds(&in, &out);
+        keep_fds(&in, &out);  // Corrected function name
         input = readline("minish-1.0$ ");
         if (!input)
             break;
         add_history(input);
         tokens = tokenize_input(input, envp);
-        tree = parse_tokens(&tokens, envp);
-        executing(tree, envp);
+        if (tokens) {
+            tree = parse_tokens(&tokens, envp);
+            if (tree) {
+                executing(tree, envp);
+                free_tree(tree);  // Free tree after execution
+            }
+            // Free tokens after processing
+        }
         g_sig = 0;
-        set_fds(in, out);
-        free_tree(tree);
+        set_fds(in, out);  // Corrected function name
         free(input);
-        free_tokens(tokens);
     }
     free_env(envp);
     clear_history();
+    clear_token(&tokens);
     return 0;
 }
+
