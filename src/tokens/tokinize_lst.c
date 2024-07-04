@@ -42,14 +42,15 @@ void token_add_back(t_token **lst, t_token *new)
     last->next = new;
 }
 
-void clear_token(t_token **lst)
+void clear_token(t_token **tokens)
 {
     t_token *current;
     t_token *next;
 
-    if (!lst || !*lst)
+    if (!tokens || !*tokens)
         return;
-    current = *lst;
+
+    current = *tokens;
     while (current)
     {
         next = current->next;
@@ -57,7 +58,8 @@ void clear_token(t_token **lst)
         free(current);
         current = next;
     }
-    *lst = NULL;
+
+    *tokens = NULL;
 }
 
 int ft_lstsize_token(t_token *lst)

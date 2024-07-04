@@ -28,28 +28,43 @@ static int	separator(char **line, t_token **token_list)
 		return (process_word(line, token_list));
 }
 
-t_token	*tokenize_input(char *input, t_env *env)
-{
-	t_token	*tokens;
-	char	*s;
-	char	*v;
 
-	tokens = NULL;
-	s = ft_strtrim(input, " \t\n\v\r\f");
-	v = s;
-	if (v[0] == '$' && is_var_in_env(env, ++v))
-	{
-		v = get_env_var(env, v);
-		if (ft_strchr(v, '|'))
-			return (token_add_back(&tokens, new_token(v, T_WORD)), tokens);
-	}
-	while (*s)
-	{
-		if (ft_isspace(*s))
-			skip_spaces(&s);
-		if (!separator(&s, &tokens))
-			return (clear_token(&tokens), NULL);
-	}
-	return (tokens);
+t_token *tokenize_input(char *input, t_env *env)
+{
+    t_token *tokens = NULL;
+    char *s = ft_strtrim(input, " \t\n\v\r\f");
+    char *v = NULL;
+
+    if (!s)
+        return NULL;
+
+    if (s[0] == '$' && is_var_in_env(env, s + 1))
+    {
+        v = get_env_var(env, s + 1);
+        if (v && ft_strchr(v, '|'))
+        {
+            token_add_back(&tokens, new_token(v, T_WORD));
+            free(v);
+            free(s);
+            return tokens;
+        }
+        free(v);
+    }
+
+    char *current = s;
+    while (*current)
+    {
+        if (ft_isspace(*current))
+            skip_spaces(&current);
+        if (!separator(&current, &tokens))
+        {
+            clear_token(&tokens);
+            free(s);
+            return NULL;
+        }
+    }
+
+    free(s);
+    return tokens;
 }
 

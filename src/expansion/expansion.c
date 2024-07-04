@@ -12,27 +12,38 @@
 
 #include "../../include/minishell.h"
 
-char	*expansion_input(char *str, t_env *env)
+char *expansion_input(char *str, t_env *env)
 {
-	size_t	i;
-	char	*ret;
-	char	*result;
+    size_t  i;
+    char    *ret;
+    char    *result;
+    char    *temp;
 
-	ret = strdup("");
-	i = 0;
-	while (str[i])
-	{
-		if (str[i] == '\'')
-			ret = handle_single_quotes(ret, str, &i);
-		else if (str[i] == '"')
-			ret = handle_double_quotes(ret, str, &i, env);
-		else if (str[i] == '$')
-			ret = handle_dollar(ret, str, &i, env);
-		else
-			ret = handle_normal(ret, str, &i);
-	}
-	result = remov_quotes(ret);
-	return (result);
+    ret = strdup("");
+    if (!ret)
+        return NULL;
+
+    i = 0;
+    while (str[i])
+    {
+        temp = ret;
+        if (str[i] == '\'')
+            ret = handle_single_quotes(ret, str, &i);
+        else if (str[i] == '"')
+            ret = handle_double_quotes(ret, str, &i, env);
+        else if (str[i] == '$')
+            ret = handle_dollar(ret, str, &i, env);
+        else
+            ret = handle_normal(ret, str, &i);
+
+        if (!ret)
+        {
+            free(temp);
+            return NULL;
+        }
+    }
+    result = remov_quotes(ret);
+    return result;
 }
 
 char	*expansion_content(char *str, t_env *env)

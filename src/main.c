@@ -30,32 +30,44 @@ void	kep_fds(int *in, int *out)
 
 int main(int argc, char **argv, char **env)
 {
-	char    *input;
-	t_node  *tree;
-	t_env   *envp;
-	t_token *tokens;
-	int     in;
-	int     out;
+    char    *input;
+    t_node  *tree;
+    t_env   *envp;
+    t_token *tokens;
+    int     in;
+    int     out;
 
-	(void)argv;
-	(void)argc;
+    (void)argv;
+    (void)argc;
 
-	init_env(&envp, env);
-	while (1)
-	{
-		setup_signal(envp);
-		kep_fds(&in, &out);
-		input = readline("minish-1.0$ ");
-		if (!input)
-			break;
-		add_history(input);
-		tokens = tokenize_input(input, envp);
-		tree = parse_tokens(&tokens, envp);
-		executing(tree, envp);
-		g_sig = 0;
-		set_fds(in, out);
-		free_tree(tree);
-		free(input);
-	}
-	return 0;
+    init_env(&envp, env);
+    while (1)
+    {
+        setup_signal(envp);
+        kep_fds(&in, &out);
+        input = readline("minish-1.0$ ");
+        if (!input)
+            break;
+
+        add_history(input);
+        tokens = tokenize_input(input, envp);
+        if (tokens)
+        {
+            tree = parse_tokens(&tokens, envp);
+            if (tree)
+            {
+                executing(tree, envp);
+                free_tree(tree);
+            }
+            //clear_token(&tokens);  // Use clear_token instead of free_tokens
+        }
+
+        g_sig = 0;
+        set_fds(in, out);
+        free(input);
+    }
+
+    free_env(envp);
+    clear_history();
+    return 0;
 }

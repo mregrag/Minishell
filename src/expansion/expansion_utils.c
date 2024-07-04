@@ -12,35 +12,43 @@
 
 #include "../../include/minishell.h"
 
-char	*remov_quotes(char *str)
+char *remov_quotes(char *str)
 {
-	char	*ret;
-	char	quote;
-	size_t	i;
-	size_t	j;
+    char    *ret;
+    char    quote;
+    size_t  i;
+    size_t  j;
 
-	if (!str)
-		return (NULL);
-	i = 0;
-	j = 0;
-	ret = malloc(strlen(str) + 1);
-	if (!ret)
-		return (NULL);
-	while (str[i])
-	{
-		if (str[i] == '"' || str[i] == '\'')
-		{
-			quote = str[i++];
-			while (str[i] && str[i] != quote)
-				ret[j++] = str[i++];
-			i++;
-		}
-		else
-			ret[j++] = str[i++];
-	}
-	ret[j] = '\0';
-	return (ft_free(&str), ret);
+    if (!str)
+        return NULL;
+
+    ret = malloc(strlen(str) + 1);
+    if (!ret)
+    {
+        free(str);
+        return NULL;
+    }
+
+    i = 0;
+    j = 0;
+    while (str[i])
+    {
+        if (str[i] == '"' || str[i] == '\'')
+        {
+            quote = str[i++];
+            while (str[i] && str[i] != quote)
+                ret[j++] = str[i++];
+            if (str[i])
+                i++;
+        }
+        else
+            ret[j++] = str[i++];
+    }
+    ret[j] = '\0';
+    free(str);
+    return ret;
 }
+
 
 char	*handle_single_quotes(char *ret, char *str, size_t *i)
 {
