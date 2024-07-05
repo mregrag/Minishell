@@ -15,7 +15,7 @@ LIBFT		= libft.a
 LIBRAIRIE	= "lib/libft"
 FSS		= fsanitize=address -fno-omit-frame-pointer -g2
 CC		= cc
-CFLAGS		= -Wall -Wextra -Werror
+CFLAGS		= -Wall -Wextra -Werror -g2
 HEADER		= ./include/minishell.h
 RM		= rm -rf
 

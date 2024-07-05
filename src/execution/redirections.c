@@ -12,31 +12,42 @@
 
 #include "../../include/minishell.h"
 
-int	heredoc(t_node *node, t_env *env)
-{
-	int		fd[2];
-	char	*str;
+int heredoc(t_node *node, t_env *env) {
+    int fd[2];
+    char *str;
+    char *expanded_str;
+    char *dilim;
 
-	if (ft_pipe(fd) < 0)
-		return (-1);
-	while (1)
-	{
-		if (ft_strchr(node->right->cmd[0], '\''))
-			node->flag = 1;
-		str = readline("> ");
-		if (!str || ft_strcmp(str, expansion_dilim(node->right->cmd[0])) == 0)
-		{
-			ft_free(&str);
-			break;
-		}
-		if (node->flag == 1)
-			ft_putendl_fd(str, fd[1]);
-		else
-			ft_putendl_fd(expansion_content(str, env), fd[1]);
-		ft_free(&str);
-	}
-	ft_close(fd[1]);
-	return (fd[0]);
+    if (ft_pipe(fd) < 0)
+        return (-1);
+
+    while (1) {
+        if (ft_strchr(node->right->cmd[0], '\''))
+            node->flag = 1;
+        str = readline("> ");
+        if (!str)
+            break;
+
+        dilim = expansion_dilim(node->right->cmd[0]);
+        if (!dilim || ft_strcmp(str, dilim) == 0) {
+            free(str);
+            free(dilim);
+            break;
+        }
+        free(dilim);
+        if (node->flag == 1) {
+            ft_putendl_fd(str, fd[1]);
+        } else {
+            expanded_str = expansion_content(str, env);
+            if (expanded_str) {
+                ft_putendl_fd(expanded_str, fd[1]);
+                free(expanded_str);
+            }
+        }
+        free(str);
+    }
+    ft_close(fd[1]);
+    return (fd[0]);
 }
 
 static int	check_file(t_node *node)

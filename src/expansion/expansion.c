@@ -46,38 +46,52 @@ char *expansion_input(char *str, t_env *env)
     return result;
 }
 
-char	*expansion_content(char *str, t_env *env)
-{
-	size_t	i;
-	char	*ret;
+char *expansion_content(char *str, t_env *env) {
+    size_t i;
+    char *ret;
+    char *temp;
 
-	ret = strdup("");
-	i = 0;
-	while (str[i])
-	{
-		if (str[i] == '\'' || str[i] == '"')
-			ret = handle_quotes(ret, str, &i, env);
-		else if (str[i] == '$')
-			ret = handle_dollar(ret, str, &i, env);
-		else
-			ret = handle_normal(ret, str, &i);
-	}
-	return (ret);
+    ret = strdup("");
+    if (!ret) return NULL; // Check for strdup failure
+    i = 0;
+    while (str[i]) {
+        temp = ret;
+        if (str[i] == '\'' || str[i] == '"') {
+            ret = handle_quotes(ret, str, &i, env);
+        } else if (str[i] == '$') {
+            ret = handle_dollar(ret, str, &i, env);
+        } else {
+            ret = handle_normal(ret, str, &i);
+        }
+        if (!ret) {
+            free(temp);
+            return NULL;
+        }
+    }
+    return ret;
 }
 
-char	*expansion_dilim(char *str)
-{
-	size_t	i;
-	char	*ret;
+char *expansion_dilim(char *str) {
+    size_t i;
+    char *ret;
+    char *temp;
+    char *result;
 
-	ret = strdup("");
-	i = 0;
-	while (str[i])
-	{
-		if (str[i] == '\'' || str[i] == '"')
-			ret = handle_quotes_dilim(ret, str, &i);
-		else
-			ret = handle_str(ret, str, &i);
-	}
-	return (remov_quotes(ret));
+    ret = strdup("");
+    if (!ret) return NULL; // Check for strdup failure
+    i = 0;
+    while (str[i]) {
+        temp = ret;
+        if (str[i] == '\'' || str[i] == '"') {
+            ret = handle_quotes_dilim(ret, str, &i);
+        } else {
+            ret = handle_str(ret, str, &i);
+        }
+        if (!ret) {
+            free(temp);
+            return NULL;
+        }
+    }
+    result = remov_quotes(ret);
+    return result;
 }

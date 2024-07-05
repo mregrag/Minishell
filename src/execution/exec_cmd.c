@@ -65,7 +65,8 @@ static void child_exec(t_node *node, t_env *env)
 	if (pid == 0)
 	{
 		path = get_path(node->cmd[0], env);
-		execve(path, node->cmd, envp);
+		if (path)
+			execve(path, node->cmd, envp);
 		error = exec_err(errno, path, node->cmd[0]);
 		free(path);
 		ft_free_array(envp);
