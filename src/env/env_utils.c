@@ -12,6 +12,29 @@
 
 #include "../../include/minishell.h"
 
+void	update_env_var(char *var, char *value, t_node *node)
+{
+	t_list	*current;
+	char	*new_entry;
+
+	new_entry = ft_strjoin(ft_strjoin(var, "="), value);
+	if (!new_entry)
+		return ;
+	current = node->env->env;
+	while (current)
+	{
+		if (ft_strncmp(current->content, var, ft_strlen(var)) == 0
+				&& ((char *)current->content)[ft_strlen(var)] == '=')
+		{
+			current->content = ft_strdup(new_entry);
+			ft_free(&new_entry);
+			return ;
+		}
+		current = current->next;
+	}
+	ft_lstadd_back(&node->env->env, ft_lstnew(ft_strdup(new_entry)));
+	free(new_entry);
+}
 
 char	*get_env_var(t_env *env, const char *name)
 {
