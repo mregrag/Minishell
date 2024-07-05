@@ -40,7 +40,7 @@ t_token *tokenize_input(char *input, t_env *env) {
     if (s[0] == '$' && is_var_in_env(env, s + 1)) {
         v = get_env_var(env, s + 1);
         if (v && ft_strchr(v, '|')) {
-            token_add_back(&tokens, new_token(v, T_WORD));
+            tokens = new_token(v, T_WORD);
             free(v);
             free(s);
             return tokens;

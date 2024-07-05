@@ -42,27 +42,29 @@ int main(int argc, char **argv, char **env) {
     init_env(&envp, env);
     while (1) {
         setup_signal(envp);
-        keep_fds(&in, &out);  // Corrected function name
+        keep_fds(&in, &out);
         input = readline("minish-1.0$ ");
         if (!input)
             break;
         add_history(input);
         tokens = tokenize_input(input, envp);
+        if (!tokens)
+            continue ;
         if (tokens) {
             tree = parse_tokens(&tokens, envp);
             if (tree) {
                 executing(tree, envp);
-                free_tree(tree);  // Free tree after execution
+                free_tree(tree);
             }
-            // Free tokens after processing
         }
-        g_sig = 0;
-        set_fds(in, out);  // Corrected function name
+        clear_token(&tokens);
         free(input);
+        g_sig = 0;
+        set_fds(in, out); 
     }
     free_env(envp);
     clear_history();
-    clear_token(&tokens);
+   
     return 0;
 }
 

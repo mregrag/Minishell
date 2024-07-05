@@ -14,12 +14,19 @@
 
 int	ft_env(t_node *node, t_env *env)
 {
+	char	*path;
+
+	path = get_path(node->cmd[0], env);
 	if (node->cmd[1] || !is_var_in_env(env, "PATH"))
 	{
 		print_error("env", node->cmd[1], "No such file or directory", NULL);
 		return (1);
 	}
-	set_env_var(env, "_", get_path(node->cmd[0], env));
+	if (path)
+	{
+		set_env_var(env, "_", path);
+		free(path);
+	}
 	print_env(env);
 	return (1);
 }

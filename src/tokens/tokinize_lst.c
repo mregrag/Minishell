@@ -45,7 +45,10 @@ void token_add_back(t_token **lst, t_token *new)
     while (last->next)
         last = last->next;
     last->next = new;
+    free(new);
+
 }
+
 
 void clear_token(t_token **tokens)
 {

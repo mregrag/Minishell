@@ -127,9 +127,16 @@ t_node *build_tree(t_token **tokens, t_env *env)
 
 t_node	*parse_tokens(t_token **tokens, t_env *env)
 {
+	t_node *tree;
+
 	if (!tokens || !*tokens)
 		return (NULL);
 	if (!check_syntax(*tokens))
+	{
+		clear_token(tokens);
 		return (NULL);
-	return (build_tree(tokens, env));
+	}
+	tree = build_tree(tokens, env);
+	clear_token(tokens);
+	return (tree);
 }
