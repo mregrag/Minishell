@@ -6,35 +6,12 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 16:25:14 by mregrag           #+#    #+#             */
-/*   Updated: 2024/07/03 23:00:20 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/07/05 15:17:54 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-void	update_env_var(char *var, char *value, t_node *node)
-{
-	t_list	*current;
-	char	*new_entry;
-
-	new_entry = ft_strjoin_three(var, "=", value);
-	if (!new_entry)
-		return ;
-	current = node->env->env;
-	while (current)
-	{
-		if (ft_strncmp(current->content, var, ft_strlen(var)) == 0
-				&& ((char *)current->content)[ft_strlen(var)] == '=')
-		{
-			current->content = ft_strdup(new_entry);
-			ft_free(&new_entry);
-			return ;
-		}
-		current = current->next;
-	}
-	ft_lstadd_back(&node->env->env, ft_lstnew(ft_strdup(new_entry)));
-	free(new_entry);
-}
 
 char	*get_env_var(t_env *env, const char *name)
 {

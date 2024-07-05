@@ -6,7 +6,7 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/30 15:10:09 by mregrag           #+#    #+#             */
-/*   Updated: 2024/07/04 00:25:29 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/07/05 16:30:45 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,10 +75,7 @@ char	*expansion_dilim(char *str)
 	while (str[i])
 	{
 		if (str[i] == '\'' || str[i] == '"')
-		{
-			// node->flag = 1;
 			ret = handle_quotes_dilim(ret, str, &i);
-		}
 		else
 			ret = handle_str(ret, str, &i);
 	}

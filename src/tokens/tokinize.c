@@ -6,7 +6,7 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/11 22:02:39 by mregrag           #+#    #+#             */
-/*   Updated: 2024/07/03 23:30:01 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/07/05 15:54:38 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,6 @@ t_token *tokenize_input(char *input, t_env *env) {
             return NULL;
         }
     }
-
     free(s);
     return tokens;
 }

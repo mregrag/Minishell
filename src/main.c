@@ -6,12 +6,11 @@
 /*   By: mkoualil <mkoualil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/10 16:14:20 by mregrag           #+#    #+#             */
-/*   Updated: 2024/07/04 00:29:04 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/07/05 16:27:09 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
-
 int	g_sig = 0;
 
 void	set_fds(int in, int out)
@@ -22,49 +21,42 @@ void	set_fds(int in, int out)
 	close(out);
 }
 
-void	keep_fds(int *in, int *out)
+void	kep_fds(int *in, int *out)
 {
 	*in = dup(STDIN_FILENO);
 	*out = dup(STDOUT_FILENO);
 }
 
-int main(int argc, char **argv, char **env) {
-    char    *input;
-    t_node  *tree;
-    t_env   *envp;
-    t_token *tokens;
-    int     in;
-    int     out;
+int main(int argc, char **argv, char **env)
+{
+	char    *input;
+	t_node  *tree;
+	t_env   *envp;
+	t_token *tokens;
+	int     in;
+	int     out;
 
-    (void)argv;
-    (void)argc;
+	(void)argv;
+	(void)argc;
 
-    init_env(&envp, env);
-    while (1) {
-        setup_signal(envp);
-        keep_fds(&in, &out);
-        input = readline("minish-1.0$ ");
-        if (!input)
-            break;
-        add_history(input);
-        tokens = tokenize_input(input, envp);
-        if (!tokens)
-            continue ;
-        if (tokens) {
-            tree = parse_tokens(&tokens, envp);
-            if (tree) {
-                executing(tree, envp);
-                free_tree(tree);
-            }
-        }
-        clear_token(&tokens);
-        free(input);
-        g_sig = 0;
-        set_fds(in, out); 
-    }
-    free_env(envp);
-    clear_history();
-   
-    return 0;
+	init_env(&envp, env);
+	while (1)
+	{
+		setup_signal(envp);
+		kep_fds(&in, &out);
+		input = readline("minish-1.0$ ");
+		if (!input)
+			break;
+		add_history(input);
+		tokens = tokenize_input(input, envp);
+		tree = parse_tokens(&tokens, envp);
+		executing(tree, envp);
+		g_sig = 0;
+		set_fds(in, out);
+		free_tree(tree);
+		free(input);
+	}
+	clear_token(&tokens);
+	free_env(envp);
+	return 0;
 }
-
