@@ -36,7 +36,7 @@ char *get_path(char *command, t_env *env)
 		full_path = ft_strjoin_three(paths[i], "/", command);
 		if (!full_path)
 			return (ft_free_array(paths), NULL);
-		if (access(full_path, X_OK) == 0)
+		if (access(full_path, X_OK | F_OK) == 0)
 			return (ft_free_array(paths), full_path);
 		free(full_path);
 		i++;
@@ -55,7 +55,7 @@ static void child_exec(t_node *node, t_env *env)
 
 	envp = ft_list_to_arr(env->env);
 	if (!envp)
-		return;
+		return ;
 	pid = ft_fork();
 	if (pid < 0)
 	{
@@ -67,7 +67,7 @@ static void child_exec(t_node *node, t_env *env)
 		path = get_path(node->cmd[0], env);
 		if (path)
 			execve(path, node->cmd, envp);
-		error = exec_err(errno, path, node->cmd[0]);
+		error = exec_err(path, node->cmd[0]);
 		free(path);
 		ft_free_array(envp);
 		exit(error);
@@ -77,10 +77,7 @@ static void child_exec(t_node *node, t_env *env)
 		waitpid(pid, &status, 0);
 		exit_status = ft_itoa(WEXITSTATUS(status));
 		if (exit_status)
-		{
-			set_env_var(env, "?", exit_status);
-			free(exit_status);
-		}
+			(set_env_var(env, "?", exit_status), free(exit_status));
 	}
 	ft_free_array(envp);
 }

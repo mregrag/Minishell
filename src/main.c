@@ -27,6 +27,7 @@ void	kep_fds(int *in, int *out)
 	*out = dup(STDOUT_FILENO);
 }
 
+
 int main(int argc, char **argv, char **env)
 {
 	char    *input;
@@ -48,13 +49,13 @@ int main(int argc, char **argv, char **env)
 		if (!input)
 			break;
 		add_history(input);
-		tokens = tokenize_input(input, envp);
+		tokens = process_tokenize(input, envp);
 		tree = parse_tokens(&tokens, envp);
 		executing(tree, envp);
+		free_tree(tree);
 		g_sig = 0;
 		set_fds(in, out);
-		free(input);
-		free_tree(tree);
+		
 		clear_token(&tokens);
 	}
 	clear_token(&tokens);

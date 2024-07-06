@@ -45,6 +45,7 @@ int	ft_echo(t_node *node, t_env *env)
 	{
 		ft_putstr_fd(node->cmd[i], 1);
 		set_env_var(env, "_", node->cmd[i]);
+		set_env_var(env, "?", "0");
 		if (node->cmd[i + 1])
 			ft_putstr_fd(" ", 1);
 		i++;
