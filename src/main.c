@@ -13,6 +13,20 @@
 #include "../include/minishell.h"
 int	g_sig = 0;
 
+void free_tokens(t_token *head)
+{
+    t_token *current;
+    t_token *next;
+
+    current = head;
+    while (current)
+    {
+        next = current->next;
+        free(current->value);
+        free(current);
+        current = next;
+    }
+}
 void	set_fds(int in, int out)
 {
 	dup2(in, STDIN_FILENO);
@@ -53,12 +67,10 @@ int main(int argc, char **argv, char **env)
 		tree = parse_tokens(&tokens, envp);
 		executing(tree, envp);
 		free_tree(tree);
+		clear_token(&tokens);
 		g_sig = 0;
 		set_fds(in, out);
-		
-		clear_token(&tokens);
 	}
-	clear_token(&tokens);
 	free_env(envp);
 	return 0;
 }

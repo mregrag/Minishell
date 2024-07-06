@@ -18,7 +18,11 @@ int	add_separator(t_type type, char **line, t_token **tokens, char *value)
 
 	token = new_token(value, type);
 	if (!token)
+    {
+        free(token);
 		return (0);
+    }
+    free(value);
 	token_add_back(tokens, token);
 	(*line)++;
 	if (type == T_HERDOC || type == T_APPEND)
@@ -30,6 +34,7 @@ int process_word(char **line, t_token **tokens) {
     char    *tmp;
     char    *value;
     size_t  i;
+    t_token   *token;
     
     tmp = *line;
     i = 0;
@@ -48,10 +53,7 @@ int process_word(char **line, t_token **tokens) {
     }
     value = ft_substr(tmp, 0, i);
     *line += i;
-    if (value)
-    {
-        token_add_back(tokens, new_token(value, T_WORD));
-        free(value);
-    }
+    token = new_token(value, T_WORD);
+    token_add_back(tokens, token);
     return 1;
 }
