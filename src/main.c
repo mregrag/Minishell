@@ -53,10 +53,11 @@ int main(int argc, char **argv, char **env)
 		executing(tree, envp);
 		g_sig = 0;
 		set_fds(in, out);
-		free_tree(tree);
 		free(input);
+		free_tree(tree);
+		clear_token(&tokens);
 	}
-	clear_token(&tokens);
+	//clear_token(&tokens);
 	free_env(envp);
 	return 0;
 }

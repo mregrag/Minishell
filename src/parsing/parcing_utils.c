@@ -27,7 +27,6 @@ t_node	*new_node(t_type type)
 	return (node);
 }
 
-
 void free_tree(t_node *node)
 {
     int i;
@@ -35,7 +34,7 @@ void free_tree(t_node *node)
     if (!node)
         return;
     i = 0;
-    if (node->type == T_WORD && node->cmd)
+    if (node->cmd)
     {
         while (node->cmd[i])
         {

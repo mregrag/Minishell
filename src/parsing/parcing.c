@@ -37,11 +37,13 @@ t_node	*create_file(t_token *token, t_type type, t_env *env)
 	if (!node->cmd)
 		return (NULL);
 	if (type == T_IN || type == T_APPEND || type == T_OUT)
+	{
 		node->cmd[0] = expansion_input(token->value, env);
+		free(token->value);
+	}
 	else if (type == T_HERDOC)
 		node->cmd[0] = token->value;
 	node->cmd[1] = (NULL);
-	free(token);
 	return (node);
 }
 

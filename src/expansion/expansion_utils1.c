@@ -11,119 +11,132 @@
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
-
 char *handle_quotes(char *ret, char *str, size_t *i, t_env *env)
 {
     char quote;
-    char *content = NULL;
-    char *temp = NULL;
+    char *temp;
+    char *content;
+    char *new_ret;
     size_t start;
 
-    temp = ft_strdup("");
-    if (!temp)
-        return NULL;
     quote = str[*i];
     start = (*i)++;
+    temp = ft_strdup("");
+    if (!temp) return ret;
+
     while (str[*i] && str[*i] != quote)
     {
-        if (str[*i] == '$') {
-            char *new_temp = handle_dollar(temp, str, i, env);
-            if (!new_temp) {
-                ft_free(temp);
-                return NULL;
+        if (str[*i] == '$')
+        {
+            char *dollar_result = handle_dollar(temp, str, i, env);
+            free(temp);
+            temp = dollar_result;
+        }
+        else
+        {
+            char *substr = ft_substr(str, *i, 1);
+            if (!substr)
+            {
+                free(temp);
+                return ret;
             }
-            ft_free(temp);
+            char *new_temp = ft_strjoin(temp, substr);
+            free(temp);
+            free(substr);
             temp = new_temp;
-        } else {
-            char *next_char = ft_substr(str, *i, 1);
-            if (!next_char) {
-                ft_free(temp);
-                return NULL;
-            }
-            char *new_temp = ft_strjoin(temp, next_char);
-            ft_free(next_char);
-            ft_free(temp);
-            temp = new_temp;
-            if (!temp) {
-                return NULL;
-            }
             (*i)++;
         }
+        if (!temp) return ret;
     }
-    if (str[*i] == quote) {
-        (*i)++;
-    }
-    char *quote_char = ft_substr(str, start, 1);
-    if (!quote_char) {
-        ft_free(temp);
-        return NULL;
-    }
-    char *first_part = ft_strjoin(quote_char, temp);
-    ft_free(quote_char);
-    ft_free(temp);
-    if (!first_part)
-        return NULL;
-    content = ft_strjoin(first_part, quote_char);
-    ft_free(first_part);
-    if (!content)
-        return NULL;
-    char *new_ret = ft_strjoin(ret, content);
-    ft_free(content);
 
-    if (!new_ret)
-        return NULL;
-    ft_free(ret);
+    if (str[*i] == quote)
+        (*i)++;
+
+    char *opening_quote = ft_substr(str, start, 1);
+    char *closing_quote = ft_substr(str, start, 1);
+    if (!opening_quote || !closing_quote)
+    {
+        (free(temp), free(opening_quote), free(closing_quote));
+        return ret;
+    }
+    content = ft_strjoin(opening_quote, temp);
+    free(opening_quote);
+    free(temp);
+    if (!content)
+    {
+        free(closing_quote);
+        return ret;
+    }
+    char *new_content = ft_strjoin(content, closing_quote);
+    free(content);
+    free(closing_quote);
+    if (!new_content) return ret;
+    new_ret = ft_strjoin(ret, new_content);
+    free(new_content);
+    free(ret);
     return new_ret;
 }
 
 char *handle_quotes_dilim(char *ret, const char *str, size_t *i)
 {
     char quote;
-    char *content;
     char *temp;
+    char *content;
+    char *new_ret;
     size_t start;
 
     temp = ft_strdup("");
-    if (!temp)
-        return NULL;
+    if (!temp) return ret;
+
     quote = str[*i];
     start = (*i)++;
     while (str[*i] && str[*i] != quote)
     {
-        char *next_char = ft_substr(str, *i, 1);
-        if (!next_char) {
+        char *substr = ft_substr(str, *i, 1);
+        if (!substr)
+        {
             free(temp);
-            return NULL;
+            return ret;
         }
-        char *new_temp = ft_strjoin(temp, next_char);
-        free(next_char);
+        char *new_temp = ft_strjoin(temp, substr);
         free(temp);
+        free(substr);
         temp = new_temp;
-        if (!temp) {
-            return NULL;
-        }
+        if (!temp) return ret;
         (*i)++;
     }
     if (str[*i] == quote)
         (*i)++;
-    char *quote_char = ft_substr(str, start, 1);
-    if (!quote_char) {
-        free(temp);
-        return NULL;
-    }
-    content = ft_strjoin(quote_char, temp);
-    free(quote_char);
-    free(temp);
 
+    char *opening_quote = ft_substr(str, start, 1);
+    char *closing_quote = ft_substr(str, start, 1);
+    if (!opening_quote || !closing_quote)
+    {
+        free(temp);
+        free(opening_quote);
+        free(closing_quote);
+        return ret;
+    }
+    content = ft_strjoin(opening_quote, temp);
+    free(opening_quote);
+    free(temp);
     if (!content)
-        return NULL;
-    char *new_ret = ft_strjoin(ret, content);
+    {
+        free(closing_quote);
+        return ret;
+    }
+    char *new_content = ft_strjoin(content, closing_quote);
     free(content);
-    if (!new_ret)
-        return NULL;
+    free(closing_quote);
+    if (!new_content) return ret;
+
+    new_ret = ft_strjoin(ret, new_content);
+    free(new_content);
     free(ret);
     return new_ret;
 }
+
+
 
 char *handle_str(char *ret, char *str, size_t *i)
 {

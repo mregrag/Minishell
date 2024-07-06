@@ -12,41 +12,49 @@
 
 #include "../../include/minishell.h"
 
+
+
 t_token *new_token(char *value, t_type type)
 {
-    t_token *token;
+    t_token *token = malloc(sizeof(t_token));
+    if (!token) return NULL;
 
-    token = (t_token *)malloc(sizeof(t_token));
-    if (!token)
-        return NULL;
-    token->value = ft_strdup(value);
-    if (!token->value)
-    {
+    token->value = strdup(value);
+    if (!token->value) {
         free(token);
         return NULL;
     }
+
     token->type = type;
     token->next = NULL;
     return token;
 }
 
-void token_add_back(t_token **lst, t_token *new)
-{
-    t_token *last;
 
-    if (!lst || !new)
-        return;
-    if (!*lst)
-    {
-        *lst = new;
+void token_add_back(t_token **head, t_token *new_token)
+{
+    if (!*head) {
+        *head = new_token;
         return;
     }
-    last = *lst;
-    while (last->next)
-        last = last->next;
-    last->next = new;
+
+    t_token *current = *head;
+    while (current->next) {
+        current = current->next;
+    }
+    current->next = new_token;
 }
 
+void free_tokens(t_token *head)
+{
+    while (head)
+    {
+        t_token *temp = head;
+        head = head->next;
+        free(temp->value);
+        free(temp);
+    }
+}
 
 void clear_token(t_token **tokens)
 {
@@ -57,7 +65,7 @@ void clear_token(t_token **tokens)
         return;
 
     current = *tokens;
-    while (current)
+    while (current && current->next)
     {
         next = current->next;
         free(current->value);
@@ -67,7 +75,6 @@ void clear_token(t_token **tokens)
 
     *tokens = NULL;
 }
-
 
 int ft_lstsize_token(t_token *lst)
 {

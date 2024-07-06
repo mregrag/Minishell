@@ -26,13 +26,11 @@ int	add_separator(t_type type, char **line, t_token **tokens, char *value)
 	return (1);
 }
 
-int process_word(char **line, t_token **tokens)
-{
+int process_word(char **line, t_token **tokens) {
     char    *tmp;
     char    *value;
-    t_token *token;
     size_t  i;
-
+    
     tmp = *line;
     i = 0;
     while (tmp[i] && !is_separator(tmp + i))
@@ -49,13 +47,11 @@ int process_word(char **line, t_token **tokens)
             i++;
     }
     value = ft_substr(tmp, 0, i);
-    if (!value)
-        return 0;
-    token = new_token(value, T_WORD);
-    free(value);
-    if (!token)
-        return 0;
     *line += i;
-    token_add_back(tokens, token);
+    if (value)
+    {
+        token_add_back(tokens, new_token(value, T_WORD));
+        free(value);
+    }
     return 1;
 }

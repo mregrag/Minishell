@@ -73,46 +73,54 @@ char *handle_single_quotes(char *ret, char *str, size_t *i)
 
 char *handle_double_quotes(char *ret, char *str, size_t *i, t_env *env)
 {
-    char *temp;
-    char *content;
-    char *sub;
-    char *new_temp;
-    char *new_ret;
-
-    (*i)++;
-    temp = strdup(""); // Initialize temp to an empty string
+    char *temp = strdup("");
     if (!temp)
         return ret;
 
+    (*i)++;
     while (str[*i] && str[*i] != '"')
     {
         if (str[*i] == '$')
         {
-            new_temp = handle_dollar(temp, str, i, env);
-            free(temp); // Free the old temp
-            temp = new_temp;
+            char *new_temp = handle_dollar(temp, str, i, env);
+            if (new_temp)
+            {
+                temp = new_temp;
+            }
         }
         else
         {
-            sub = ft_substr(str, *i, 1);
-            new_temp = ft_strjoin(temp, sub);
-            free(temp); // Free the old temp
-            free(sub);
-            temp = new_temp;
-            (*i)++;
+            char *sub = ft_substr(str, *i, 1);
+            if (sub)
+            {
+                char *new_temp = ft_strjoin(temp, sub);
+                free(sub);
+                if (new_temp)
+                {
+                    free(temp);
+                    temp = new_temp;
+                }
+                (*i)++;
+            }
         }
     }
+
     if (str[*i] == '"')
         (*i)++;
-    content = ft_strjoin_three("\"", temp, "\"");
-    new_ret = ft_strjoin(ret, content);
-    free(temp);
-    free(content);
-    if (new_ret)
+
+    char *content = ft_strjoin_three("\"", temp, "\"");
+    if (content)
     {
-        free(ret);
-        return new_ret;
+        char *new_ret = ft_strjoin(ret, content);
+        free(content);
+        if (new_ret)
+        {
+            free(ret);
+            ret = new_ret;
+        }
     }
+
+    free(temp);
     return ret;
 }
 

@@ -77,7 +77,8 @@ typedef struct s_gb
 }	t_gb;
 
 extern t_gb	g_minish;
-void free_tokens(t_token *tokens);
+t_token *tokenize(char *input);
+void free_tokens(t_token *head);
 t_env *copy_env(t_env *original);
 //t_env *init_env(char **envp);
 void    init_env(t_env **env, char **envp);
