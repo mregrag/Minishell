@@ -6,7 +6,7 @@
 /*   By: mkoualil <mkoualil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/10 16:14:20 by mregrag           #+#    #+#             */
-/*   Updated: 2024/07/05 16:27:09 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/07/06 18:44:38 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ int main(int argc, char **argv, char **env)
 		free_tree(tree);
 		clear_token(&tokens);
 	}
-	//clear_token(&tokens);
+	clear_token(&tokens);
 	free_env(envp);
 	return 0;
 }
