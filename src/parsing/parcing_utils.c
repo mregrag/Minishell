@@ -27,26 +27,29 @@ t_node	*new_node(t_type type)
 	return (node);
 }
 
-void free_tree(t_node *node)
-{
-    int i;
 
-    if (!node)
-        return;
-    i = 0;
-    if (node->cmd)
-    {
-        while (node->cmd[i])
-        {
-            free(node->cmd[i]);
-            i++;
-        }
-        free(node->cmd);
-    }
-    free_tree(node->left);
-    free_tree(node->right);
-    free(node);
+void	free_tree(t_node *node)
+{
+	int				i;
+
+	i = 0;
+	if (!node)
+		return ;
+	if (node->type == T_WORD && node->cmd)
+	{
+		while (node->cmd && node->cmd[i])
+		{
+			free(node->cmd[i]);
+			i++;
+		}
+		free(node->cmd);
+	}
+	free_tree(node->left);
+	free_tree(node->right);
+	free(node);
+    node = NULL;
 }
+
 
 t_node	*create_redire(t_token **tokens, t_token *tmp, t_env *env)
 {
