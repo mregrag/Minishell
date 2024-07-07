@@ -6,7 +6,7 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/24 21:22:11 by mregrag           #+#    #+#             */
-/*   Updated: 2024/07/05 16:32:30 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/07/07 22:15:23 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,7 @@ t_node	*create_file(t_token *token, t_type type, t_env *env)
 	else if (type == T_HERDOC)
 		node->cmd[0] = token->value;
 	node->cmd[1] = (NULL);
+	free(token);
 	return (node);
 }
 
@@ -106,6 +107,6 @@ t_node	*parse_tokens(t_token **tokens, t_env *env)
 	if (!tokens || !*tokens)
 		return (NULL);
 	if (!check_syntax(*tokens))
-		return (NULL);
+		return (clear_tokens(tokens), NULL);
 	return (build_tree(tokens, env));
 }

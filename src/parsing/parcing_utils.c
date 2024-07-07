@@ -6,7 +6,7 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/24 21:23:34 by mregrag           #+#    #+#             */
-/*   Updated: 2024/07/04 00:21:22 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/07/07 21:47:54 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,29 +27,26 @@ t_node	*new_node(t_type type)
 	return (node);
 }
 
-
-void	free_tree(t_node *node)
+void free_tree(t_node *node)
 {
-	int				i;
+    int i;
 
-	i = 0;
-	if (!node)
-		return ;
-	if (node->type == T_WORD && node->cmd)
-	{
-		while (node->cmd && node->cmd[i])
-		{
-			free(node->cmd[i]);
-			i++;
-		}
-		free(node->cmd);
-	}
-	free_tree(node->left);
-	free_tree(node->right);
-	free(node);
-    node = NULL;
+    if (!node)
+        return;
+    i = 0;
+    if (node->cmd)
+    {
+        while (node->cmd[i])
+        {
+            free(node->cmd[i]);
+            i++;
+        }
+        free(node->cmd);
+    }
+    free_tree(node->left);
+    free_tree(node->right);
+    free(node);
 }
-
 
 t_node	*create_redire(t_token **tokens, t_token *tmp, t_env *env)
 {
@@ -62,25 +59,22 @@ t_node	*create_redire(t_token **tokens, t_token *tmp, t_env *env)
 	free(tmp);
 	return (node);
 }
-void creat_cmd(t_node *node, t_token **tokens, int count, t_env *env)
-{
-    int     i;
-    char    *expanded;
 
-    i = 0;
-    while (i < count)
-    {
-        expanded = expansion_input((*tokens)->value, env);
-        if (!expanded)
-        {
-            while (--i >= 0)
-                free(node->cmd[i]);
-            node->cmd = NULL;
-            return;
-        }
-        node->cmd[i] = expanded;
-        *tokens = (*tokens)->next;
-        i++;
-    }
-    node->cmd[count] = NULL;
+void	creat_cmd(t_node *node, t_token **tokens, int count, t_env *env)
+{
+	int		i;
+	t_token	*tmp;
+
+	i = 0;
+	while (i < count)
+	{
+		node->cmd[i] = expansion_input((*tokens)->value, env);
+		tmp = *tokens;
+		*tokens = (*tokens)->next;
+		free(tmp->value);
+		free(tmp);
+		i++;
+	}
+	node->cmd[count] = NULL;
 }
+

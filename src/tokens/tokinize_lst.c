@@ -14,17 +14,21 @@
 
 t_token *new_token(char *value, t_type type)
 {
-    t_token *new;
+    t_token *new_token;
 
-    new = (t_token *)malloc(sizeof(t_token));
-    if (!new)
+    new_token = malloc(sizeof(t_token));
+    if (!new_token)
         return NULL;
-    new->value = ft_strdup(value);
-    new->type = type;
-    new->next = NULL;
-    return new;
+    new_token->value = ft_strdup(value);
+    if (!new_token->value)
+    {
+        free(new_token);
+        return NULL;
+    }
+    new_token->type = type;
+    new_token->next = NULL;
+    return new_token;
 }
-
 
 void token_add_back(t_token **head, t_token *new_token)
 {
@@ -45,15 +49,10 @@ void token_add_back(t_token **head, t_token *new_token)
 
 void clear_tokens(t_token **head)
 {
-    t_token *current;
-    t_token *next;
-
-    if (!head || !*head)
-        return;
-    current = *head;
+    t_token *current = *head;
     while (current)
     {
-        next = current->next;
+        t_token *next = current->next;
         free(current->value);
         free(current);
         current = next;

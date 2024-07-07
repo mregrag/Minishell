@@ -6,48 +6,46 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/07 18:05:58 by mregrag           #+#    #+#             */
-/*   Updated: 2024/07/05 16:35:03 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/07/07 22:15:55 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-int heredoc(t_node *node, t_env *env) {
-    int fd[2];
-    char *str;
-    char *expanded_str;
-    char *dilim;
+int	heredoc(t_node *node, t_env *env)
+{
+	int fd[2];
+	char *str;
+	char *exp_str;
+	char *dilim;
 
-    if (ft_pipe(fd) < 0)
-        return (-1);
-
-    while (1) {
-        if (ft_strchr(node->right->cmd[0], '\''))
-            node->flag = 1;
-        str = readline("> ");
-        if (!str)
-            break;
-
-        dilim = expansion_dilim(node->right->cmd[0]);
-        if (!dilim || ft_strcmp(str, dilim) == 0) {
-            free(str);
-            free(dilim);
-            break;
-        }
-        free(dilim);
-        if (node->flag == 1) {
-            ft_putendl_fd(str, fd[1]);
-        } else {
-            expanded_str = expansion_content(str, env);
-            if (expanded_str) {
-                ft_putendl_fd(expanded_str, fd[1]);
-                free(expanded_str);
-            }
-        }
-        free(str);
-    }
-    ft_close(fd[1]);
-    return (fd[0]);
+	if (ft_pipe(fd) < 0)
+		return (-1);
+	while (1)
+	{
+		if (ft_strchr(node->right->cmd[0], '\''))
+			node->flag = 1;
+		str = readline("> ");
+		if (!str)
+			break;
+		dilim = expansion_dilim(node->right->cmd[0]);
+		if (!dilim || !ft_strcmp(str, dilim))
+		{
+			(free(str),free(dilim));
+			break;
+		}
+		free(dilim);
+		if (node->flag == 1)
+			ft_putendl_fd(str, fd[1]);
+		else
+		{
+			exp_str = expansion_content(str, env);
+			if (exp_str)
+				(ft_putendl_fd(exp_str, fd[1]),free(exp_str));
+		}
+		free(str);
+	}
+	return (ft_close(fd[1]), fd[0]);
 }
 
 static int	check_file(t_node *node)

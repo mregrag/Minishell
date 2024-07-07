@@ -6,7 +6,7 @@
 #    By: mkoualil <mkoualil@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/05/10 16:12:48 by mregrag           #+#    #+#              #
-#    Updated: 2024/07/05 15:55:50 by mregrag          ###   ########.fr        #
+#    Updated: 2024/07/07 23:08:19 by mregrag          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,7 +15,8 @@ LIBFT		= libft.a
 LIBRAIRIE	= "lib/libft"
 FSS		= fsanitize=address -fno-omit-frame-pointer -g2
 CC		= cc
-CFLAGS		= -Wall -Wextra -Werror -g2
+CFLAGS		= -Wall -Wextra -Werror
+
 HEADER		= ./include/minishell.h
 RM		= rm -rf
 
