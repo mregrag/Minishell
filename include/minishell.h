@@ -6,7 +6,7 @@
 /*   By: mkoualil <mkoualil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/10 16:16:44 by mregrag           #+#    #+#             */
-/*   Updated: 2024/07/07 00:10:56 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/07/08 01:06:15 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,7 +95,7 @@ t_token	*new_token(char *value, t_type type);
 void	clear_tokens(t_token **head);
 void	token_add_back(t_token **lst, t_token *new_token);
 void	skip_spaces(char **str);
-int		process_word(char **line, t_token **tokens);
+int		process_word(char **line);
 int		process_word1(char **line, t_token **tokens);
 int		add_separator(t_type type, char **line, t_token **token, char *value);
 int		is_separator(char *s);
