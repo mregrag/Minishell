@@ -6,7 +6,7 @@
 #    By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/11/07 01:45:00 by mregrag           #+#    #+#              #
-#    Updated: 2024/06/29 17:30:45 by mregrag          ###   ########.fr        #
+#    Updated: 2024/07/08 19:29:23 by mregrag          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,7 +14,7 @@ SRCS = ft_isalpha.c ft_isdigit.c ft_isalnum.c ft_isascii.c \
        ft_isprint.c ft_strlen.c ft_memset.c ft_bzero.c ft_issamechar.c \
        ft_memcpy.c ft_memmove.c ft_strlcpy.c ft_strlcat.c ft_strjoin_char.c\
        ft_calloc.c ft_strdup.c ft_toupper.c ft_tolower.c ft_strcpy.c \
-       ft_strchr.c ft_strncmp.c ft_memchr.c ft_memcmp.c ft_free.c \
+       ft_strchr.c ft_strncmp.c ft_memchr.c ft_memcmp.c ft_free.c ft_atol.c \
        ft_strnstr.c ft_atoi.c ft_strrchr.c ft_substr.c ft_isquotes.c \
        ft_strjoin.c ft_strtrim.c ft_split.c ft_itoa.c ft_isspace.c \
        ft_strmapi.c ft_striteri.c ft_putchar_fd.c ft_strcmp.c \

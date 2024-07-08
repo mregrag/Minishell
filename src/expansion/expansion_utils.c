@@ -6,15 +6,17 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/18 21:49:59 by mregrag           #+#    #+#             */
-/*   Updated: 2024/07/08 01:26:09 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/07/08 14:35:15 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-static size_t	ft_strlen_unquot(char *str)
+char	*remov_quotes(char *str)
 {
+	char	*ret;
 	size_t	i;
+	size_t	j;
 	size_t	len;
 
 	i = 0;
@@ -25,58 +27,21 @@ static size_t	ft_strlen_unquot(char *str)
 			len++;
 		i++;
 	}
-	return (len);
-}
-
-char	*remov_quotes(char *str)
-
-{
-	char	*ret;
-	size_t	i;
-	size_t	j;
-
-	i = 0;
-	j = 0;
-	ret = ft_calloc(1 + ft_strlen_unquot(str), sizeof(char));
+	ret = malloc((len + 1) * sizeof(char));
 	if (!ret)
 		return (NULL);
+	i = 0;
+	j = 0;
 	while (str[i])
 	{
 		if (str[i] != '"' && str[i] != '\'')
 			ret[j++] = str[i];
 		i++;
 	}
-	return (free(str), str = NULL,  ret);
+	ret[j] = '\0';
+	return (free(str), ret);
 }
 
-// char	*remov_quotes(char *str)
-// {
-// 	char	*ret;
-// 	size_t	i;
-// 	size_t	j;
-// 	int		in_quotes;
-//
-// 	i = 0;
-// 	j = 0;
-// 	in_quotes = 0;
-// 	ret = malloc(ft_strlen(str) + 1);
-// 	if (!ret)
-// 		return (NULL);
-// 	while (str[i])
-// 	{
-// 		if (str[i] == '\'' && (!in_quotes || (in_quotes && str[i + 1] == '\'')))
-// 		{
-// 			in_quotes = !in_quotes;
-// 			i += in_quotes;
-// 		}
-// 		else
-// 			ret[j++] = str[i];
-// 		i++;
-// 	}
-// 	ret[j] = '\0';
-// 	return (free(str), ret);
-// }
-//
 char	*handle_single_quotes(char *ret, char *str, size_t *i)
 {
 	size_t	start;

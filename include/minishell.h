@@ -6,7 +6,7 @@
 /*   By: mkoualil <mkoualil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/10 16:16:44 by mregrag           #+#    #+#             */
-/*   Updated: 2024/07/08 01:06:15 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/07/08 19:21:43 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,8 @@
 # define ERRSYNT "syntax error near unexpected token `newline'"
 # define ERRSYNT "syntax error near unexpected token `newline'"
 
+# define OUT_FLAG  O_CREAT | O_WRONLY | O_TRUNC
+# define APP_FLAG  O_CREAT | O_WRONLY | O_APPEND
 typedef enum e_type
 {
 	T_WORD,
@@ -72,16 +74,15 @@ typedef struct s_node
 
 typedef struct s_gb
 {
-	int	exit_status;
 	int	signal;
 }	t_gb;
 
 extern t_gb	g_minish;
+
 t_token	*process_tokenize(char *input, t_env *env);
 t_token *tokenize(char *input);
 void free_tokens(t_token *head);
 t_env *copy_env(t_env *original);
-//t_env *init_env(char **envp);
 void    init_env(t_env **env, char **envp);
 char *get_env_var(t_env *env, const char *name);
 int set_env_var(t_env *env, const char *name, const char *value);
@@ -95,13 +96,13 @@ t_token	*new_token(char *value, t_type type);
 void	clear_tokens(t_token **head);
 void	token_add_back(t_token **lst, t_token *new_token);
 void	skip_spaces(char **str);
-int		process_word(char **line);
-int		process_word1(char **line, t_token **tokens);
-int		add_separator(t_type type, char **line, t_token **token, char *value);
-int		is_separator(char *s);
 int		skip_quotes(char *line, size_t *i);
 int		is_redirection(t_type type);
 int		ft_lstsize_token(t_token *lst);
+t_type	get_operator_type(const char *str);
+int	check_operators(const char *str);
+int	is_operator(const char *str);
+int	check_quotes(char **line);
 
 //------------------------parcing------------------------
 
@@ -120,7 +121,7 @@ t_node *parse_redire(t_token **tokens, t_env *env);
 int		ft_echo(t_node *node, t_env *env);
 int		ft_env(t_node *node, t_env *env);
 int		ft_cd(t_node *node, t_env *env);
-int		ft_exit(t_node *node);
+int		ft_exit(t_node *node, t_env *env);
 int		ft_export(t_node *node, t_env *env);
 int		ft_unset(t_node *node, t_env *env);
 int		print_error(char *s1, char *s2, char *s3, char *message);
@@ -129,13 +130,10 @@ int		ft_pwd(void);
 
 //-----------------------------env---------------------------------
 
-// void	init_minishel(t_node *node, char **env);
 t_node	*init_minishell(char **env);
 void	create_env_var(char *var, char *value, t_node *node);
 void	update_env_var(char *var, char *new_value, t_node *node);
-// int update_env_var(t_env *env, const char *name, const char *value);
 void	duplicate_env(t_node *node, char **envp);
-// void	increment_shlvl(t_node *node);
 void	increment_shlvl(t_env *env);
 char	*ft_getenv(const char *key, t_list *env);
 
@@ -184,7 +182,6 @@ int	ft_redir(t_node *node);
 
 int check_syntax(t_token *tokens);
 
-// t_node *init_minishell(char **env);
 void	reset_in_out(int *in, int *out);
 int	exec_err(char *path, char *cmd);
 

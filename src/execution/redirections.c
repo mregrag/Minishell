@@ -6,7 +6,7 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/07 18:05:58 by mregrag           #+#    #+#             */
-/*   Updated: 2024/07/07 22:15:55 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/07/08 18:38:48 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,10 @@
 
 int	heredoc(t_node *node, t_env *env)
 {
-	int fd[2];
-	char *str;
-	char *exp_str;
-	char *dilim;
+	char	*str;
+	char	*exp_str;
+	char	*dilim;
+	int		fd[2];
 
 	if (ft_pipe(fd) < 0)
 		return (-1);
@@ -27,12 +27,12 @@ int	heredoc(t_node *node, t_env *env)
 			node->flag = 1;
 		str = readline("> ");
 		if (!str)
-			break;
+			break ;
 		dilim = expansion_dilim(node->right->cmd[0]);
 		if (!dilim || !ft_strcmp(str, dilim))
 		{
-			(free(str),free(dilim));
-			break;
+			(free(str), free(dilim));
+			break ;
 		}
 		free(dilim);
 		if (node->flag == 1)
@@ -41,7 +41,7 @@ int	heredoc(t_node *node, t_env *env)
 		{
 			exp_str = expansion_content(str, env);
 			if (exp_str)
-				(ft_putendl_fd(exp_str, fd[1]),free(exp_str));
+				(ft_putendl_fd(exp_str, fd[1]), free(exp_str));
 		}
 		free(str);
 	}
@@ -67,12 +67,11 @@ static int	check_file(t_node *node)
 	return (1);
 }
 
-static int	redir_input(t_node *node, t_env *env)
+static int	redir_input(t_node *node, t_env *env, int *fd)
 {
-	int		fd;
 	t_node	*current;
 
-	fd = 0;
+	*fd = 0;
 	current = node;
 	if (!check_file(current))
 		return (-1);
@@ -80,34 +79,28 @@ static int	redir_input(t_node *node, t_env *env)
 	{
 		if (current->type == T_IN)
 		{
-			if (fd != 0)
-				close(fd);
-			fd = ft_open(current->right->cmd[0], O_RDONLY, 00644);
+			if (*fd != 0)
+				close(*fd);
+			*fd = ft_open(current->right->cmd[0], O_RDONLY, 00644);
 		}
 		else if (current->type == T_HERDOC)
 		{
-			if (fd != 0)
-				close(fd);
-			fd = heredoc(current, env);
+			if (*fd != 0)
+				close(*fd);
+			*fd = heredoc(current, env);
 		}
-		if (fd < 0)
+		if (*fd < 0)
 			return (-1);
 		current = current->left;
 	}
-	if (fd != 0)
-		if (dup2(fd, STDIN_FILENO) < 0)
-			return (0);
-	if (fd != 0)
-		close(fd);
 	return (0);
 }
 
-static int	redire_output(t_node *node)
+static int	redire_output(t_node *node, int *fd)
 {
-	int		fd;
 	t_node	*current;
 
-	fd = 1;
+	*fd = 1;
 	current = node;
 	if (!check_file(current))
 		return (-1);
@@ -115,34 +108,46 @@ static int	redire_output(t_node *node)
 	{
 		if (current->type == T_OUT)
 		{
-			if (fd != 1)
-				close(fd);
-			fd = ft_open(current->right->cmd[0], O_CREAT | O_WRONLY | O_TRUNC, 00644);
+			if (*fd != 1)
+				close(*fd);
+			*fd = ft_open(current->right->cmd[0], OUT_FLAG, 00644);
 		}
 		else if (current->type == T_APPEND)
 		{
-			if (fd != 1)
-				close(fd);
-			fd = ft_open(current->right->cmd[0], O_CREAT | O_WRONLY | O_APPEND, 00644);
+			if (*fd != 1)
+				close(*fd);
+			*fd = ft_open(current->right->cmd[0], APP_FLAG, 00644);
 		}
+		if (*fd < 0)
+			return (-1);
 		current = current->left;
 	}
-	if (fd < 0)
-		return (-1);
-	if (fd != 1)
-		if (ft_dup2(fd, STDOUT_FILENO) < 0)
-			return (0);
-	if (fd != 1)
-		close(fd);
 	return (0);
 }
 
 int	redirections(t_node *node, t_env *env)
 {
+	int	fd_in;
+	int	fd_out;
+
 	if (is_redirection(node->type))
 	{
-		if (redir_input(node, env) < 0 || redire_output(node) < 0)
+		fd_in = 0;
+		fd_out = 1;
+		if (redir_input(node, env, &fd_in) < 0 || redire_output(node, &fd_out) < 0)
 			return (0);
+		if (fd_in != 0)
+		{
+			if (dup2(fd_in, STDIN_FILENO) < 0)
+				return (0);
+			close(fd_in);
+		}
+		if (fd_out != 1)
+		{
+			if (ft_dup2(fd_out, STDOUT_FILENO) < 0)
+				return (0);
+			close(fd_out);
+		}
 	}
 	return (1);
 }
