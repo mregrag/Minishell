@@ -6,7 +6,7 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/18 21:49:59 by mregrag           #+#    #+#             */
-/*   Updated: 2024/07/08 14:35:15 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/07/08 23:05:34 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,24 +17,24 @@ char	*remov_quotes(char *str)
 	char	*ret;
 	size_t	i;
 	size_t	j;
-	size_t	len;
+	int		double_q;
+	int		single_q;
 
-	i = 0;
-	len = 0;
-	while (str[i])
-	{
-		if (str[i] != '\'' && str[i] != '"')
-			len++;
-		i++;
-	}
-	ret = malloc((len + 1) * sizeof(char));
-	if (!ret)
+	if (!str)
 		return (NULL);
+	if (!(ret = malloc(strlen(str) + 1)))
+		return (free(str), NULL);
 	i = 0;
 	j = 0;
+	double_q = 0;
+	single_q = 0;
 	while (str[i])
 	{
-		if (str[i] != '"' && str[i] != '\'')
+		if (str[i] == '"' && !single_q)
+			double_q = !double_q;
+		else if (str[i] == '\'' && !double_q)
+			single_q = !single_q;
+		else
 			ret[j++] = str[i];
 		i++;
 	}

@@ -6,7 +6,7 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/18 18:50:25 by mregrag           #+#    #+#             */
-/*   Updated: 2024/07/01 16:21:37 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/07/08 20:55:42 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ int	ft_pwd(void)
 {
 	char	cwd[PATH_MAX];
 
-	if (getcwd(cwd, PATH_MAX))
-		ft_putendl_fd(cwd, 1);
+	getcwd(cwd, PATH_MAX);
+	ft_putendl_fd(cwd, 1);
 	return (1);
 }

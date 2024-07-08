@@ -6,7 +6,7 @@
 /*   By: mkoualil <mkoualil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/17 22:24:25 by mregrag           #+#    #+#             */
-/*   Updated: 2024/07/04 20:47:18 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/07/08 21:29:48 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ void    executing(t_node *node, t_env *env)
     if (!node || !env)
         return;
 
-    if (node->type == T_WORD && node->cmd && node->cmd[0])
+    if (node->type == T_WORD && node->cmd)
     {
         int last_arg = ft_strlen_arg(node->cmd) - 1;
         if (last_arg >= 0)
