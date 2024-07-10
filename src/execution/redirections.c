@@ -3,14 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   redirections.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mkoualil <mkoualil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/07 18:05:58 by mregrag           #+#    #+#             */
-/*   Updated: 2024/07/10 20:38:09 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/07/10 22:33:38 by mkoualil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
+extern int g_sig;
 
 int	heredoc(t_node *node, t_env *env)
 {
@@ -21,11 +22,17 @@ int	heredoc(t_node *node, t_env *env)
 
 	if (ft_pipe(fd) < 0)
 		return (-1);
+	set_signal_heredoc();
 	while (1)
 	{
 		if (ft_strchr(node->right->cmd[0], '\'') || ft_strchr(node->right->cmd[0], '"'))
 			node->flag = 1;
 		str = readline("> ");
+		if(!ttyname(0))
+		{	g_sig = -1;
+			ft_free(&str);
+			return (-1);
+		}
 		if (!str)
 			break ;
 		dilim = expansion_dilim(node->right->cmd[0]);

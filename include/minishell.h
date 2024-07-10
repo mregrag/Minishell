@@ -6,7 +6,7 @@
 /*   By: mkoualil <mkoualil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/10 16:16:44 by mregrag           #+#    #+#             */
-/*   Updated: 2024/07/10 20:44:53 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/07/10 22:30:36 by mkoualil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@
 # include <stdarg.h>
 # include <stdbool.h>
 # include <stdlib.h>
+# include <signal.h>
 # include <string.h>
 # include <termios.h>
 # include <sys/param.h>
@@ -176,7 +177,7 @@ char	*handle_str(char *ret, char *str, size_t *i);
 //-----------------------signals------------------
 void	setup_signal(t_env *envp);
 void	exit_status(int status, t_env *env);
-void	update_exit_status(t_node *node, int status);
+void	set_signal_heredoc(void);
 
 int	deal_w_redir(t_node *node);
 int	ft_redir(t_node *node);

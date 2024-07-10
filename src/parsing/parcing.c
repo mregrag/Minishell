@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parcing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mkoualil <mkoualil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/24 21:22:11 by mregrag           #+#    #+#             */
-/*   Updated: 2024/07/09 20:41:47 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/07/10 22:32:02 by mkoualil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,28 +61,43 @@ t_node	*parse_file(t_token *token, t_type type, t_env *env)
 	return (node);
 }
 
-t_node	*parse_redire(t_token **tokens, t_env *env)
+t_node    *create_redire(t_token **tokens, t_token *tmp, t_env *env)
 {
-	t_token	*current;
-	t_token	*redir_token;
-	t_node	*node;
+    t_node    *node;
 
-	current = *tokens;
-	while (current && current->next)
-	{
-		if (is_redirection(current->next->type))
-		{
-			node = new_node(current->next->type);
-			redir_token = current->next;
-			current->next = redir_token->next->next;
-			node->left = parse_redire(tokens, env);
-			node->right = parse_file(redir_token->next, redir_token->type, env);
-			free_token(redir_token);
-			return (node);
-		}
-		current = current->next;
-	}
-	return (parse_command(tokens, env));
+    node = new_node((*tokens)->type);
+    *tokens = (*tokens)->next->next;
+    node->left = parse_redire(tokens, env);
+    node->right = parse_file(tmp->next, tmp->type, env);
+    free(tmp);
+    return (node);
+}
+t_node    *parse_redire(t_token **tokens, t_env *env)
+{
+    t_token    *current;
+    t_token    *redir_token;
+    t_node    *node;
+
+    if (!*tokens)
+        return (NULL);
+    current = *tokens;
+    if ((*tokens)->type >= T_IN && (*tokens)->type <= T_HERDOC)
+        return (create_redire(tokens, current, env));
+    while (current && current->next)
+    {
+        if (is_redirection(current->next->type))
+        {
+            node = new_node(current->next->type);
+            redir_token = current->next;
+            current->next = redir_token->next->next;
+            node->left = parse_redire(tokens, env);
+            node->right = parse_file(redir_token->next, redir_token->type, env);
+            free_token(redir_token);
+            return (node);
+        }
+        current = current->next;
+    }
+    return (parse_command(tokens, env));
 }
 
 t_node	*parse_expression(t_token **tokens, t_env *env)
