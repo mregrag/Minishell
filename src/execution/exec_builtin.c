@@ -6,13 +6,13 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/20 20:49:46 by mregrag           #+#    #+#             */
-/*   Updated: 2024/07/08 19:21:21 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/07/10 20:44:44 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-int	is_builtin(t_node *node, t_env *env)
+int	execute_builtin(t_node *node, t_env *env)
 {
 	if (ft_strcmp(node->cmd[0], "echo") == 0)
 		return (ft_echo(node, env));
@@ -30,3 +30,4 @@ int	is_builtin(t_node *node, t_env *env)
 		return (ft_export(node, env));
 	return (0);
 }
+

@@ -6,110 +6,59 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/24 22:43:10 by mregrag           #+#    #+#             */
-/*   Updated: 2024/07/09 22:45:42 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/07/10 19:03:52 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-static pid_t	left_pipe(t_node *node, int fd[2], t_env *env)
+static void	close_pipe(int fd[2])
 {
-	pid_t	pid;
-	int		heredoc_fd;
-	t_node	*tmp;
-
-	tmp = setup_heredoc(node, &heredoc_fd, env);
-	if (!tmp)
-		return (-1);
-	pid = fork();
-	if (pid < 0)
-	{
-		if (heredoc_fd != -1)
-			close(heredoc_fd);
-		return (-1);
-	}
-	if (pid == 0)
-	{
-		if (dup2(fd[1], STDOUT_FILENO) < 0)
-			exit(1);
-		(close(fd[0]), close(fd[1]));
-		if (heredoc_fd != -1)
-		{
-			if (dup2(heredoc_fd, STDIN_FILENO) < 0)
-				exit(1);
-			close(heredoc_fd);
-		}
-		executing(tmp, env);
-		exit(ft_atoi(get_env_var(env, "?")));
-	}
-	if (heredoc_fd != -1)
-		close(heredoc_fd);
-	return (pid);
+	close(fd[0]);
+	close(fd[1]);
 }
 
-static pid_t	right_pipe(t_node *node, int fd[2], t_env *env)
+static void	child_process(t_node *node, int fd[2], int is_left, t_env *env)
 {
-	pid_t	pid;
-	int		heredoc_fd;
-	t_node	*tmp;
-
-	tmp = setup_heredoc(node, &heredoc_fd, env);
-	pid = fork();
-	if (pid < 0)
+	if (is_left)
 	{
-		if (heredoc_fd != -1)
-			close(heredoc_fd);
-		return (-1);
+		close(fd[0]);
+		dup2(fd[1], STDOUT_FILENO);
+		close(fd[1]);
 	}
-	if (pid == 0)
+	else
 	{
-		if (dup2(fd[0], STDIN_FILENO) < 0)
-			exit(1);
-		(close(fd[0]), close(fd[1]));
-		if (heredoc_fd != -1)
-		{
-			if (dup2(heredoc_fd, STDIN_FILENO) < 0)
-				exit(1);
-			close(heredoc_fd);
-		}
-		executing(tmp, env);
-		exit(ft_atoi(get_env_var(env, "?")));
+		close(fd[1]);
+		dup2(fd[0], STDIN_FILENO);
+		close(fd[0]);
 	}
-	if (heredoc_fd != -1)
-		close(heredoc_fd);
-	return (pid);
+	executing(node, env);
+	exit(ft_atoi(get_env_var(env, "?")));
 }
 
 void	exec_pipe(t_node *node, t_env *env)
 {
-	pid_t	pid_read;
-	pid_t	pid_write;
+	char	*exit_status;
+	pid_t	pid_left;
+	pid_t	pid_right;
 	int		status;
 	int		fd[2];
-	char		*exit_status;
 
 	if (ft_pipe(fd) < 0)
 		return ;
-	pid_write = left_pipe(node->left, fd, env);
-	if (pid_write < 0)
-	{
-		(close(fd[0]), close(fd[1]));
-		return ;
-	}
-	pid_read = right_pipe(node->right, fd, env);
-	if (pid_read < 0)
-	{
-		(close(fd[0]), close(fd[1]));
-		return ;
-	}
-	(close(fd[0]), close(fd[1]));
-	waitpid(pid_write, &status, 0);
-	waitpid(pid_read, &status, 0);
-	exit_status = ft_itoa(update_status(status));
+	pid_left = ft_fork();
+	if (pid_left == 0)
+		child_process(node->left, fd, 1, env);
+	else if (pid_left < 0)
+		return (close_pipe(fd));
+	pid_right = ft_fork();
+	if (pid_right == 0)
+		child_process(node->right, fd, 0, env);
+	else if (pid_right < 0)
+		return (close_pipe(fd));
+	close_pipe(fd);
+	(waitpid(pid_left, &status, 0), waitpid(pid_right, &status, 0));
+	exit_status = ft_itoa(WEXITSTATUS(status));
 	if (exit_status)
-	{
-		set_env_var(env, "?", exit_status);
-		free(exit_status);
-	}
-
+		(set_env_var(env, "?", exit_status), free(exit_status));
 }

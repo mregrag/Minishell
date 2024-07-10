@@ -6,7 +6,7 @@
 /*   By: mkoualil <mkoualil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/10 16:16:44 by mregrag           #+#    #+#             */
-/*   Updated: 2024/07/09 23:07:55 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/07/10 20:44:53 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -145,7 +145,7 @@ char	*get_path(char *cmd, t_env *env);
 void	executing(t_node *node, t_env *env);
 void	exec_cmd(t_node *node, t_env *env);
 void	exec_pipe(t_node *node, t_env *env);
-int		is_builtin(t_node *node, t_env *env);
+int	execute_builtin(t_node *node, t_env *env);
 int		heredoc(t_node *node, t_env *env);
 t_node *setup_heredoc(t_node *node, int *heredoc_fd, t_env *env);
 int		ft_pipe(int ends[2]);

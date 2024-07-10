@@ -6,7 +6,7 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/17 22:58:39 by mregrag           #+#    #+#             */
-/*   Updated: 2024/07/10 00:53:54 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/07/10 20:53:44 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,49 +61,41 @@ char *get_path(char *command, t_env *env)
 	return (ft_free_array(paths), NULL);
 }
 
-static void child_exec(t_node *node, t_env *env)
+static void	child_exec(t_node *node, t_env *env)
 {
-	char    **envp;
-	pid_t   pid;
-	int     status;
-	char    *path;
-	char    *exit_status;
+	char	**envp;
+	char	*path;
 	int	error;
 
 	envp = ft_list_to_arr(env->env);
 	if (!envp)
-		return ;
+		exit(1);
+	path = get_path(node->cmd[0], env);
+	if (path)
+		execve(path, node->cmd, envp);
+	error = exec_err(path, node->cmd[0]);
+	free(path);
+	ft_free_array(envp);
+	exit(error);
+}
+
+void	exec_cmd(t_node *node, t_env *env)
+{
+	pid_t	pid;
+	int	status;
+	char	*exit_status;
+
 	pid = ft_fork();
 	if (pid < 0)
-	{
-		ft_free_array(envp);
-		return;
-	}
+		return ;
 	if (pid == 0)
-	{
-		path = get_path(node->cmd[0], env);
-		if (path)
-			execve(path, node->cmd, envp);
-		error = exec_err(path, node->cmd[0]);
-		free(path);
-		ft_free_array(envp);
-		exit(error);
-	}
+		child_exec(node, env);
 	else
 	{
 		waitpid(pid, &status, 0);
-		exit_status = ft_itoa(update_status(status));
-		if (exit_status)
-			(set_env_var(env, "?", exit_status), free(exit_status));
+		exit_status = ft_itoa(WEXITSTATUS(status));
+		set_env_var(env, "?", exit_status);
+		free(exit_status);
 	}
-	ft_free_array(envp);
-}
-
-void exec_cmd(t_node *node, t_env *env)
-{
-	if (redirections(node, env))
-		while (node->left)
-			node = node->left;
-	if (node->cmd && node->cmd[0] && !is_builtin(node, env))
-		child_exec(node, env);
+	set_env_var(env, "_", node->cmd[ft_strlen_arg(node->cmd) - 1]);
 }

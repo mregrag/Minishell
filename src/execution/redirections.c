@@ -6,7 +6,7 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/07 18:05:58 by mregrag           #+#    #+#             */
-/*   Updated: 2024/07/10 06:28:54 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/07/10 20:38:09 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,24 +130,21 @@ int	redirections(t_node *node, t_env *env)
 	int	fd_in;
 	int	fd_out;
 
-	if (is_redirection(node->type))
+	fd_in = 0;
+	fd_out = 1;
+	if (redir_input(node, env, &fd_in) < 0 || redire_output(node, &fd_out) < 0)
+		return (0);
+	if (fd_in != 0)
 	{
-		fd_in = 0;
-		fd_out = 1;
-		if (redir_input(node, env, &fd_in) < 0 || redire_output(node, &fd_out) < 0)
+		if (dup2(fd_in, STDIN_FILENO) < 0)
 			return (0);
-		if (fd_in != 0)
-		{
-			if (dup2(fd_in, STDIN_FILENO) < 0)
-				return (0);
-			close(fd_in);
-		}
-		if (fd_out != 1)
-		{
-			if (ft_dup2(fd_out, STDOUT_FILENO) < 0)
-				return (0);
-			close(fd_out);
-		}
+		close(fd_in);
+	}
+	if (fd_out != 1)
+	{
+		if (ft_dup2(fd_out, STDOUT_FILENO) < 0)
+			return (0);
+		close(fd_out);
 	}
 	return (1);
 }
