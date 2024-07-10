@@ -6,7 +6,7 @@
 /*   By: mkoualil <mkoualil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/17 22:58:39 by mregrag           #+#    #+#             */
-/*   Updated: 2024/07/10 22:34:23 by mkoualil         ###   ########.fr       */
+/*   Updated: 2024/07/11 00:04:06 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,30 +29,23 @@ int	update_status(int status)
 	return (1);
 }
 
-char *get_path(char *command, t_env *env)
+char	*get_path(char *command, t_env *env)
 {
-	char *path_var;
-	char **paths;
-	char *full_path;
-	int i;
+	char	**paths;
+	char	*full_path;
+	int		i;
 
 	i = 0;
-	if (!command || !env)
-		return (NULL);
-	if (ft_strchr(command, '/'))
+	if (!command || !env || ft_strchr(command, '/'))
 		return (ft_strdup(command));
-	path_var = get_env_var(env, "PATH");
-	if (!path_var)
-		return (NULL);
-	paths = ft_split(path_var, ':');
-	free(path_var);
+	paths = ft_split(get_env_var(env, "PATH"), ':');
 	if (!paths)
 		return (NULL);
 	while (paths[i])
 	{
 		full_path = ft_strjoin_three(paths[i], "/", command);
 		if (!full_path)
-			return (ft_free_array(paths), NULL);
+			break ;
 		if (access(full_path, X_OK | F_OK) == 0)
 			return (ft_free_array(paths), full_path);
 		free(full_path);
@@ -61,40 +54,15 @@ char *get_path(char *command, t_env *env)
 	return (ft_free_array(paths), NULL);
 }
 
-static void setup_signal_handlers(struct sigaction *sa_ignore, struct sigaction *sa_default)
-{
-    sa_ignore->sa_handler = SIG_IGN;
-    sigemptyset(&sa_ignore->sa_mask);
-    sa_ignore->sa_flags = 0;
-
-    sa_default->sa_handler = SIG_DFL;
-    sigemptyset(&sa_default->sa_mask);
-    sa_default->sa_flags = 0;
-}
-
-static void block_signals(struct sigaction *sa_ignore)
-{
-    sigaction(SIGINT, sa_ignore, NULL);
-    sigaction(SIGQUIT, sa_ignore, NULL);
-}
-
-static void restore_signals(struct sigaction *sa_default)
-{
-    sigaction(SIGINT, sa_default, NULL);
-    sigaction(SIGQUIT, sa_default, NULL);
-}
-
 static void	child_exec(t_node *node, t_env *env)
 {
 	char	**envp;
 	char	*path;
-	int	error;
-
+	int		error;
 
 	envp = ft_list_to_arr(env->env);
 	if (!envp)
 		exit(1);
-
 	path = get_path(node->cmd[0], env);
 	if (path)
 		execve(path, node->cmd, envp);
@@ -106,15 +74,15 @@ static void	child_exec(t_node *node, t_env *env)
 
 void	exec_cmd(t_node *node, t_env *env)
 {
-	pid_t	pid;
-	int	status;
 	char	*exit_status;
-	struct sigaction sa_ignore;
-    struct sigaction  sa_default;
+	struct sigaction	sa_ignore;
+	struct sigaction	sa_default;
+	pid_t				pid;
+	int			status;
 	if (!node->cmd || !node->cmd[0])
 		return ;
-	setup_signal_handlers(&sa_ignore, &sa_default);
-    block_signals(&sa_ignore);
+	signal_handlers(&sa_ignore, &sa_default);
+	block_signals(&sa_ignore);
 	pid = ft_fork();
 	if (pid < 0)
 		return ;

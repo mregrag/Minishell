@@ -6,7 +6,7 @@
 #    By: mkoualil <mkoualil@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/05/10 16:12:48 by mregrag           #+#    #+#              #
-#    Updated: 2024/07/10 21:42:06 by mregrag          ###   ########.fr        #
+#    Updated: 2024/07/10 23:44:10 by mregrag          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -59,7 +59,8 @@ UTILS		:=	src/utils/error_exit.c \
 
 MAIN		:=	src/main.c
 
-SIGNALS		:=	src/signals/signals.c
+SIGNALS		:=	src/signals/signals1.c \
+			src/signals/signals2.c
 
 SRCS		:=	$(BUILTINS)\
 			$(EXECUCTION)\

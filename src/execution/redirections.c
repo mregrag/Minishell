@@ -6,11 +6,12 @@
 /*   By: mkoualil <mkoualil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/07 18:05:58 by mregrag           #+#    #+#             */
-/*   Updated: 2024/07/10 22:33:38 by mkoualil         ###   ########.fr       */
+/*   Updated: 2024/07/10 23:55:42 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
+
 extern int g_sig;
 
 int	heredoc(t_node *node, t_env *env)
@@ -30,8 +31,7 @@ int	heredoc(t_node *node, t_env *env)
 		str = readline("> ");
 		if(!ttyname(0))
 		{	g_sig = -1;
-			ft_free(&str);
-			return (-1);
+			return (free(str), -1);
 		}
 		if (!str)
 			break ;

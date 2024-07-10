@@ -6,7 +6,7 @@
 /*   By: mkoualil <mkoualil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/10 16:16:44 by mregrag           #+#    #+#             */
-/*   Updated: 2024/07/10 22:30:36 by mkoualil         ###   ########.fr       */
+/*   Updated: 2024/07/10 23:59:22 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -177,18 +177,13 @@ char	*handle_str(char *ret, char *str, size_t *i);
 //-----------------------signals------------------
 void	setup_signal(t_env *envp);
 void	exit_status(int status, t_env *env);
+void	block_signals(struct sigaction *sa_ignore);
 void	set_signal_heredoc(void);
+void	restore_signals(struct sigaction *sa_default);
+void	signal_handlers(struct sigaction *sa_ig, struct sigaction *sa_def);
 
-int	deal_w_redir(t_node *node);
-int	ft_redir(t_node *node);
 
 int check_syntax(t_token *tokens);
-
-void	reset_in_out(int *in, int *out);
 int	exec_err(char *path, char *cmd);
 
-void	sigint_h(int sigN);
-void	sig_ign(void);
-void	sig_allow(void);
-void	heredoc_h(int n);
 #endif
