@@ -6,37 +6,13 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 16:25:14 by mregrag           #+#    #+#             */
-/*   Updated: 2024/07/08 20:51:36 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/07/10 04:58:39 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-// void	update_env_var(char *var, char *value, t_node *node)
-// {
-// 	t_list	*current;
-// 	char	*new_entry;
-//
-// 	new_entry = ft_strjoin(ft_strjoin(var, "="), value);
-// 	if (!new_entry)
-// 		return ;
-// 	current = node->env->env;
-// 	while (current)
-// 	{
-// 		if (ft_strncmp(current->content, var, ft_strlen(var)) == 0
-// 				&& ((char *)current->content)[ft_strlen(var)] == '=')
-// 		{
-// 			current->content = ft_strdup(new_entry);
-// 			ft_free(&new_entry);
-// 			return ;
-// 		}
-// 		current = current->next;
-// 	}
-// 	ft_lstadd_back(&node->env->env, ft_lstnew(ft_strdup(new_entry)));
-// 	free(new_entry);
-// }
-
-char	*get_env_var(t_env *env, const char *name)
+char	*get_env_var(t_env *env, char *name)
 {
 	t_list	*current;
 	char	*tmp;
@@ -56,48 +32,49 @@ char	*get_env_var(t_env *env, const char *name)
 	return (NULL);
 }
 
-int	set_env_var(t_env *env, const char *name, const char *value)
+void	set_env_var(t_env *env, char *name, char *value)
 {
 	t_list	*current;
 	char	*new_var;
 	size_t	len;
 
 	if (!env || !name || !value)
-		return (-1);
+		return ;
 	len = ft_strlen(name);
 	new_var = ft_strjoin_three(name, "=", value);
 	if (!new_var)
-		return (-1);
+		return ;
 	current = env->env;
 	while (current)
 	{
-		if (ft_strncmp(current->content, name, len) == 0 && ((char *)current->content)[len] == '=')
+		if (ft_strncmp(current->content, name, len) == 0
+				&& ((char *)current->content)[len] == '=')
 		{
 			free(current->content);
 			current->content = new_var;
-			return (0);
+			return ;
 		}
 		current = current->next;
 	}
 	ft_lstadd_back(&(env->env), ft_lstnew(ft_strdup(new_var)));
 	free(new_var);
-	return (0);
 }
 
-int	unset_env_var(t_env *env, const char *name)
+void	unset_env_var(t_env *env, char *name)
 {
 	t_list	*current;
 	t_list	*prev;
 	size_t	len;
 
 	if (!env || !name)
-		return (-1);
+		return ;
 	len = ft_strlen(name);
 	current = env->env;
 	prev = NULL;
 	while (current)
 	{
-		if (ft_strncmp(current->content, name, len) == 0 && ((char *)current->content)[len] == '=')
+		if (ft_strncmp(current->content, name, len) == 0
+				&& ((char *)current->content)[len] == '=')
 		{
 			if (prev)
 				prev->next = current->next;
@@ -105,10 +82,9 @@ int	unset_env_var(t_env *env, const char *name)
 				env->env = current->next;
 			free(current->content);
 			free(current);
-			return (0);
+			return ;
 		}
 		prev = current;
 		current = current->next;
 	}
-	return (-1);
 }

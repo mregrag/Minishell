@@ -6,23 +6,11 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 20:13:20 by mregrag           #+#    #+#             */
-/*   Updated: 2024/06/25 16:45:43 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/07/09 20:47:29 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
-
-int	is_separator(char *str)
-{
-	if (!ft_strncmp(str, "<<", 2)
-		|| *str == ' '
-		|| *str == '\t'
-		|| *str == '<'
-		|| *str == '>'
-		|| *str == '|')
-		return (1);
-	return (0);
-}
 
 int	skip_quotes(char *line, size_t *i)
 {

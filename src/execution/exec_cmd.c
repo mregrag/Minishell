@@ -6,11 +6,28 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/17 22:58:39 by mregrag           #+#    #+#             */
-/*   Updated: 2024/07/05 16:50:21 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/07/10 00:53:54 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
+
+int	update_status(int status)
+{
+	if (WIFSTOPPED(status))
+		return (128 + WSTOPSIG(status));
+	if (WIFSIGNALED(status))
+	{
+		if (128 + WTERMSIG(status) == 130)
+			ft_putstr_fd("\n", 2);
+		else if (128 + WTERMSIG(status) == 131)
+			ft_putstr_fd("Quit: 3\n", 2);
+		return (128 + WTERMSIG(status));
+	}
+	if (WIFEXITED(status))
+		return (WEXITSTATUS(status));
+	return (1);
+}
 
 char *get_path(char *command, t_env *env)
 {
@@ -75,7 +92,7 @@ static void child_exec(t_node *node, t_env *env)
 	else
 	{
 		waitpid(pid, &status, 0);
-		exit_status = ft_itoa(WEXITSTATUS(status));
+		exit_status = ft_itoa(update_status(status));
 		if (exit_status)
 			(set_env_var(env, "?", exit_status), free(exit_status));
 	}

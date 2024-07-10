@@ -6,7 +6,7 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/11 22:02:54 by mregrag           #+#    #+#             */
-/*   Updated: 2024/07/07 00:08:06 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/07/09 20:36:44 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,19 @@ void clear_tokens(t_token **head)
         current = next;
     }
     *head = NULL;
+}
+
+void free_token(t_token *token)
+{
+    if (token)
+    {
+        if (token->value)
+        {
+            free(token->value);
+            token->value = NULL;
+        }
+        free(token);
+    }
 }
 
 

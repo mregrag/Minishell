@@ -6,7 +6,7 @@
 /*   By: mkoualil <mkoualil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/12 18:33:04 by mregrag           #+#    #+#             */
-/*   Updated: 2024/07/03 21:34:00 by mkoualil         ###   ########.fr       */
+/*   Updated: 2024/07/10 00:54:17 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,22 +19,23 @@ void	exit_status(int status, t_env *env)
 
 int	exec_err(char *path, char *cmd)
 {
-	struct stat f_stat;
-    if (!cmd || !*cmd)
-        return (print_error("minishell", cmd, "command not found", NULL), 127);
-    if (!path || !*path)
-         return (print_error("minishell", cmd, "command not found", NULL), 127);
-    if (access(path, F_OK) == -1)
-		 return (print_error("minishell", cmd, "No such file or directory", NULL), 127);
-    if (stat(path, &f_stat) == 0)
-    {
-        if (S_ISDIR(f_stat.st_mode))
-			return (print_error("minishell", cmd, "is a directory", NULL), 126);
-    }
-    if (access(path, X_OK) == -1)
-      	return (print_error("minishell", cmd, "is a directory", NULL), 126);
-    return 127;
+	if (!cmd || !*cmd)
+		return (print_error("minishell", cmd, "command not found", NULL), 127);
+	if (!path || !*path)
+		return (print_error("minishell", cmd, "command not found", NULL), 127);
+	if (access(path, F_OK) == -1)
+		return (print_error("minishell", cmd, "No such file or directory", NULL), 127);
+	if (access(path, X_OK) == -1)
+		return (print_error("minishell", cmd, "is a directory", NULL), 126);
+	return 127;
 }
+
+void	malloc_error(int error)
+{
+	print_error("minish", "malloc", strerror(error), NULL);
+	exit(1);
+}
+
 
 int	print_error(char *s1, char *s2, char *s3, char *message)
 {
@@ -59,12 +60,5 @@ int	print_error(char *s1, char *s2, char *s3, char *message)
 		ft_putstr_fd(message, 2);
 	}
 	ft_putchar_fd('\n', 2);
-	return (1);
-}
-
-int	print_error_errno(char *s1, char *s2, char *s3)
-{
-	print_error(s1, s2, s3, strerror(errno));
-	errno = 0;
 	return (1);
 }

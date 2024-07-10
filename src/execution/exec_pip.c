@@ -6,7 +6,7 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/24 22:43:10 by mregrag           #+#    #+#             */
-/*   Updated: 2024/07/03 22:11:57 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/07/09 22:45:42 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ static pid_t	left_pipe(t_node *node, int fd[2], t_env *env)
 			close(heredoc_fd);
 		}
 		executing(tmp, env);
-		exit(1);
+		exit(ft_atoi(get_env_var(env, "?")));
 	}
 	if (heredoc_fd != -1)
 		close(heredoc_fd);
@@ -73,7 +73,7 @@ static pid_t	right_pipe(t_node *node, int fd[2], t_env *env)
 			close(heredoc_fd);
 		}
 		executing(tmp, env);
-		exit(2);
+		exit(ft_atoi(get_env_var(env, "?")));
 	}
 	if (heredoc_fd != -1)
 		close(heredoc_fd);
@@ -105,7 +105,7 @@ void	exec_pipe(t_node *node, t_env *env)
 	(close(fd[0]), close(fd[1]));
 	waitpid(pid_write, &status, 0);
 	waitpid(pid_read, &status, 0);
-	exit_status = ft_itoa(WEXITSTATUS(status));
+	exit_status = ft_itoa(update_status(status));
 	if (exit_status)
 	{
 		set_env_var(env, "?", exit_status);

@@ -6,7 +6,7 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/30 15:14:43 by mregrag           #+#    #+#             */
-/*   Updated: 2024/07/08 19:01:42 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/07/10 04:05:41 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,9 +24,7 @@ static char	*handle_special_cases(char *ret, char *str, size_t *i, t_env *env)
 		val = get_env_var(env, "?");
 		if (!val)
 			return (ret);
-		new_ret = ft_strjoin(ret, val);
-		free(val);
-		free(ret);
+		new_ret = ft_strjoin_free(ret, val);
 		(*i)++;
 		return (new_ret);
 	}
@@ -55,20 +53,18 @@ static char	*handle_env_var(char *ret, char *str, size_t *i, t_env *env)
 	val = get_env_var(env, var);
 	free(var);
 	if (!val)
-		return (ret);
-	new_ret = ft_strjoin(ret, val);
-	free(ret);
-	free(val);
+		return (NULL);
+	new_ret = ft_strjoin_free(ret, val);
 	return (new_ret);
 }
 
 char	*handle_dollar(char *ret, char *str, size_t *i, t_env *env)
 {
-	char	*special_case_result;
+	char	*result;
 
 	(*i)++;
-	special_case_result = handle_special_cases(ret, str, i, env);
-	if (special_case_result)
-		return (special_case_result);
+	result = handle_special_cases(ret, str, i, env);
+	if (result)
+		return (result);
 	return (handle_env_var(ret, str, i, env));
 }

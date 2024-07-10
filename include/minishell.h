@@ -6,7 +6,7 @@
 /*   By: mkoualil <mkoualil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/10 16:16:44 by mregrag           #+#    #+#             */
-/*   Updated: 2024/07/08 19:21:43 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/07/09 23:07:55 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,8 +66,6 @@ typedef struct s_node
 	t_type			type;
 	t_env			*env;
 	int			flag;
-	int			fdh;
-	int			fd[2];
 	struct s_node	*left;
 	struct s_node	*right;
 }	t_node;
@@ -79,14 +77,16 @@ typedef struct s_gb
 
 extern t_gb	g_minish;
 
+int	update_status(int status);
+void	malloc_error(int error);
 t_token	*process_tokenize(char *input, t_env *env);
 t_token *tokenize(char *input);
 void free_tokens(t_token *head);
 t_env *copy_env(t_env *original);
 void    init_env(t_env **env, char **envp);
-char *get_env_var(t_env *env, const char *name);
-int set_env_var(t_env *env, const char *name, const char *value);
-int unset_env_var(t_env *env, const char *name);
+char *get_env_var(t_env *env, char *name);
+void	set_env_var(t_env *env, char *name, char *value);
+void  unset_env_var(t_env *env, char *name);
 void print_env(t_env *env);
 void free_env(t_env *env);
 int	 is_var_in_env(t_env *env, const char *var_name);
@@ -99,18 +99,19 @@ void	skip_spaces(char **str);
 int		skip_quotes(char *line, size_t *i);
 int		is_redirection(t_type type);
 int		ft_lstsize_token(t_token *lst);
-t_type	get_operator_type(const char *str);
-int	check_operators(const char *str);
-int	is_operator(const char *str);
+t_type	get_operator_type(char *str);
+int	check_operators(char *str);
+int	is_operator(char *str);
 int	check_quotes(char **line);
+void	free_token(t_token *token);
 
 //------------------------parcing------------------------
 
-t_node *parse_cmd(t_token **tokens, t_env *env);
-t_node	*buil_tree(t_token **tokens, t_env *env);
+char	*extract_word(char **input);
+t_node *parse_command(t_token **tokens, t_env *env);
+t_node	*parse_expression(t_token **tokens, t_env *env);
 t_node *parse_tokens(t_token **tokens, t_env *env);
-t_node *create_redire(t_token **tokens, t_token *tmp, t_env *env);
-t_node *create_file(t_token *token, t_type type, t_env *env);
+t_node *parse_file(t_token *token, t_type type, t_env *env);
 void	free_tree(t_node *node);
 void	creat_cmd(t_node *node, t_token **tokens, int count, t_env *env);
 t_node *new_node(t_type type);

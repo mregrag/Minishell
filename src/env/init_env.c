@@ -6,7 +6,7 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/01 18:16:01 by mregrag           #+#    #+#             */
-/*   Updated: 2024/07/03 23:42:26 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/07/10 06:15:49 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,19 +60,15 @@ void	init_env(t_env **env, char **envp)
 
 	if (!env || !envp)
 		return ;
-	*env = (t_env *)malloc(sizeof(t_env));
+	*env = malloc(sizeof(t_env));
 	if (!*env)
-		return;
+		return (malloc_error(errno));
 	(*env)->env = NULL;
 	while (*envp)
 	{
 		tmp = ft_strdup(*envp);
 		if (!tmp)
-		{
-			free_env(*env);
-			*env = NULL;
-			return ;
-		}
+			return (malloc_error(errno));
 		ft_lstadd_back(&((*env)->env), ft_lstnew(tmp));
 		envp++;
 	}
@@ -97,7 +93,7 @@ void	print_env(t_env *env)
 	{
 		content = (char *)current->content;
 		if (content[0] != '?' || content[1] != '=')
-			ft_putendl_fd(content, STDOUT_FILENO);
+			ft_putendl_fd(content, 1);
 		current = current->next;
 	}
 }

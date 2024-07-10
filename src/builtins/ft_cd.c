@@ -6,12 +6,11 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/18 18:49:44 by mregrag           #+#    #+#             */
-/*   Updated: 2024/07/08 22:52:36 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/07/09 23:46:40 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
-
 
 static	void	cd_err(t_env *env)
 {
@@ -26,7 +25,6 @@ static	char	*pmsg(t_env *env)
 	char	*path;
 
 	path = get_env_var(env, "HOME");
-	printf("path = %s\n", path);
 	if (!path)
 	{
 		ft_putstr_fd("bash: cd: HOME not set\n", 2);
@@ -60,4 +58,3 @@ int	ft_cd(t_node *node, t_env *env)
 	set_env_var(env, "?", "0");
 	return (1);
 }
-

@@ -6,7 +6,7 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/25 01:29:14 by mregrag           #+#    #+#             */
-/*   Updated: 2024/07/08 19:28:55 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/07/10 03:57:34 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ char		*ft_strtrim(char const *s1, char const *set);
 char		**ft_split(char const *s, char c);
 char		*ft_itoa(int n);
 char		*ft_strmapi(char const *s, char (*f)(unsigned int, char));
-char		*ft_strjoin_char(char *s, char c);
+char		*ft_strjoin_free(char *s1, char *s2);
 char		**ft_list_to_arr(t_list *lst);
 
 void		*ft_memchr(const void *s, int c, size_t n);

@@ -6,7 +6,7 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/18 18:50:47 by mregrag           #+#    #+#             */
-/*   Updated: 2024/07/08 20:03:35 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/07/10 06:55:49 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ static	void	export_list(t_list *env)
 	while (env)
 	{
 		content = (char *)env->content;
-		if (content[0] != '?' && content[0] != '_')
+		if ((content[0] != '?' && content[0] != '_') || content[1] == '_')
 			printf("declare -x %s\"\n", content);
 		env = env->next;
 	}
@@ -28,90 +28,49 @@ static	void	export_list(t_list *env)
 static int	check_var(const char *str)
 {
 	int	i;
+	int	count;
 
 	i = 1;
+	count = 0;
 	if (!ft_isalpha(*str) && *str != '_')
 		return (0);
-	while (str[i] && str[i] != '=' && str[i] != '+')
+	while (str[i] && str[i] != '=')
 	{
-		if (!ft_isalnum(str[i]) && str[i] != '_')
+		if (str[i] == '+')
+			count++;
+		if ((!ft_isalnum(str[i]) || str[i] == '_' ) && count > 1)
 			return (0);
 		i++;
 	}
 	return (1);
 }
 
-static int	find_char_index(const char *str, char c)
-{
-	int	index;
-
-	index = 0;
-	if (!str)
-		return (-1);
-	while (str[index] != '\0')
-	{
-		if (str[index] == c)
-			return (index);
-		index++;
-	}
-	return (-1);
-}
-
-static void	handle_existing_var(t_env *env, char *var, char *value, int append)
-{
-	char	*existing_value;
-	char	*new_value;
-
-	existing_value = get_env_var(env, var);
-	if (existing_value && !append)
-	{
-		if (value)
-			set_env_var(env, var, value);
-		else
-			set_env_var(env, var, "");
-	}
-	else if (existing_value && append)
-	{
-		if (value)
-			new_value = ft_strjoin(existing_value, value);
-		else
-			new_value = ft_strdup(existing_value);
-		set_env_var(env, var, new_value);
-		free(new_value);
-	}
-	else if (value)
-		set_env_var(env, var, value);
-	else
-		set_env_var(env, var, "");
-	free(existing_value);
-}
-
 void	add_arg_to_env(char *argv, t_env *env)
 {
 	int		index;
-	char	*var;
-	char	*trimmed_var;
 	char	*value;
-	int		append;
+	char	*var;
+	char	*trimmed;
+	char	*temp;
 
-	index = find_char_index(argv, '=');
+	index = ft_strchr(argv, '=') - argv;
 	var = ft_substr(argv, 0, index);
-	trimmed_var = ft_strtrim(var, "+");
+	trimmed = ft_strtrim(var, "+");
+	set_env_var(env, "_", trimmed);
 	free(var);
-	if (index != -1)
-		value = ft_substr(argv, index + 1, ft_strlen(argv) - index);
-	else
-		value = NULL;
-	if (value && ft_issamechar(value, '$'))
+	value = ft_substr(argv, index + 1, ft_strlen(argv) - index);
+	if (get_env_var(env, trimmed) && !ft_strchr(argv, '+'))
+		set_env_var(env, trimmed, value);
+	else if (get_env_var(env, trimmed) && argv[index - 1] == '+')
 	{
-		free(value);
-		value = ft_itoa(getpid());
+		temp = ft_strjoin(get_env_var(env, trimmed), value);
+		set_env_var(env, trimmed, temp);
+		free(temp);
 	}
-	append = 0;
-	if (index > 0 && argv[index - 1] == '+')
-		append = 1;
-	handle_existing_var(env, trimmed_var, value, append);
-	(free(trimmed_var), free(value));
+	else if (ft_strchr(argv, '='))
+		set_env_var(env, trimmed, value);
+	free(trimmed);
+	free(value);
 }
 
 int	ft_export(t_node *node, t_env *env)
@@ -123,8 +82,7 @@ int	ft_export(t_node *node, t_env *env)
 	argv = node->cmd;
 	if (!argv[1])
 		return (export_list(envp), 1);
-	argv++;
-	while (*argv)
+	while (*(++argv))
 	{
 		if (!check_var(*argv))
 		{
@@ -133,7 +91,6 @@ int	ft_export(t_node *node, t_env *env)
 		}
 		else
 			add_arg_to_env(*argv, env);
-		argv++;
 	}
 	return (1);
 }

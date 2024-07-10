@@ -6,45 +6,49 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/11 22:02:39 by mregrag           #+#    #+#             */
-/*   Updated: 2024/07/08 18:01:24 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/07/09 20:45:04 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-char	*extract_word(char **input)
+static int	handle_operator(char **input, t_token **tokens)
 {
+	t_type	type;
+	char	*word;
 	char	*start;
-	size_t	len;
-	char	quote;
 
-	quote = 0;
 	start = *input;
-	while (**input)
-	{
-		if (!quote && is_operator(*input))
-			break ;
-		if (!quote && ft_isspace(**input))
-			break ;
-		if (ft_isquotes(**input))
-		{
-			if (!quote)
-				quote = **input;
-			else if (**input == quote)
-				quote = 0;
-		}
-		(*input)++;
-	}
-	len = *input - start;
-	return (ft_substr(start, 0, len));
+	type = get_operator_type(*input);
+	if (type == T_HERDOC || type == T_APPEND)
+		*input += 2;
+	else
+		*input += 1;
+	word = ft_substr(start, 0, *input - start);
+	if (!word)
+		return (0);
+	token_add_back(tokens, new_token(word, type));
+	free(word);
+	return (1);
+}
+
+static int	handle_word(char **input, t_token **tokens)
+{
+	char	*word;
+
+	word = extract_word(input);
+	if (!word)
+		return (0);
+	token_add_back(tokens, new_token(word, T_WORD));
+	free(word);
+	return (1);
 }
 
 t_token	*tokenize(char *input)
 {
 	t_token	*tokens;
-	t_type	type;
-	char	*word;
 
+	tokens = NULL;
 	if (!check_quotes(&input))
 		return (NULL);
 	while (*input)
@@ -52,28 +56,17 @@ t_token	*tokenize(char *input)
 		skip_spaces(&input);
 		if (is_operator(input))
 		{
-			type = get_operator_type(input);
-			if (type == T_HERDOC || type == T_APPEND)
-				input += 2;
-			else
-				input += 1;
-			word = ft_strdup(input);
-			if (!word)
+			if (!handle_operator(&input, &tokens))
 				return (clear_tokens(&tokens), NULL);
-			(token_add_back(&tokens, new_token(word, type)), free(word));
 		}
 		else
-		{
-			word = extract_word(&input);
-			if (!word)
+			if (!handle_word(&input, &tokens))
 				return (clear_tokens(&tokens), NULL);
-			(token_add_back(&tokens, new_token(word, T_WORD)), free(word));
-		}
 	}
 	return (tokens);
 }
 
-t_token	*create_single_token(char *str)
+static t_token	*create_single_token(char *str)
 {
 	t_token	*token;
 
@@ -89,8 +82,6 @@ t_token	*process_tokenize(char *input, t_env *env)
 	t_token	*tokens;
 
 	tokens = NULL;
-	if (!input)
-		return (NULL);
 	trimmed = ft_strtrim(input, " \t\n\v\f\r");
 	free(input);
 	if (!trimmed)

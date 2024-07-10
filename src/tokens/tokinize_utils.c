@@ -6,11 +6,38 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/11 23:05:33 by mregrag           #+#    #+#             */
-/*   Updated: 2024/07/08 17:59:28 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/07/09 20:26:44 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
+
+char	*extract_word(char **input)
+{
+	char	*start;
+	size_t	len;
+	char	quote;
+
+	quote = 0;
+	start = *input;
+	while (**input)
+	{
+		if (!quote && is_operator(*input))
+			break ;
+		if (!quote && ft_isspace(**input))
+			break ;
+		if (ft_isquotes(**input))
+		{
+			if (!quote)
+				quote = **input;
+			else if (**input == quote)
+				quote = 0;
+		}
+		(*input)++;
+	}
+	len = *input - start;
+	return (ft_substr(start, 0, len));
+}
 
 int	check_quotes(char **line)
 {
@@ -33,7 +60,7 @@ int	check_quotes(char **line)
 	return (1);
 }
 
-int	is_operator(const char *str)
+int	is_operator(char *str)
 {
 	if (!str)
 		return (0);
@@ -44,7 +71,7 @@ int	is_operator(const char *str)
 		|| *str == '|');
 }
 
-t_type	get_operator_type(const char *str)
+t_type	get_operator_type(char *str)
 {
 	if (ft_strncmp(str, "<<", 2) == 0)
 		return (T_HERDOC);
@@ -59,7 +86,7 @@ t_type	get_operator_type(const char *str)
 	return (T_WORD);
 }
 
-int	check_operators(const char *str)
+int	check_operators(char *str)
 {
 	while (*str)
 	{

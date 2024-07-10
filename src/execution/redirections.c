@@ -6,7 +6,7 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/07 18:05:58 by mregrag           #+#    #+#             */
-/*   Updated: 2024/07/08 18:38:48 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/07/10 06:28:54 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ int	heredoc(t_node *node, t_env *env)
 		return (-1);
 	while (1)
 	{
-		if (ft_strchr(node->right->cmd[0], '\''))
+		if (ft_strchr(node->right->cmd[0], '\'') || ft_strchr(node->right->cmd[0], '"'))
 			node->flag = 1;
 		str = readline("> ");
 		if (!str)

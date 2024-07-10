@@ -6,7 +6,7 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/01 16:51:41 by mregrag           #+#    #+#             */
-/*   Updated: 2024/07/07 23:12:14 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/07/10 04:11:46 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,29 +15,28 @@
 char	*handle_quotes(char *ret, char *str, size_t *i, t_env *env)
 {
 	char	*new_ret;
-	char	*temp;
-	char	current[2];
+	size_t	start;
+	size_t	len;
 
 	new_ret = ft_strdup(ret);
-	current[1] = '\0';
+	start = *i;
 	while (str[*i] && str[*i] != '\n')
 	{
 		if (str[*i] == '$' && str[*i + 1] && str[*i + 1] != ' ')
 		{
-			temp = handle_dollar(new_ret, str, i, env);
-			new_ret = temp;
+			len = *i - start;
+			if (len > 0)
+				new_ret = ft_strjoin_free(new_ret, ft_substr(str, start, len));
+			new_ret = handle_dollar(new_ret, str, i, env);
+			start = *i;
 		}
 		else
-		{
-			current[0] = str[*i];
-			temp = ft_strjoin(new_ret, current);
-			free(new_ret);
-			new_ret = temp;
 			(*i)++;
-		}
 	}
-	if (str[*i] == '\n')
-		(*i)++;
+	len = *i - start;
+	if (len > 0)
+		new_ret = ft_strjoin_free(new_ret, ft_substr(str, start, len));
+	*i += (str[*i] == '\n');
 	return (free(ret), new_ret);
 }
 
