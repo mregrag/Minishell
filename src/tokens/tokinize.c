@@ -6,7 +6,7 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/11 22:02:39 by mregrag           #+#    #+#             */
-/*   Updated: 2024/07/09 20:45:04 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/07/11 06:05:50 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,9 +39,18 @@ static int	handle_word(char **input, t_token **tokens)
 	word = extract_word(input);
 	if (!word)
 		return (0);
-	token_add_back(tokens, new_token(word, T_WORD));
+	token_add_back(tokens, new_token(word, T_CMD));
 	free(word);
 	return (1);
+}
+
+static t_token	*create_single_token(char *str)
+{
+	t_token	*token;
+
+	token = new_token(str, T_CMD);
+	free(str);
+	return (token);
 }
 
 t_token	*tokenize(char *input)
@@ -66,16 +75,7 @@ t_token	*tokenize(char *input)
 	return (tokens);
 }
 
-static t_token	*create_single_token(char *str)
-{
-	t_token	*token;
-
-	token = new_token(str, T_WORD);
-	free(str);
-	return (token);
-}
-
-t_token	*process_tokenize(char *input, t_env *env)
+t_token	*tokenize_input(char *input, t_env *env)
 {
 	char	*trimmed;
 	char	*env_var;

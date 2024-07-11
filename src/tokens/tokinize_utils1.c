@@ -6,7 +6,7 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 20:13:20 by mregrag           #+#    #+#             */
-/*   Updated: 2024/07/09 20:47:29 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/07/11 06:25:46 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,5 +36,5 @@ void	skip_spaces(char **str)
 
 int	is_redirection(t_type type)
 {
-    return (type >= T_IN && type <= T_HERDOC);
+	return (type >= T_IN && type <= T_HERDOC);
 }

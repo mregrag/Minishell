@@ -6,7 +6,7 @@
 /*   By: mkoualil <mkoualil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/17 22:58:39 by mregrag           #+#    #+#             */
-/*   Updated: 2024/07/11 00:04:06 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/07/11 03:38:35 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ char	*get_path(char *command, t_env *env)
 
 	i = 0;
 	if (!command || !env || ft_strchr(command, '/'))
-		return (ft_strdup(command));
+		return (command);
 	paths = ft_split(get_env_var(env, "PATH"), ':');
 	if (!paths)
 		return (NULL);
@@ -66,7 +66,7 @@ static void	child_exec(t_node *node, t_env *env)
 	path = get_path(node->cmd[0], env);
 	if (path)
 		execve(path, node->cmd, envp);
-	error = exec_err(path, node->cmd[0]);
+	error = exec_err(path, node->cmd[0], env);
 	free(path);
 	ft_free_array(envp);
 	exit(error);
@@ -74,11 +74,12 @@ static void	child_exec(t_node *node, t_env *env)
 
 void	exec_cmd(t_node *node, t_env *env)
 {
-	char	*exit_status;
 	struct sigaction	sa_ignore;
 	struct sigaction	sa_default;
 	pid_t				pid;
-	int			status;
+	char				*exit_status;
+	int					status;
+
 	if (!node->cmd || !node->cmd[0])
 		return ;
 	signal_handlers(&sa_ignore, &sa_default);
@@ -95,8 +96,7 @@ void	exec_cmd(t_node *node, t_env *env)
 	{
 		waitpid(pid, &status, 0);
 		exit_status = ft_itoa(update_status(status));
-		set_env_var(env, "?", exit_status);
-		free(exit_status);
+		(set_env_var(env, "?", exit_status), free(exit_status));
 	}
 	set_env_var(env, "_", node->cmd[ft_strlen_arg(node->cmd) - 1]);
 }

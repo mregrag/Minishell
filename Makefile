@@ -6,7 +6,7 @@
 #    By: mkoualil <mkoualil@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/05/10 16:12:48 by mregrag           #+#    #+#              #
-#    Updated: 2024/07/10 23:44:10 by mregrag          ###   ########.fr        #
+#    Updated: 2024/07/11 05:28:47 by mregrag          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,6 +16,7 @@ LIBRAIRIE	= "lib/libft"
 FSS		= fsanitize=address -fno-omit-frame-pointer -g2
 CC		= cc
 CFLAGS		= -Wall -Wextra -Werror
+
 
 HEADER		= ./include/minishell.h
 RM		= rm -rf
@@ -39,8 +40,8 @@ EXECUCTION	:=	src/execution/exe_utils.c \
 			src/execution/exec_cmd.c \
 			src/execution/exec_pip.c \
 			src/execution/executing.c \
-			src/execution/redir_utils.c \
-			src/execution/redirections.c
+			src/execution/redirections.c \
+			src/execution/redire_utils.c
 
 EXPANSION	:=	src/expansion/expansion.c \
 			src/expansion/handle_dolar.c \

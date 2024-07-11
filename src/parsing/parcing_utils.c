@@ -6,7 +6,7 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/24 21:23:34 by mregrag           #+#    #+#             */
-/*   Updated: 2024/07/09 18:51:37 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/07/11 05:35:41 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ t_node	*new_node(t_type type)
 
 	node = malloc(sizeof(t_node));
 	if (!node)
-		return (NULL);
+		malloc_error();
 	node->type = type;
 	node->cmd = NULL;
 	node->left = NULL;
@@ -27,23 +27,35 @@ t_node	*new_node(t_type type)
 	return (node);
 }
 
-void free_tree(t_node *node)
+void	free_tree(t_node *node)
 {
-    int i;
+	int	i;
 
-    if (!node)
-        return;
-    i = 0;
-    if (node->cmd)
-    {
-        while (node->cmd[i])
-        {
-            free(node->cmd[i]);
-            i++;
-        }
-        free(node->cmd);
-    }
-    free_tree(node->left);
-    free_tree(node->right);
-    free(node);
+	if (!node)
+		return ;
+	i = 0;
+	if (node->cmd)
+	{
+		while (node->cmd[i])
+		{
+			free(node->cmd[i]);
+			i++;
+		}
+		free(node->cmd);
+	}
+	free_tree(node->left);
+	free_tree(node->right);
+	free(node);
+}
+
+t_node	*create_redire(t_token **tokens, t_token *tmp, t_env *env)
+{
+	t_node	*node;
+
+	node = new_node((*tokens)->type);
+	*tokens = (*tokens)->next->next;
+	node->left = parse_redire(tokens, env);
+	node->right = parse_file(tmp->next, tmp->type, env);
+	free(tmp);
+	return (node);
 }

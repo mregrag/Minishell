@@ -6,7 +6,7 @@
 /*   By: mkoualil <mkoualil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/12 18:33:04 by mregrag           #+#    #+#             */
-/*   Updated: 2024/07/10 00:54:17 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/07/11 03:57:20 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,28 +14,40 @@
 
 void	exit_status(int status, t_env *env)
 {
-	set_env_var(env, "?", ft_itoa(status));
+	char	*exit_stat;
+
+	exit_stat = ft_itoa(status);
+	set_env_var(env, "?", exit_stat);
+	free(exit_stat);
 }
 
-int	exec_err(char *path, char *cmd)
+int	exec_err(char *path, char *cmd, t_env *env)
 {
-	if (!cmd || !*cmd)
+	struct stat	path_stat;
+
+	if (!is_var_in_env(env, "PATH"))
+	{
+		print_error("minish", cmd, "No such file or directory", NULL);
+		return (127);
+	}
+	else if (!cmd || !*cmd || access(path, F_OK | X_OK))
 		return (print_error("minishell", cmd, "command not found", NULL), 127);
-	if (!path || !*path)
-		return (print_error("minishell", cmd, "command not found", NULL), 127);
-	if (access(path, F_OK) == -1)
-		return (print_error("minishell", cmd, "No such file or directory", NULL), 127);
-	if (access(path, X_OK) == -1)
-		return (print_error("minishell", cmd, "is a directory", NULL), 126);
-	return 127;
+	else if (stat(path, &path_stat) == 0)
+	{
+		if (S_ISDIR(path_stat.st_mode))
+		{
+			print_error("minish", cmd, "is a directory", NULL);
+			return (126);
+		}
+	}
+	return (127);
 }
 
-void	malloc_error(int error)
+void	malloc_error(void)
 {
-	print_error("minish", "malloc", strerror(error), NULL);
-	exit(1);
+	print_error("minish", "malloc", strerror(errno), NULL);
+	exit(EXIT_FAILURE);
 }
-
 
 int	print_error(char *s1, char *s2, char *s3, char *message)
 {

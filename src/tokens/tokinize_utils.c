@@ -6,7 +6,7 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/11 23:05:33 by mregrag           #+#    #+#             */
-/*   Updated: 2024/07/09 20:26:44 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/07/11 02:32:19 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,7 @@ t_type	get_operator_type(char *str)
 		return (T_OUT);
 	if (*str == '|')
 		return (T_PIPE);
-	return (T_WORD);
+	return (T_CMD);
 }
 
 int	check_operators(char *str)

@@ -6,7 +6,7 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/10 23:38:35 by mregrag           #+#    #+#             */
-/*   Updated: 2024/07/10 23:58:33 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/07/11 06:25:07 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,4 +32,13 @@ void	signal_handlers(struct sigaction *sa_ig, struct sigaction *sa_def)
 	sa_def->sa_handler = SIG_DFL;
 	sigemptyset(&sa_def->sa_mask);
 	sa_def->sa_flags = 0;
+}
+
+void	ctl_d(t_env *envp)
+{
+	char	*status;
+
+	printf("exit\n");
+	status = get_env_var(envp, "?");
+	exit(ft_atoi(status));
 }

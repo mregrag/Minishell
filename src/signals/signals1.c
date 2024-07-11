@@ -6,7 +6,7 @@
 /*   By: mkoualil <mkoualil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 15:47:14 by mregrag           #+#    #+#             */
-/*   Updated: 2024/07/10 23:50:56 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/07/11 05:10:27 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,11 +41,6 @@ void	setup_signal(t_env *envp)
 	set_terminal_print_off();
 	signal(SIGINT, ctrl_c);
 	signal(SIGQUIT, SIG_IGN);
-	if (g_sig == 1 || g_sig == -1)
-	{
-		exit_status(1, envp);
-		g_sig = 0;
-	}
 }
 
 void	do_sigint_heredoc(int signum)
@@ -53,6 +48,7 @@ void	do_sigint_heredoc(int signum)
 	(void)signum;
 	ft_putstr_fd("\n", 1);
 	close(0);
+	g_sig = -1;
 }
 
 void	set_signal_heredoc(void)

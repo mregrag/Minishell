@@ -6,7 +6,7 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/20 20:49:46 by mregrag           #+#    #+#             */
-/*   Updated: 2024/07/10 20:44:44 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/07/11 06:30:06 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,4 +30,3 @@ int	execute_builtin(t_node *node, t_env *env)
 		return (ft_export(node, env));
 	return (0);
 }
-

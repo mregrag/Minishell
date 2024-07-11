@@ -6,72 +6,37 @@
 /*   By: mkoualil <mkoualil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/07 18:05:58 by mregrag           #+#    #+#             */
-/*   Updated: 2024/07/10 23:55:42 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/07/11 18:46:24 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-extern int g_sig;
+extern int	g_sig;
 
 int	heredoc(t_node *node, t_env *env)
 {
-	char	*str;
-	char	*exp_str;
+	char	*content;
 	char	*dilim;
 	int		fd[2];
 
 	if (ft_pipe(fd) < 0)
 		return (-1);
 	set_signal_heredoc();
+	node->flag = ft_strchr(node->cmd[0], '\'') || ft_strchr(node->cmd[0], '"');
 	while (1)
 	{
-		if (ft_strchr(node->right->cmd[0], '\'') || ft_strchr(node->right->cmd[0], '"'))
-			node->flag = 1;
-		str = readline("> ");
-		if(!ttyname(0))
-		{	g_sig = -1;
-			return (free(str), -1);
-		}
-		if (!str)
+		content = readline("> ");
+		if (!ttyname(0))
+			return (free(content), close(fd[1]), close(fd[0]), -1);
+		dilim = expansion_dilim(node->cmd[0]);
+		if (!dilim || !ft_strcmp(content, dilim))
 			break ;
-		dilim = expansion_dilim(node->right->cmd[0]);
-		if (!dilim || !ft_strcmp(str, dilim))
-		{
-			(free(str), free(dilim));
-			break ;
-		}
+		heredoc_content(node, fd[1], content, env);
+		free(content);
 		free(dilim);
-		if (node->flag == 1)
-			ft_putendl_fd(str, fd[1]);
-		else
-		{
-			exp_str = expansion_content(str, env);
-			if (exp_str)
-				(ft_putendl_fd(exp_str, fd[1]), free(exp_str));
-		}
-		free(str);
 	}
-	return (ft_close(fd[1]), fd[0]);
-}
-
-static int	check_file(t_node *node)
-{
-	t_node	*current;
-	char	*str;
-
-	current = node;
-	while (current)
-	{
-		if (current->right && !current->right->cmd[0])
-		{
-			str = current->right->cmd[0];
-			print_error("minish", str, "ambiguous redirect", NULL);
-			return (0);
-		}
-		current = current->left;
-	}
-	return (1);
+	return (free(content), free(dilim), close(fd[1]), fd[0]);
 }
 
 static int	redir_input(t_node *node, t_env *env, int *fd)
@@ -94,7 +59,7 @@ static int	redir_input(t_node *node, t_env *env, int *fd)
 		{
 			if (*fd != 0)
 				close(*fd);
-			*fd = heredoc(current, env);
+			*fd = heredoc(current->right, env);
 		}
 		if (*fd < 0)
 			return (-1);
@@ -143,7 +108,7 @@ int	redirections(t_node *node, t_env *env)
 		return (0);
 	if (fd_in != 0)
 	{
-		if (dup2(fd_in, STDIN_FILENO) < 0)
+		if (ft_dup2(fd_in, 0) < 0)
 			return (0);
 		close(fd_in);
 	}

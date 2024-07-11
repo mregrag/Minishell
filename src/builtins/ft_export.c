@@ -6,7 +6,7 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/18 18:50:47 by mregrag           #+#    #+#             */
-/*   Updated: 2024/07/10 06:55:49 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/07/11 04:02:13 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,8 +69,7 @@ void	add_arg_to_env(char *argv, t_env *env)
 	}
 	else if (ft_strchr(argv, '='))
 		set_env_var(env, trimmed, value);
-	free(trimmed);
-	free(value);
+	(free(trimmed), free(value));
 }
 
 int	ft_export(t_node *node, t_env *env)

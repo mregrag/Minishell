@@ -6,7 +6,7 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 16:25:14 by mregrag           #+#    #+#             */
-/*   Updated: 2024/07/10 04:58:39 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/07/11 18:44:26 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ void	set_env_var(t_env *env, char *name, char *value)
 	while (current)
 	{
 		if (ft_strncmp(current->content, name, len) == 0
-				&& ((char *)current->content)[len] == '=')
+			&& ((char *)current->content)[len] == '=')
 		{
 			free(current->content);
 			current->content = new_var;
@@ -74,7 +74,7 @@ void	unset_env_var(t_env *env, char *name)
 	while (current)
 	{
 		if (ft_strncmp(current->content, name, len) == 0
-				&& ((char *)current->content)[len] == '=')
+			&& ((char *)current->content)[len] == '=')
 		{
 			if (prev)
 				prev->next = current->next;
@@ -87,4 +87,18 @@ void	unset_env_var(t_env *env, char *name)
 		prev = current;
 		current = current->next;
 	}
+}
+
+void	set_std_fds(int in, int out)
+{
+	dup2(in, STDIN_FILENO);
+	dup2(out, STDOUT_FILENO);
+	close(in);
+	close(out);
+}
+
+void	get_std_fds(int *in_out)
+{
+	in_out[0] = dup(STDIN_FILENO);
+	in_out[1] = dup(STDOUT_FILENO);
 }

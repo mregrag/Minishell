@@ -6,7 +6,7 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/01 18:16:01 by mregrag           #+#    #+#             */
-/*   Updated: 2024/07/10 06:15:49 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/07/11 06:27:34 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,8 +45,8 @@ int	is_var_in_env(t_env *env, const char *var_name)
 	current = env->env;
 	while (current)
 	{
-		if (ft_strncmp(current->content, var_name, var_len) == 0 &&
-				((char *)current->content)[var_len] == '=')
+		if (ft_strncmp(current->content, var_name, var_len) == 0
+			&& ((char *)current->content)[var_len] == '=')
 			return (1);
 		current = current->next;
 	}
@@ -62,13 +62,13 @@ void	init_env(t_env **env, char **envp)
 		return ;
 	*env = malloc(sizeof(t_env));
 	if (!*env)
-		return (malloc_error(errno));
+		malloc_error();
 	(*env)->env = NULL;
 	while (*envp)
 	{
 		tmp = ft_strdup(*envp);
 		if (!tmp)
-			return (malloc_error(errno));
+			malloc_error();
 		ft_lstadd_back(&((*env)->env), ft_lstnew(tmp));
 		envp++;
 	}
@@ -98,7 +98,7 @@ void	print_env(t_env *env)
 	}
 }
 
-void    free_env(t_env *env)
+void	free_env(t_env *env)
 {
 	t_list	*current;
 	t_list	*next;
@@ -114,4 +114,5 @@ void    free_env(t_env *env)
 		current = next;
 	}
 	free(env);
+	rl_clear_history();
 }

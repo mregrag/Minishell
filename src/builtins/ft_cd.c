@@ -6,7 +6,7 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/18 18:49:44 by mregrag           #+#    #+#             */
-/*   Updated: 2024/07/09 23:46:40 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/07/11 02:47:06 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ static	char	*pmsg(t_env *env)
 	if (!path)
 	{
 		ft_putstr_fd("bash: cd: HOME not set\n", 2);
-		set_env_var(env, "?", "1");
+		exit_status(1, env);
 		return (NULL);
 	}
 	return (path);
@@ -55,6 +55,6 @@ int	ft_cd(t_node *node, t_env *env)
 	set_env_var(env, "PWD", path);
 	if (!path)
 		return (cd_err(env), 1);
-	set_env_var(env, "?", "0");
+	exit_status(0, env);
 	return (1);
 }

@@ -6,7 +6,7 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/27 17:47:28 by mregrag           #+#    #+#             */
-/*   Updated: 2024/07/09 17:27:03 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/07/11 05:41:54 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ static int	is_numeric(char *s)
 	return (1);
 }
 
-static void	exit_with_error(char *cmd, char *arg, char *message)
+static void	error(char *cmd, char *arg, char *message)
 {
 	print_error(cmd, arg, message, NULL);
 	exit(255);
@@ -38,21 +38,21 @@ int	ft_exit(t_node *node, t_env *env)
 {
 	long	exit_code;
 
-	ft_putendl_fd("exit", 1);
+	ft_putendl_fd("exit", 2);
 	if (node->cmd[1])
 	{
 		if (!is_numeric(node->cmd[1]))
-			exit_with_error(node->cmd[0], node->cmd[1], "numeric argument required");
+			error(node->cmd[0], node->cmd[1], "numeric argument required");
 		exit_code = ft_atol(node->cmd[1]);
-		if (exit_code > INT_MAX || exit_code < INT_MIN)
-			exit_with_error(node->cmd[0], node->cmd[1], "numeric argument required");
+		if (exit_code == LONG_MAX || exit_code == LONG_MIN)
+			error(node->cmd[0], node->cmd[1], "numeric argument required");
 		if (node->cmd[2])
 		{
 			print_error("minish", node->cmd[0], "too many arguments", NULL);
-			set_env_var(env, "?", "1");
+			exit_status(1, env);
 			return (1);
 		}
-		exit((int)exit_code);
+		exit((unsigned char)exit_code);
 	}
-	exit(ft_atoi(get_env_var(env, "?")));
+	exit((unsigned char)ft_atoi(get_env_var(env, "?")));
 }

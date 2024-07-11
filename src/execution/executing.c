@@ -6,7 +6,7 @@
 /*   By: mkoualil <mkoualil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/17 22:24:25 by mregrag           #+#    #+#             */
-/*   Updated: 2024/07/10 21:40:58 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/07/11 02:09:03 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ void	executing(t_node *node, t_env *env)
 {
 	if (!node || !env)
 		return ;
-	if (node->type == T_WORD && execute_builtin(node, env))
+	if (node->type == T_CMD && execute_builtin(node, env))
 		return ;
 	if (is_redirection(node->type))
 	{

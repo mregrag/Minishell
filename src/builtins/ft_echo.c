@@ -6,7 +6,7 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/18 18:16:11 by mregrag           #+#    #+#             */
-/*   Updated: 2024/07/03 19:23:42 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/07/11 02:41:57 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,25 +32,25 @@ static int	check_option(char *s)
 int	ft_echo(t_node *node, t_env *env)
 {
 	int	i;
-	int	supp_newline;
+	int	newline;
 
 	i = 1;
-	supp_newline = 0;
-	while (node->cmd[i] != NULL && check_option(node->cmd[i]) == 1)
+	newline = 0;
+	while (node->cmd[i] && check_option(node->cmd[i]) == 1)
 	{
-		supp_newline = 1;
+		newline = 1;
 		i++;
 	}
 	while (node->cmd[i])
 	{
 		ft_putstr_fd(node->cmd[i], 1);
 		set_env_var(env, "_", node->cmd[i]);
-		set_env_var(env, "?", "0");
+		exit_status(0, env);
 		if (node->cmd[i + 1])
 			ft_putstr_fd(" ", 1);
 		i++;
 	}
-	if (supp_newline == 0)
+	if (newline == 0)
 		ft_putstr_fd("\n", 1);
 	return (1);
 }

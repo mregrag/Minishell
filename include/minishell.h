@@ -6,7 +6,7 @@
 /*   By: mkoualil <mkoualil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/10 16:16:44 by mregrag           #+#    #+#             */
-/*   Updated: 2024/07/10 23:59:22 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/07/11 18:44:57 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@
 # include <termios.h>
 # include <sys/param.h>
 # include <sys/wait.h>
-#include <sys/stat.h>
+# include <sys/stat.h>
 # include <unistd.h>
 # include "../lib/libft/libft.h"
 
@@ -39,9 +39,10 @@
 
 # define OUT_FLAG  O_CREAT | O_WRONLY | O_TRUNC
 # define APP_FLAG  O_CREAT | O_WRONLY | O_APPEND
+
 typedef enum e_type
 {
-	T_WORD,
+	T_CMD,
 	T_PIPE,
 	T_IN,
 	T_OUT,
@@ -51,8 +52,8 @@ typedef enum e_type
 
 typedef struct s_env
 {
-	t_list *env;
-} t_env;
+	t_list	*env;
+}	t_env;
 
 typedef struct s_token
 {
@@ -66,57 +67,42 @@ typedef struct s_node
 	char			**cmd;
 	t_type			type;
 	t_env			*env;
-	int			flag;
+	int				flag;
 	struct s_node	*left;
 	struct s_node	*right;
 }	t_node;
 
-typedef struct s_gb
-{
-	int	signal;
-}	t_gb;
-
-extern t_gb	g_minish;
-
-int	update_status(int status);
-void	malloc_error(int error);
-t_token	*process_tokenize(char *input, t_env *env);
-t_token *tokenize(char *input);
-void free_tokens(t_token *head);
-t_env *copy_env(t_env *original);
-void    init_env(t_env **env, char **envp);
-char *get_env_var(t_env *env, char *name);
-void	set_env_var(t_env *env, char *name, char *value);
-void  unset_env_var(t_env *env, char *name);
-void print_env(t_env *env);
-void free_env(t_env *env);
-int	 is_var_in_env(t_env *env, const char *var_name);
+int		update_status(int status);
+void	malloc_error(void);
 //------------------------tokens------------------------
 t_token	*tokenize_input(char *input, t_env *env);
 t_token	*new_token(char *value, t_type type);
+t_token	*tokenize(char *input);
 void	clear_tokens(t_token **head);
+void	free_token(t_token *token);
 void	token_add_back(t_token **lst, t_token *new_token);
 void	skip_spaces(char **str);
 int		skip_quotes(char *line, size_t *i);
 int		is_redirection(t_type type);
 int		ft_lstsize_token(t_token *lst);
 t_type	get_operator_type(char *str);
-int	check_operators(char *str);
-int	is_operator(char *str);
-int	check_quotes(char **line);
-void	free_token(t_token *token);
+int		check_operators(char *str);
+int		is_operator(char *str);
+int		check_quotes(char **line);
 
 //------------------------parcing------------------------
 
-char	*extract_word(char **input);
-t_node *parse_command(t_token **tokens, t_env *env);
+t_node	*parse_command(t_token **tokens, t_env *env);
 t_node	*parse_expression(t_token **tokens, t_env *env);
-t_node *parse_tokens(t_token **tokens, t_env *env);
-t_node *parse_file(t_token *token, t_type type, t_env *env);
+t_node	*parse_tokens(t_token **tokens, t_env *env);
+t_node	*parse_file(t_token *token, t_type type, t_env *env);
+t_node	*create_redire(t_token **tokens, t_token *tmp, t_env *env);
+t_node	*new_node(t_type type);
+t_node	*parse_redire(t_token **tokens, t_env *env);
 void	free_tree(t_node *node);
 void	creat_cmd(t_node *node, t_token **tokens, int count, t_env *env);
-t_node *new_node(t_type type);
-t_node *parse_redire(t_token **tokens, t_env *env);
+char	*extract_word(char **input);
+int		check_syntax(t_token *tokens);
 
 //-----------------------------bultin---------------------------------
 
@@ -130,34 +116,38 @@ int		print_error(char *s1, char *s2, char *s3, char *message);
 int		print_error_errno(char *s1, char *s2, char *s3);
 int		ft_pwd(void);
 
-//-----------------------------env---------------------------------
+// ----------------------------env---------------------------------
 
-t_node	*init_minishell(char **env);
-void	create_env_var(char *var, char *value, t_node *node);
-void	update_env_var(char *var, char *new_value, t_node *node);
-void	duplicate_env(t_node *node, char **envp);
 void	increment_shlvl(t_env *env);
-char	*ft_getenv(const char *key, t_list *env);
+void	init_env(t_env **env, char **envp);
+void	print_env(t_env *env);
+void	set_env_var(t_env *env, char *name, char *value);
+void	unset_env_var(t_env *env, char *name);
+void	free_env(t_env *env);
+void	set_std_fds(int in, int out);
+void	get_std_fds(int *in_out);
+int		is_var_in_env(t_env *env, const char *var_name);
+char	*get_env_var(t_env *env, char *name);
 
 //---------------------------execution------------------------------------
 
-
+t_node	*setup_heredoc(t_node *node, int *heredoc_fd, t_env *env);
 char	*get_path(char *cmd, t_env *env);
 void	executing(t_node *node, t_env *env);
 void	exec_cmd(t_node *node, t_env *env);
 void	exec_pipe(t_node *node, t_env *env);
-int	execute_builtin(t_node *node, t_env *env);
+void	heredoc_content(t_node *node, int fd, char *content, t_env *env);
+int		execute_builtin(t_node *node, t_env *env);
 int		heredoc(t_node *node, t_env *env);
-t_node *setup_heredoc(t_node *node, int *heredoc_fd, t_env *env);
+int		check_file(t_node *node);
 int		ft_pipe(int ends[2]);
 int		ft_dup2(int filde1, int filde2);
 int		redirections(t_node *node, t_env *env);
 int		ft_open(const char *path, int oflag, mode_t mode);
 pid_t	ft_fork(void);
-int 	ft_close(int fd);
-int	ft_dup(int oldfd);
-int	ft_dup2(int oldfd, int newfd);
-int	ft_pipe(int pipefd[2]);
+int		ft_dup(int oldfd);
+int		ft_dup2(int oldfd, int newfd);
+int		ft_pipe(int pipefd[2]);
 
 //---------------------expansion-------------------------------
 
@@ -181,9 +171,7 @@ void	block_signals(struct sigaction *sa_ignore);
 void	set_signal_heredoc(void);
 void	restore_signals(struct sigaction *sa_default);
 void	signal_handlers(struct sigaction *sa_ig, struct sigaction *sa_def);
-
-
-int check_syntax(t_token *tokens);
-int	exec_err(char *path, char *cmd);
-
+void	signal_middle_exec(t_env *env);
+void	ctl_d(t_env *envp);
+int		exec_err(char *path, char *cmd, t_env *env);
 #endif
