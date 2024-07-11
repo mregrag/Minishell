@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_cd.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mkoualil <mkoualil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/18 18:49:44 by mregrag           #+#    #+#             */
-/*   Updated: 2024/07/11 02:47:06 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/07/11 19:34:17 by mkoualil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ static	void	cd_err(t_env *env)
 	set_env_var(env, "?", "1");
 }
 
-static	char	*pmsg(t_env *env)
+static	char	*home(t_env *env)
 {
 	char	*path;
 
@@ -34,6 +34,15 @@ static	char	*pmsg(t_env *env)
 	return (path);
 }
 
+static int	is_directory(const char *path)
+{
+	struct stat	statbuf;
+
+	if (stat(path, &statbuf) != 0)
+		return (0);
+	return (S_ISDIR(statbuf.st_mode));
+}
+
 int	ft_cd(t_node *node, t_env *env)
 {
 	char	s[PATH_MAX];
@@ -42,11 +51,15 @@ int	ft_cd(t_node *node, t_env *env)
 	char	*old_pwd;
 
 	if (!node->cmd[1])
-		path = pmsg(env);
+		path = home(env);
 	else
 		path = node->cmd[1];
-	if (!path)
+	if (!is_directory(path))
+	{
+		print_error("minish", "cd", strerror(errno), NULL);
+		exit_status(1, env);
 		return (1);
+	}
 	old_pwd = getcwd(s, PATH_MAX);
 	set_env_var(env, "OLDPWD", old_pwd);
 	if (chdir(path) < 0)

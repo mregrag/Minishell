@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_exit.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mkoualil <mkoualil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/27 17:47:28 by mregrag           #+#    #+#             */
-/*   Updated: 2024/07/11 05:41:54 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/07/11 19:39:20 by mkoualil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ static int	is_numeric(char *s)
 
 static void	error(char *cmd, char *arg, char *message)
 {
-	print_error(cmd, arg, message, NULL);
+	print_error("minish", cmd, arg, message);
 	exit(255);
 }
 

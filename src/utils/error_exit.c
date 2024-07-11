@@ -6,7 +6,7 @@
 /*   By: mkoualil <mkoualil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/12 18:33:04 by mregrag           #+#    #+#             */
-/*   Updated: 2024/07/11 03:57:20 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/07/11 19:49:38 by mkoualil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ int	exec_err(char *path, char *cmd, t_env *env)
 			return (126);
 		}
 	}
-	return (127);
+	return (0);
 }
 
 void	malloc_error(void)

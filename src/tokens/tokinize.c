@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokinize.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mkoualil <mkoualil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/11 22:02:39 by mregrag           #+#    #+#             */
-/*   Updated: 2024/07/11 06:05:50 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/07/11 20:31:23 by mkoualil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,7 @@ t_token	*tokenize_input(char *input, t_env *env)
 	free(input);
 	if (!trimmed)
 		return (NULL);
-	if (trimmed[0] == '$')
+	if (trimmed[0] == '$' && is_var_in_env(env , trimmed + 1))
 	{
 		env_var = get_env_var(env, trimmed + 1);
 		free(trimmed);

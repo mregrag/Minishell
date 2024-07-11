@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_export.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mkoualil <mkoualil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/18 18:50:47 by mregrag           #+#    #+#             */
-/*   Updated: 2024/07/11 04:02:13 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/07/11 19:11:41 by mkoualil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,8 +34,11 @@ static int	check_var(const char *str)
 	count = 0;
 	if (!ft_isalpha(*str) && *str != '_')
 		return (0);
+
 	while (str[i] && str[i] != '=')
 	{
+		if (str[i] == '-')
+			return 0;
 		if (str[i] == '+')
 			count++;
 		if ((!ft_isalnum(str[i]) || str[i] == '_' ) && count > 1)

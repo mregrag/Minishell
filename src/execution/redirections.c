@@ -6,7 +6,7 @@
 /*   By: mkoualil <mkoualil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/07 18:05:58 by mregrag           #+#    #+#             */
-/*   Updated: 2024/07/11 18:46:24 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/07/11 19:53:55 by mkoualil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,7 +105,7 @@ int	redirections(t_node *node, t_env *env)
 	fd_in = 0;
 	fd_out = 1;
 	if (redir_input(node, env, &fd_in) < 0 || redire_output(node, &fd_out) < 0)
-		return (0);
+		return (exit_status(1, env), 0);
 	if (fd_in != 0)
 	{
 		if (ft_dup2(fd_in, 0) < 0)
