@@ -3,24 +3,37 @@
 /*                                                        :::      ::::::::   */
 /*   ft_export.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mkoualil <mkoualil@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/18 18:50:47 by mregrag           #+#    #+#             */
-/*   Updated: 2024/07/11 19:11:41 by mkoualil         ###   ########.fr       */
+/*   Updated: 2024/07/12 23:56:57 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-static	void	export_list(t_list *env)
+static void	export_list(t_list *env)
 {
 	char	*content;
+	char	*var;
+	char	*value;
+	int		index;
 
 	while (env)
 	{
 		content = (char *)env->content;
 		if ((content[0] != '?' && content[0] != '_') || content[1] == '_')
-			printf("declare -x %s\"\n", content);
+		{
+			index = ft_strchr(content, '=') - content;
+			var = ft_substr(content, 0, index);
+			value = ft_substr(content, index + 1, ft_strlen(content) - index);
+			if (ft_strchr(content, '='))
+				printf("declare -x %s=\"%s\"\n", var, value);
+			else
+				printf("declare -x %s\n", var);
+			ft_free(&value);
+			ft_free(&var);
+		}
 		env = env->next;
 	}
 }
@@ -28,20 +41,14 @@ static	void	export_list(t_list *env)
 static int	check_var(const char *str)
 {
 	int	i;
-	int	count;
 
-	i = 1;
-	count = 0;
 	if (!ft_isalpha(*str) && *str != '_')
 		return (0);
-
+	i = 1;
 	while (str[i] && str[i] != '=')
 	{
-		if (str[i] == '-')
-			return 0;
-		if (str[i] == '+')
-			count++;
-		if ((!ft_isalnum(str[i]) || str[i] == '_' ) && count > 1)
+		if (!ft_isalnum(str[i]) && str[i] != '_'
+			&& !(str[i] == '+' && str[i + 1] == '='))
 			return (0);
 		i++;
 	}
@@ -50,29 +57,30 @@ static int	check_var(const char *str)
 
 void	add_arg_to_env(char *argv, t_env *env)
 {
-	int		index;
-	char	*value;
 	char	*var;
+	char	*value;
 	char	*trimmed;
-	char	*temp;
+	char	*equals;
 
-	index = ft_strchr(argv, '=') - argv;
-	var = ft_substr(argv, 0, index);
+	equals = ft_strchr(argv, '=');
+	var = NULL;
+	value = NULL;
+	if (equals)
+	{
+		var = ft_substr(argv, 0, equals - argv);
+		value = ft_strdup(equals + 1);
+	}
+	else
+		var = ft_strdup(argv);
 	trimmed = ft_strtrim(var, "+");
 	set_env_var(env, "_", trimmed);
-	free(var);
-	value = ft_substr(argv, index + 1, ft_strlen(argv) - index);
-	if (get_env_var(env, trimmed) && !ft_strchr(argv, '+'))
+	if (equals && *(equals - 1) == '+')
+		append_env_var(env, trimmed, value);
+	else if (equals)
 		set_env_var(env, trimmed, value);
-	else if (get_env_var(env, trimmed) && argv[index - 1] == '+')
-	{
-		temp = ft_strjoin(get_env_var(env, trimmed), value);
-		set_env_var(env, trimmed, temp);
-		free(temp);
-	}
-	else if (ft_strchr(argv, '='))
-		set_env_var(env, trimmed, value);
-	(free(trimmed), free(value));
+	else if (!is_var_in_env(env, argv))
+		ft_lstadd_back(&(env->env), ft_lstnew(ft_strdup(argv)));
+	(free(trimmed), free(var), free(value));
 }
 
 int	ft_export(t_node *node, t_env *env)

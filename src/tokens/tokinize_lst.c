@@ -6,7 +6,7 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/11 22:02:54 by mregrag           #+#    #+#             */
-/*   Updated: 2024/07/11 02:27:50 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/07/13 03:48:09 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,40 +14,38 @@
 
 t_token	*new_token(char *value, t_type type)
 {
-	t_token	*new_token;
+	t_token	*token;
 
-	new_token = malloc(sizeof(t_token));
-	if (!new_token)
+	token = malloc(sizeof(t_token));
+	if (!token)
 		malloc_error();
-	new_token->value = ft_strdup(value);
-	if (!new_token->value)
-		(free(new_token), malloc_error());
-	new_token->type = type;
-	new_token->next = NULL;
-	return (new_token);
+	token->value = value;
+	token->type = type;
+	token->next = NULL;
+	return (token);
 }
 
-void	token_add_back(t_token **head, t_token *new_token)
+void	token_add_back(t_token **tokens, t_token *token)
 {
 	t_token	*current;
 
-	if (!*head)
-		*head = new_token;
+	if (!*tokens)
+		*tokens = token;
 	else
 	{
-		current = *head;
+		current = *tokens;
 		while (current->next)
 			current = current->next;
-		current->next = new_token;
+		current->next = token;
 	}
 }
 
-void	clear_tokens(t_token **head)
+void	clear_tokens(t_token **tokens)
 {
 	t_token	*current;
 	t_token	*next;
 
-	current = *head;
+	current = *tokens;
 	while (current)
 	{
 		next = current->next;
@@ -55,7 +53,7 @@ void	clear_tokens(t_token **head)
 		free(current);
 		current = next;
 	}
-	*head = NULL;
+	*tokens = NULL;
 }
 
 void	free_token(t_token *token)

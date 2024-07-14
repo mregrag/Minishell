@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mkoualil <mkoualil@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/05/10 16:14:20 by mregrag           #+#    #+#             */
-/*   Updated: 2024/07/11 18:45:21 by mregrag          ###   ########.fr       */
+/*   Created: 2024/07/12 21:20:59 by mregrag           #+#    #+#             */
+/*   Updated: 2024/07/13 07:38:45 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-int	g_sig = 0;
+int	g_sig;
 
 int	main(int argc, char **argv, char **env)
 {
@@ -31,10 +31,11 @@ int	main(int argc, char **argv, char **env)
 		if (g_sig == 1 || g_sig == -1)
 			(exit_status(1, envp), g_sig = 0);
 		if (!input)
-			ctl_d(envp);
-		add_history(input);
+			handle_eof(envp);
+		if (*input)
+			add_history(input);
 		tokens = tokenize_input(input, envp);
-		tree = parse_tokens(&tokens, envp);
+		tree = parse_tokens(tokens, envp);
 		get_std_fds(in_out);
 		(executing(tree, envp), free_tree(tree));
 		set_std_fds(in_out[0], in_out[1]);

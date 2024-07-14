@@ -6,7 +6,7 @@
 #    By: mkoualil <mkoualil@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/05/10 16:12:48 by mregrag           #+#    #+#              #
-#    Updated: 2024/07/11 05:28:47 by mregrag          ###   ########.fr        #
+#    Updated: 2024/07/13 22:57:26 by mregrag          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -34,6 +34,7 @@ BUILTINS	:=	src/builtins/ft_cd.c \
 
 ENV		:=	src/env/env_utils.c \
 			src/env/init_env.c \
+			src/env/utils.c
 
 EXECUCTION	:=	src/execution/exe_utils.c \
 			src/execution/exec_builtin.c \

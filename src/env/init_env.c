@@ -6,7 +6,7 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/01 18:16:01 by mregrag           #+#    #+#             */
-/*   Updated: 2024/07/11 06:27:34 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/07/13 00:05:50 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@ int	is_var_in_env(t_env *env, const char *var_name)
 {
 	t_list	*current;
 	size_t	var_len;
+	char	*content;
 
 	if (!env || !var_name)
 		return (0);
@@ -45,8 +46,9 @@ int	is_var_in_env(t_env *env, const char *var_name)
 	current = env->env;
 	while (current)
 	{
-		if (ft_strncmp(current->content, var_name, var_len) == 0
-			&& ((char *)current->content)[var_len] == '=')
+		content = (char *)current->content;
+		if (ft_strncmp(content, var_name, var_len) == 0
+			&& (content[var_len] == '=' || content[var_len] == '\0'))
 			return (1);
 		current = current->next;
 	}
@@ -92,7 +94,7 @@ void	print_env(t_env *env)
 	while (current)
 	{
 		content = (char *)current->content;
-		if (content[0] != '?' || content[1] != '=')
+		if (content[0] != '?' && ft_strchr(content, '='))
 			ft_putendl_fd(content, 1);
 		current = current->next;
 	}

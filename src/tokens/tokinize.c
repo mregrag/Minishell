@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokinize.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mkoualil <mkoualil@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/11 22:02:39 by mregrag           #+#    #+#             */
-/*   Updated: 2024/07/11 20:31:23 by mkoualil         ###   ########.fr       */
+/*   Updated: 2024/07/13 03:55:49 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,6 @@ static int	handle_operator(char **input, t_token **tokens)
 	if (!word)
 		return (0);
 	token_add_back(tokens, new_token(word, type));
-	free(word);
 	return (1);
 }
 
@@ -40,20 +39,10 @@ static int	handle_word(char **input, t_token **tokens)
 	if (!word)
 		return (0);
 	token_add_back(tokens, new_token(word, T_CMD));
-	free(word);
 	return (1);
 }
 
-static t_token	*create_single_token(char *str)
-{
-	t_token	*token;
-
-	token = new_token(str, T_CMD);
-	free(str);
-	return (token);
-}
-
-t_token	*tokenize(char *input)
+static t_token	*creat_tokens(char *input)
 {
 	t_token	*tokens;
 
@@ -77,28 +66,26 @@ t_token	*tokenize(char *input)
 
 t_token	*tokenize_input(char *input, t_env *env)
 {
-	char	*trimmed;
-	char	*env_var;
+	char	*new_input;
+	char	*value;
 	t_token	*tokens;
 
 	tokens = NULL;
-	trimmed = ft_strtrim(input, " \t\n\v\f\r");
+	new_input = ft_strtrim(input, " \t\n\v\f\r");
 	free(input);
-	if (!trimmed)
-		return (NULL);
-	if (trimmed[0] == '$' && is_var_in_env(env , trimmed + 1))
+	if (new_input[0] == '$' && is_var_in_env(env, new_input + 1))
 	{
-		env_var = get_env_var(env, trimmed + 1);
-		free(trimmed);
-		if (!env_var)
+		value = get_env_var(env, new_input + 1);
+		free(new_input);
+		if (!value)
 			return (NULL);
-		if (check_operators(env_var))
-			return (create_single_token(env_var));
-		trimmed = ft_strdup(env_var);
-		free(env_var);
-		if (!trimmed)
+		if (check_operators(value))
+			return (new_token(value, T_CMD));
+		new_input = ft_strdup(value);
+		free(value);
+		if (!new_input)
 			return (NULL);
 	}
-	tokens = tokenize(trimmed);
-	return (free(trimmed), tokens);
+	tokens = creat_tokens(new_input);
+	return (free(new_input), tokens);
 }

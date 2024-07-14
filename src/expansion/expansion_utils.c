@@ -6,7 +6,7 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/18 21:49:59 by mregrag           #+#    #+#             */
-/*   Updated: 2024/07/10 04:02:54 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/07/13 03:52:21 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ char	*remov_quotes(char *str)
 
 	ret = malloc(strlen(str) + 1);
 	if (!ret)
-		return (free(str), NULL);
+		malloc_error();
 	i = 0;
 	j = 0;
 	double_q = 0;

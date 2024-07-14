@@ -3,30 +3,31 @@
 /*                                                        :::      ::::::::   */
 /*   ft_echo.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mkoualil <mkoualil@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/18 18:16:11 by mregrag           #+#    #+#             */
-/*   Updated: 2024/07/11 21:50:13 by mkoualil         ###   ########.fr       */
+/*   Updated: 2024/07/13 00:07:21 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-static int	check_option(char *s)
+static int	check_options(char **s)
 {
 	int	i;
+	int	j;
 
-	i = 0;
-	if (s[0] != '-')
-		return (0);
-	i++;
-	while (s[i])
+	j = 1;
+	while (s[j] && s[j][0] == '-' && s[j][1] == 'n')
 	{
-		if (s[i] != 'n')
-			return (0);
-		i++;
+		i = 1;
+		while (s[j][i] && s[j][i] == 'n')
+			i++;
+		if (s[j][i] != '\0')
+			break ;
+		j++;
 	}
-	return (1);
+	return (j);
 }
 
 int	ft_echo(t_node *node, t_env *env)
@@ -34,13 +35,10 @@ int	ft_echo(t_node *node, t_env *env)
 	int	i;
 	int	newline;
 
-	i = 1;
-	newline = 0;
-	while (node->cmd[i] && check_option(node->cmd[i]) == 1)
-	{
-		newline = 1;
-		i++;
-	}
+	newline = 1;
+	i = check_options(node->cmd);
+	if (i > 1)
+		newline = 0;
 	while (node->cmd[i])
 	{
 		ft_putstr_fd(node->cmd[i], 1);
@@ -50,7 +48,7 @@ int	ft_echo(t_node *node, t_env *env)
 			ft_putstr_fd(" ", 1);
 		i++;
 	}
-	if (newline == 0)
+	if (newline == 1)
 		ft_putstr_fd("\n", 1);
 	return (1);
 }

@@ -6,13 +6,11 @@
 /*   By: mkoualil <mkoualil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/07 18:05:58 by mregrag           #+#    #+#             */
-/*   Updated: 2024/07/11 19:53:55 by mkoualil         ###   ########.fr       */
+/*   Updated: 2024/07/14 06:46:41 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
-
-extern int	g_sig;
 
 int	heredoc(t_node *node, t_env *env)
 {
@@ -39,21 +37,19 @@ int	heredoc(t_node *node, t_env *env)
 	return (free(content), free(dilim), close(fd[1]), fd[0]);
 }
 
-static int	redir_input(t_node *node, t_env *env, int *fd)
+int	redir_input(t_node *node, t_env *env, int *fd)
 {
 	t_node	*current;
 
 	*fd = 0;
 	current = node;
-	if (!check_file(current))
-		return (-1);
-	while (current)
+	while (current && current->left)
 	{
 		if (current->type == T_IN)
 		{
 			if (*fd != 0)
 				close(*fd);
-			*fd = ft_open(current->right->cmd[0], O_RDONLY, 00644);
+			*fd = ft_open_input(current->right->cmd[0]);
 		}
 		else if (current->type == T_HERDOC)
 		{
@@ -68,27 +64,25 @@ static int	redir_input(t_node *node, t_env *env, int *fd)
 	return (0);
 }
 
-static int	redire_output(t_node *node, int *fd)
+int	redire_output(t_node *node, int *fd)
 {
 	t_node	*current;
 
 	*fd = 1;
 	current = node;
-	if (!check_file(current))
-		return (-1);
 	while (current)
 	{
 		if (current->type == T_OUT)
 		{
 			if (*fd != 1)
 				close(*fd);
-			*fd = ft_open(current->right->cmd[0], OUT_FLAG, 00644);
+			*fd = ft_open_output(current->right->cmd[0]);
 		}
 		else if (current->type == T_APPEND)
 		{
 			if (*fd != 1)
 				close(*fd);
-			*fd = ft_open(current->right->cmd[0], APP_FLAG, 00644);
+			*fd = ft_open_append(current->right->cmd[0]);
 		}
 		if (*fd < 0)
 			return (-1);
@@ -108,7 +102,7 @@ int	redirections(t_node *node, t_env *env)
 		return (exit_status(1, env), 0);
 	if (fd_in != 0)
 	{
-		if (ft_dup2(fd_in, 0) < 0)
+		if (ft_dup2(fd_in, STDIN_FILENO) < 0)
 			return (0);
 		close(fd_in);
 	}

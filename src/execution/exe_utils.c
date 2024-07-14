@@ -6,7 +6,7 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/09 17:11:01 by mregrag           #+#    #+#             */
-/*   Updated: 2024/07/11 02:58:08 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/07/13 01:08:26 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,16 +20,6 @@ pid_t	ft_fork(void)
 	if (pid == -1)
 		print_error("minish", "fork", strerror(errno), NULL);
 	return (pid);
-}
-
-int	ft_open(const char *pathname, int flags, mode_t mode)
-{
-	int	fd;
-
-	fd = open(pathname, flags, mode);
-	if (fd == -1)
-		print_error("minish", (char *)pathname, strerror(errno), NULL);
-	return (fd);
 }
 
 int	ft_pipe(int pipefd[2])

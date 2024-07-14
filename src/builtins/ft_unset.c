@@ -6,7 +6,7 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/18 18:51:07 by mregrag           #+#    #+#             */
-/*   Updated: 2024/07/03 19:30:02 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/07/12 05:57:50 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,9 +21,12 @@ static int	check_var_unset(char *var)
 		return (0);
 	if (!ft_isalpha(*var) && *var != '_')
 		return (0);
-	while (var[++i])
+	while (var[i])
+	{
 		if (!ft_isalnum(var[i]) && var[i] != '_')
 			return (0);
+		i++;
+	}
 	return (1);
 }
 

@@ -6,7 +6,7 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/10 23:38:35 by mregrag           #+#    #+#             */
-/*   Updated: 2024/07/11 06:25:07 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/07/13 02:10:37 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ void	signal_handlers(struct sigaction *sa_ig, struct sigaction *sa_def)
 	sa_def->sa_flags = 0;
 }
 
-void	ctl_d(t_env *envp)
+void	handle_eof(t_env *envp)
 {
 	char	*status;
 

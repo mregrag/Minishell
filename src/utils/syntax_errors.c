@@ -6,82 +6,86 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/27 18:49:43 by mregrag           #+#    #+#             */
-/*   Updated: 2024/07/11 18:49:07 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/07/13 08:18:13 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-static int	syntax_error(char *message, t_token *token)
+static int	check_redir_errors(t_token *token)
 {
-	if (token && token->value)
-		print_error("minish", ERRTOKEN, token->value, NULL);
-	else
-		print_error("minish", "syntax error", message, NULL);
+	if (!token->next)
+		return (1);
+	if (token->next->type == T_PIPE)
+		return (2);
+	if (token->next->type != T_CMD)
+		return (3);
 	return (0);
+}
+
+static int	check_token(t_token *token, int had_pipe)
+{
+	if (token->type == T_PIPE)
+	{
+		if (!token->next || had_pipe)
+			return (2);
+	}
+	else if (is_redirection(token->type))
+		return (check_redir_errors(token));
+	return (0);
+}
+
+static int	check_syntax_recursive(t_token *token, int had_pipe)
+{
+	int	error;
+
+	if (!token)
+	{
+		if (had_pipe)
+			return (1);
+		return (0);
+	}
+	error = check_token(token, had_pipe);
+	if (error)
+		return (error);
+	if (token->type == T_PIPE)
+		return (check_syntax_recursive(token->next, 1));
+	if (is_redirection(token->type))
+		return (check_syntax_recursive(token->next->next, 0));
+	return (check_syntax_recursive(token->next, 0));
+}
+
+static void	print_errors(int error_code, char *value)
+{
+	if (error_code == 1)
+		ft_putstr_fd("syntax error near unexpected token `newline'\n", 2);
+	else if (error_code == 2)
+		ft_putstr_fd("syntax error near unexpected token `|'\n", 2);
+	else if (error_code == 3)
+	{
+		ft_putstr_fd("syntax error near unexpected token `", 2);
+		ft_putstr_fd(value, 2);
+		ft_putstr_fd("'\n", 2);
+	}
 }
 
 int	check_syntax(t_token *tokens)
 {
-	int	after_pipe;
-	int	after_redirection;
+	int	error_code;
 
-	after_pipe = false;
-	after_redirection = false;
-	while (tokens)
+	if (tokens && tokens->type == T_PIPE)
 	{
-		if (tokens->type == T_PIPE)
-		{
-			if (after_pipe || after_redirection)
-				return (syntax_error("unexpected token `|'", tokens));
-			after_pipe = true;
-			after_redirection = false;
-		}
-		else if (is_redirection(tokens->type))
-		{
-			if (after_redirection)
-				return (syntax_error("unexpected token", tokens));
-			after_redirection = true;
-			after_pipe = false;
-		}
-		else if (tokens->type == T_CMD)
-		{
-			after_pipe = false;
-			after_redirection = false;
-		}
-		if (!tokens->next && (after_pipe || after_redirection))
-			return (syntax_error("unexpected token `newline'", NULL));
-		tokens = tokens->next;
+		ft_putstr_fd("syntax error near unexpected token `|'\n", 2);
+		return (1);
 	}
-	return (1);
+	error_code = check_syntax_recursive(tokens, 0);
+	if (error_code)
+	{
+		if (tokens->next)
+			print_errors(error_code, tokens->next->value);
+		else
+			print_errors(error_code, NULL);
+		return (1);
+	}
+	return (0);
 }
-// static int	syntax_error(char *message, t_token *token)
-// {
-// 	if (token && token->value)
-// 		print_error("minish", "syntax error", token->value, NULL);
-// 	else
-// 		print_error("minish", "syntax error", message, NULL);
-// 	return (0);
-// }
-//
-// int	check_syntax(t_token *tokens)
-// {
-// 	bool	expect_cmd;
-//
-// 	expect_cmd = true;
-// 	while (tokens)
-// 	{
-// 		if (tokens->type == T_PIPE || is_redirection(tokens->type))
-// 		{
-// 			if (expect_cmd)
-// 				return (syntax_error("unexpected token", tokens));
-// 			expect_cmd = true;
-// 		}
-// 		else if (tokens->type == T_CMD)
-// 			expect_cmd = false;
-// 		if (!tokens->next && expect_cmd)
-// 			return (syntax_error("unexpected token `newline'", NULL));
-// 		tokens = tokens->next;
-// 	}
-// 	return (1);
-// }

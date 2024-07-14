@@ -6,13 +6,11 @@
 /*   By: mkoualil <mkoualil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 15:47:14 by mregrag           #+#    #+#             */
-/*   Updated: 2024/07/11 05:10:27 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/07/13 00:11:50 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
-
-extern int	g_sig;
 
 void	ctrl_c(int signum)
 {

@@ -6,7 +6,7 @@
 /*   By: mkoualil <mkoualil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/17 22:24:25 by mregrag           #+#    #+#             */
-/*   Updated: 2024/07/11 20:35:23 by mkoualil         ###   ########.fr       */
+/*   Updated: 2024/07/14 07:35:30 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,14 +23,14 @@ void	executing(t_node *node, t_env *env)
 		return ;
 	if (is_redirection(node->type))
 	{
-		if (redirections(node, env))
-			while (node->left)
-				node = node->left;
+		if (redirections(node, env) < 0)
+			return ;
+		while (node->left)
+			node = node->left;
 	}
 	if (node->type == T_PIPE)
 		exec_pipe(node, env);
 	else
 		exec_cmd(node, env);
 	tcsetattr(STDIN_FILENO, TCSANOW, &term);
-	
 }
