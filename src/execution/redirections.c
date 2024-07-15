@@ -6,7 +6,7 @@
 /*   By: mkoualil <mkoualil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/07 18:05:58 by mregrag           #+#    #+#             */
-/*   Updated: 2024/07/14 06:46:41 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/07/15 03:59:08 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ int	redir_input(t_node *node, t_env *env, int *fd)
 
 	*fd = 0;
 	current = node;
-	while (current && current->left)
+	while (current)
 	{
 		if (current->type == T_IN)
 		{

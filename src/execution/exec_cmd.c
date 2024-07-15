@@ -6,7 +6,7 @@
 /*   By: mkoualil <mkoualil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/17 22:58:39 by mregrag           #+#    #+#             */
-/*   Updated: 2024/07/14 05:33:38 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/07/15 19:57:31 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ static void	child_exec(t_node *node, t_env *env)
 	exit(error);
 }
 
-void	exec_cmd(t_node *node, t_env *env)
+void	execute_command(t_node *node, t_env *env)
 {
 	struct sigaction	sa_ignore;
 	struct sigaction	sa_default;

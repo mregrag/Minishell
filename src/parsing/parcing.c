@@ -6,7 +6,7 @@
 /*   By: mkoualil <mkoualil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/24 21:22:11 by mregrag           #+#    #+#             */
-/*   Updated: 2024/07/13 08:19:10 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/07/15 04:52:45 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,7 +102,7 @@ t_node	*parse_expression(t_token *tokens, t_env *env)
 		if (next_token->type == T_PIPE)
 		{
 			node = new_node(T_PIPE);
-			(tokens)->next = NULL;
+			tokens->next = NULL;
 			node->left = parse_redire(tmp, env);
 			node->right = parse_expression((next_token->next), env);
 			free_token(next_token);

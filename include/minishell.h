@@ -6,7 +6,7 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/10 16:16:44 by mregrag           #+#    #+#             */
-/*   Updated: 2024/07/14 07:47:44 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/07/15 20:05:46 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,10 @@ typedef struct s_fd
 {
 	int		fd[2];
 	int		fdh;
+	int			fdh_left;
+	int			fdh_right;
+	int		fd_left[2];
+	int		fd_right[2];
 	int		in;
 	int		out;
 }	t_fd;
@@ -66,7 +70,6 @@ typedef struct s_node
 	char			**cmd;
 	t_type			type;
 	t_env			*env;
-	int			fdh;
 	int			fd[2];
 	int				flag;
 	struct s_node	*left;
@@ -138,8 +141,9 @@ int	ft_redir(t_node *node , t_env *env);
 t_node	*find_heredoc(t_node *node);
 char	*get_path(char *cmd, t_env *env);
 void	executing(t_node *node, t_env *env);
-void	exec_cmd(t_node *node, t_env *env);
+void	execute_command(t_node *node, t_env *env);
 void	heredoc_content(t_node *node, int fd, char *content, t_env *env);
+void execute_node(t_node *node, t_env *env);
 int		execute_builtin(t_node *node, t_env *env);
 int		heredoc(t_node *node, t_env *env);
 int		check_file(t_node *node);
