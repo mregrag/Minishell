@@ -6,7 +6,7 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/10 16:16:44 by mregrag           #+#    #+#             */
-/*   Updated: 2024/07/15 20:05:46 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/07/16 02:27:37 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -145,7 +145,7 @@ void	execute_command(t_node *node, t_env *env);
 void	heredoc_content(t_node *node, int fd, char *content, t_env *env);
 void execute_node(t_node *node, t_env *env);
 int		execute_builtin(t_node *node, t_env *env);
-int		heredoc(t_node *node, t_env *env);
+int	heredoc(t_node *node, t_env *env);
 int		check_file(t_node *node);
 int		ft_pipe(int ends[2]);
 int		ft_dup2(int filde1, int filde2);

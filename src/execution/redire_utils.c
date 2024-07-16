@@ -6,7 +6,7 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 05:26:24 by mregrag           #+#    #+#             */
-/*   Updated: 2024/07/15 07:30:38 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/07/15 23:13:44 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ int	ft_open_output(char *file)
 		print_error("minish", "ambiguous redirect", NULL, NULL);
 		return (-1);
 	}
-	fd = open(file, O_CREAT | O_WRONLY | O_TRUNC, 00644);
+	fd = open(file, O_CREAT | O_WRONLY | O_TRUNC, 0644);
 	if (fd == -1)
 		print_error("minish", (char *)file, strerror(errno), NULL);
 	return (fd);

@@ -6,7 +6,7 @@
 /*   By: mkoualil <mkoualil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/07 18:05:58 by mregrag           #+#    #+#             */
-/*   Updated: 2024/07/15 03:59:08 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/07/16 12:24:23 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,8 @@ int	heredoc(t_node *node, t_env *env)
 	while (1)
 	{
 		content = readline("> ");
+		if (!content)
+			return (-1);
 		if (!ttyname(0))
 			return (free(content), close(fd[1]), close(fd[0]), -1);
 		dilim = expansion_dilim(node->cmd[0]);
