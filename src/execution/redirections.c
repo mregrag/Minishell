@@ -6,7 +6,7 @@
 /*   By: mkoualil <mkoualil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/07 18:05:58 by mregrag           #+#    #+#             */
-/*   Updated: 2024/07/16 12:24:23 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/07/17 01:19:39 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,8 @@ int	heredoc(t_node *node, t_env *env)
 	char	*dilim;
 	int		fd[2];
 
+	if (!node)
+		return (0);
 	if (ft_pipe(fd) < 0)
 		return (-1);
 	set_signal_heredoc();
