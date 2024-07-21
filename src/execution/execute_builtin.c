@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   exec_builtin.c                                     :+:      :+:    :+:   */
+/*   execute_builtin.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/20 20:49:46 by mregrag           #+#    #+#             */
-/*   Updated: 2024/07/11 22:08:43 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/07/21 03:46:41 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int	execute_builtin(t_node *node, t_env *env)
 {
-	if (!node->cmd || !node->cmd[0])
+	if (!node || !node->cmd || !node->cmd[0])
 		return (0);
 	if (ft_strcmp(node->cmd[0], "echo") == 0)
 		return (ft_echo(node, env));

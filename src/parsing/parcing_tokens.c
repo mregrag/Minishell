@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parcing.c                                          :+:      :+:    :+:   */
+/*   parcing_tokens.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mkoualil <mkoualil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/24 21:22:11 by mregrag           #+#    #+#             */
-/*   Updated: 2024/07/15 04:52:45 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/07/19 01:34:53 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,30 +63,31 @@ t_node	*parse_file(t_token *token, t_type type, t_env *env)
 
 t_node	*parse_redire(t_token *tokens, t_env *env)
 {
-	t_token	*current;
-	t_token	*redir_token;
+	t_token	*tmp;
 	t_node	*node;
+	t_token	*next_token;
 
 	if (!tokens)
 		return (NULL);
-	current = tokens;
-	if (is_redirection(tokens->type))
-		return (create_redire(tokens, current, env));
-	while (current && current->next)
+	tmp = tokens;
+	if (is_redirection((tokens)->type))
+		return (create_redire(tokens, tmp, env));
+	while (tokens && (tokens)->next)
 	{
-		if (is_redirection(current->next->type))
+		next_token = (tokens)->next;
+		if (is_redirection(next_token->type))
 		{
-			node = new_node(current->next->type);
-			redir_token = current->next;
-			current->next = redir_token->next->next;
-			node->left = parse_redire(tokens, env);
-			node->right = parse_file(redir_token->next, redir_token->type, env);
-			free_token(redir_token);
+			node = new_node(next_token->type);
+			(tokens)->next = next_token->next->next;
+			node->left = parse_redire(tmp, env);
+			node->right = parse_file(next_token->next, next_token->type, env);
+			free(next_token->value);
+			free(next_token);
 			return (node);
 		}
-		current = current->next;
+		tokens = next_token;
 	}
-	return (parse_command(tokens, env));
+	return (parse_command(tmp, env));
 }
 
 t_node	*parse_expression(t_token *tokens, t_env *env)

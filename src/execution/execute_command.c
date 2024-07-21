@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   exec_cmd.c                                         :+:      :+:    :+:   */
+/*   execute_command.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mkoualil <mkoualil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/17 22:58:39 by mregrag           #+#    #+#             */
-/*   Updated: 2024/07/15 19:57:31 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/07/20 23:39:51 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ char	*get_path(char *command, t_env *env)
 	return (ft_free_array(paths), NULL);
 }
 
-static void	child_exec(t_node *node, t_env *env)
+static void	child_execute(t_node *node, t_env *env)
 {
 	char	**envp;
 	char	*path;
@@ -77,24 +77,17 @@ static void	child_exec(t_node *node, t_env *env)
 
 void	execute_command(t_node *node, t_env *env)
 {
-	struct sigaction	sa_ignore;
-	struct sigaction	sa_default;
 	pid_t				pid;
 	char				*exit_status;
 	int					status;
 
-	if (!node->cmd || !node->cmd[0])
-		return ;
-	signal_handlers(&sa_ignore, &sa_default);
-	block_signals(&sa_ignore);
+	if (!node || !node->cmd || !node->cmd[0])
+		return;
 	pid = ft_fork();
 	if (pid < 0)
 		return ;
 	if (pid == 0)
-	{
-		restore_signals(&sa_default);
-		child_exec(node, env);
-	}
+		child_execute(node, env);
 	else
 	{
 		waitpid(pid, &status, 0);

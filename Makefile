@@ -6,14 +6,14 @@
 #    By: mkoualil <mkoualil@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/05/10 16:12:48 by mregrag           #+#    #+#              #
-#    Updated: 2024/07/17 01:00:25 by mregrag          ###   ########.fr        #
+#    Updated: 2024/07/21 02:55:59 by mregrag          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME		= minishell
 LIBFT		= libft.a
 LIBRAIRIE	= "lib/libft"
-FSS		= fsanitize=address -fno-omit-frame-pointer -g2
+FSS		=
 CC		= cc
 CFLAGS		= -Wall -Wextra -Werror
 
@@ -37,28 +37,30 @@ ENV		:=	src/env/env_utils.c \
 			src/env/init_env.c \
 			src/env/utils.c
 
-EXECUCTION	:=	src/execution/exe_utils.c \
-			src/execution/exec_builtin.c \
-			src/execution/exec_cmd.c \
-			src/execution/exec_pip.c \
+EXECUCTION	:=	src/execution/execute_builtin.c \
+			src/execution/execute_command.c \
+			src/execution/execute_pip.c \
 			src/execution/executing.c \
 			src/execution/redirections.c \
-			src/execution/redire_utils.c
+			src/execution/redire_utils.c \
+			src/execution/heredoc.c
 
 EXPANSION	:=	src/expansion/expansion.c \
 			src/expansion/handle_dolar.c \
 			src/expansion/expansion_utils.c \
-			src/expansion/expansion_utils1.c
+			src/expansion/expansion_utils1.c \
 
-PARSING		:=	src/parsing/parcing.c \
+PARSING		:=	src/parsing/parcing_tokens.c \
 			src/parsing/parcing_utils.c
 
 TOKENIZING	:=	src/tokens/tokinize.c \
 			src/tokens/tokinize_lst.c \
 			src/tokens/tokinize_utils.c \
 			src/tokens/tokinize_utils1.c
+
 UTILS		:=	src/utils/error_exit.c \
-			src/utils/syntax_errors.c
+			src/utils/syntax_errors.c\
+			src/utils/system_utils.c
 
 MAIN		:=	src/main.c
 

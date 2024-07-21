@@ -6,12 +6,11 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/24 21:23:34 by mregrag           #+#    #+#             */
-/*   Updated: 2024/07/15 02:51:55 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/07/20 12:07:39 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
-#include <stdio.h>
 
 t_node	*new_node(t_type type)
 {
@@ -24,7 +23,8 @@ t_node	*new_node(t_type type)
 	node->cmd = NULL;
 	node->left = NULL;
 	node->right = NULL;
-	node->flag = 0;
+	node->fd_in = 0;
+	node->fd_out = 1;
 	return (node);
 }
 

@@ -6,7 +6,7 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 21:20:59 by mregrag           #+#    #+#             */
-/*   Updated: 2024/07/15 20:18:59 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/07/21 06:06:24 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,22 @@
 
 int	g_sig;
 
+void	cleanup_fds(t_node *node)
+{
+	if (!node)
+		return;
+	if (node->fd_in > 2)
+		close(node->fd_in);
+	if (node->fd_out > 2)
+		close(node->fd_out);
+	cleanup_fds(node->left);
+	cleanup_fds(node->right);
+}
+
 int	main(int argc, char **argv, char **env)
 {
 	char	*input;
-	t_node	*tree;
+	t_node	*root;
 	t_env	*envp;
 	t_token	*tokens;
 	int		in_out[2];
@@ -35,9 +47,11 @@ int	main(int argc, char **argv, char **env)
 		if (*input)
 			add_history(input);
 		tokens = tokenize_input(input, envp);
-		tree = parse_tokens(tokens, envp);
+		root = parse_tokens(tokens, envp);
 		get_std_fds(in_out);
-		(executing(tree, envp), free_tree(tree));
+		Preorder_traversal(root, envp);
+		(executing(root, envp), free_tree(root));
+		cleanup_fds(root);
 		set_std_fds(in_out[0], in_out[1]);
 	}
 	return (free_env(envp), 0);

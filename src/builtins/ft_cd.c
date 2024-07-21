@@ -6,7 +6,7 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/18 18:49:44 by mregrag           #+#    #+#             */
-/*   Updated: 2024/07/11 19:29:46 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/07/21 06:41:00 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,8 +47,8 @@ int	ft_cd(t_node *node, t_env *env)
 {
 	char	s[PATH_MAX];
 	char	new[PATH_MAX];
-	char	*path;
-	char	*old_pwd;
+	char	*path = NULL;
+	char	*old_pwd = NULL;
 
 	if (!node->cmd[1])
 		path = home(env);
@@ -57,10 +57,12 @@ int	ft_cd(t_node *node, t_env *env)
 	if (!is_directory(path))
 	{
 		print_error("minish", "cd", strerror(errno), NULL);
+		exit_status(1, env);
 		return (1);
 	}
 	old_pwd = getcwd(s, PATH_MAX);
-	set_env_var(env, "OLDPWD", old_pwd);
+	if (old_pwd)
+		set_env_var(env, "OLDPWD", old_pwd);
 	if (chdir(path) < 0)
 		return (1);
 	path = getcwd(new, PATH_MAX);

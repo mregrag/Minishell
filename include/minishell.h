@@ -6,7 +6,7 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/10 16:16:44 by mregrag           #+#    #+#             */
-/*   Updated: 2024/07/16 02:27:37 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/07/21 04:04:01 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,25 +53,14 @@ typedef struct s_token
 	struct s_token	*next;
 }	t_token;
 
-typedef struct s_fd
-{
-	int		fd[2];
-	int		fdh;
-	int			fdh_left;
-	int			fdh_right;
-	int		fd_left[2];
-	int		fd_right[2];
-	int		in;
-	int		out;
-}	t_fd;
-
 typedef struct s_node
 {
 	char			**cmd;
 	t_type			type;
 	t_env			*env;
-	int			fd[2];
 	int				flag;
+	int				fd_in;
+	int				fd_out;
 	struct s_node	*left;
 	struct s_node	*right;
 }	t_node;
@@ -79,6 +68,7 @@ typedef struct s_node
 extern int	g_sig;
 
 void	malloc_error(void);
+void	Preorder_traversal(t_node *node, t_env *env);
 //------------------------tokens------------------------
 t_token	*tokenize_input(char *input, t_env *env);
 t_token	*new_token(char *value, t_type type);
@@ -93,6 +83,7 @@ t_type	get_operator_type(char *str);
 int		check_operators(char *str);
 int		is_operator(char *str);
 int		check_quotes(char **line);
+int	handle_redirections(t_node *node);
 
 //------------------------parcing------------------------
 
@@ -122,7 +113,6 @@ int		ft_pwd(void);
 
 // ----------------------------env---------------------------------
 
- int fd_in(t_node *node);
 void	increment_shlvl(t_env *env);
 void	init_env(t_env **env, char **envp);
 void	print_env(t_env *env);
@@ -138,28 +128,21 @@ char	*get_env_var(t_env *env, char *name);
 //---------------------------execution------------------------------------
 
 int	ft_redir(t_node *node , t_env *env);
-t_node	*find_heredoc(t_node *node);
 char	*get_path(char *cmd, t_env *env);
 void	executing(t_node *node, t_env *env);
 void	execute_command(t_node *node, t_env *env);
 void	heredoc_content(t_node *node, int fd, char *content, t_env *env);
-void execute_node(t_node *node, t_env *env);
 int		execute_builtin(t_node *node, t_env *env);
 int	heredoc(t_node *node, t_env *env);
 int		check_file(t_node *node);
 int		ft_pipe(int ends[2]);
 int		ft_dup2(int filde1, int filde2);
-int		redirections(t_node *node, t_env *env);
 int		ft_open_append(char *file);
 int		ft_open_output(char *file);
 int		ft_open_input(char *file);
-int		redir_input(t_node *node, t_env *env, int *fd);
-int		redire_output(t_node *node, int *fd);
-void		exec_pipe(t_node *node, t_env *env);
+void	execute_pipe(t_node *node, t_env *env);
 pid_t	ft_fork(void);
 int		ft_dup(int oldfd);
-int		ft_dup2(int oldfd, int newfd);
-int		ft_pipe(int pipefd[2]);
 
 //---------------------expansion-------------------------------
 

@@ -6,7 +6,7 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 05:26:24 by mregrag           #+#    #+#             */
-/*   Updated: 2024/07/15 23:13:44 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/07/21 04:16:45 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,38 +14,18 @@
 
 void	heredoc_content(t_node *node, int fd, char *content, t_env *env)
 {
-	char	*exp_str;
+	char	*new_content;
 
 	if (node->flag == 1)
 		ft_putendl_fd(content, fd);
 	else
 	{
-		exp_str = expansion_content(content, env);
-		if (exp_str)
-			(ft_putendl_fd(exp_str, fd), free(exp_str));
+		new_content = expansion_content(content, env);
+		if (new_content)
+			(ft_putendl_fd(new_content, fd), free(new_content));
 	}
 }
 
-t_node	*find_heredoc(t_node *node)
-{
-	t_node	*current;
-
-	current = node;
-	while (current && current->left)
-	{
-		if (current->left->type  == T_HERDOC || current->right->type == T_HERDOC)
-			return (current);
-		current = current->right;
-	}
-	current = node;
-	while (current && current->left)
-	{
-		if (current->right->type  == T_HERDOC)
-			return (current);
-		current = current->left;
-	}
-	return (NULL);
-}
 int	ft_open_input(char *file)
 {
 	int	fd;

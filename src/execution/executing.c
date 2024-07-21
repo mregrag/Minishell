@@ -6,7 +6,7 @@
 /*   By: mkoualil <mkoualil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/17 22:24:25 by mregrag           #+#    #+#             */
-/*   Updated: 2024/07/15 20:02:44 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/07/21 05:50:14 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,15 +21,11 @@ void	executing(t_node *node, t_env *env)
 	tcgetattr(STDIN_FILENO, &term);
 	if (node->type == T_CMD && execute_builtin(node, env))
 		return ;
-	if (is_redirection(node->type))
-	{
-		if (redirections(node, env))
-			while (node->left)
-				node = node->left;
-	}
-	if (node->type == T_PIPE)
-		exec_pipe(node, env);
-	else
-		execute_command(node, env);
+	else if (is_redirection(node->type) && handle_redirections(node))
+		while (node && node->left)
+			node = node->left;
+	else if (node->type == T_PIPE)
+		execute_pipe(node, env);
+	execute_command(node, env);
 	tcsetattr(STDIN_FILENO, TCSANOW, &term);
 }
