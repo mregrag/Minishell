@@ -6,7 +6,7 @@
 /*   By: mkoualil <mkoualil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/17 22:24:25 by mregrag           #+#    #+#             */
-/*   Updated: 2024/07/21 23:38:16 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/07/22 05:52:24 by mkoualil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 void	executing(t_node *node, t_env *env)
 {
 	struct termios	term;
-
+	
 	if (!node || !env)
 		return ;
 	tcgetattr(STDIN_FILENO, &term);

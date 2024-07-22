@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute_pip.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mkoualil <mkoualil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/24 22:43:10 by mregrag           #+#    #+#             */
-/*   Updated: 2024/07/22 01:18:52 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/07/22 03:09:05 by mkoualil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,15 @@ static void	wait_for_children(pid_t pid1, pid_t pid2, t_env *env, int *pipfd)
 	}
 }
 
+
+void unblock_signals() {
+    sigset_t set;
+    sigemptyset(&set);
+    sigaddset(&set, SIGINT); // Unblock SIGINT
+    sigaddset(&set, SIGQUIT); // Unblock SIGQUIT
+    sigprocmask(SIG_UNBLOCK, &set, NULL); // Apply signal unblocking
+}
+
 void	execute_pipe(t_node *node, t_env *env)
 {
 	pid_t					pid1;
@@ -65,15 +74,18 @@ void	execute_pipe(t_node *node, t_env *env)
 		(close(pipfd[0]), close(pipfd[1]));
 		return ;
 	}
-	if (pid1 == 0)
+	if (pid1 == 0){
 		execute_left_command(node->left, env, pipfd);
+
+	}
 	pid2 = ft_fork();
 	if (pid2 == -1)
 	{
 		(close(pipfd[0]), close(pipfd[1]));
 		return ;
 	}
-	if (pid2 == 0)
+	if (pid2 == 0){
 		execute_right_command(node->right, env, pipfd);
+	}
 	wait_for_children(pid1, pid2, env, pipfd);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   signals2.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mkoualil <mkoualil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/10 23:38:35 by mregrag           #+#    #+#             */
-/*   Updated: 2024/07/22 01:19:33 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/07/22 04:59:07 by mkoualil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,10 @@ void	block_signals(struct sigaction *sa_ignore)
 {
 	sigaction(SIGINT, sa_ignore, NULL);
 	sigaction(SIGQUIT, sa_ignore, NULL);
+
 }
+
+
 
 void	restore_signals(struct sigaction *sa_default)
 {

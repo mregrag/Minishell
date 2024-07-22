@@ -6,7 +6,7 @@
 /*   By: mkoualil <mkoualil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/17 22:58:39 by mregrag           #+#    #+#             */
-/*   Updated: 2024/07/22 01:30:08 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/07/22 05:53:04 by mkoualil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,11 +19,12 @@ static int	update_status(int status)
 	if (WIFSIGNALED(status))
 	{
 		if (128 + WTERMSIG(status) == 130)
-			ft_putstr_fd("\n", 2);
+			ft_putstr_fd("\n", 1);
 		else if (128 + WTERMSIG(status) == 131)
-			ft_putstr_fd("Quit: 3\n", 2);
-		return (128 + WTERMSIG(status));
+			ft_putstr_fd("Quit: 3\n", 1);
 	}
+		return (128 + WTERMSIG(status));
+
 	if (WIFEXITED(status))
 		return (WEXITSTATUS(status));
 	return (1);
