@@ -6,13 +6,13 @@
 /*   By: mkoualil <mkoualil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 15:47:14 by mregrag           #+#    #+#             */
-/*   Updated: 2024/07/19 06:31:24 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/07/22 14:09:34 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-void	ctrl_c(int signum)
+static void	ctrl_c(int signum)
 {
 	(void)signum;
 	if (g_sig != -1)
@@ -24,7 +24,7 @@ void	ctrl_c(int signum)
 		g_sig = 1;
 }
 
-void	set_terminal_print_off(void)
+static void	set_terminal_print_off(void)
 {
 	struct termios	term;
 
@@ -33,20 +33,20 @@ void	set_terminal_print_off(void)
 	tcsetattr(1, 0, &term);
 }
 
+static void	do_sigint_heredoc(int signum)
+{
+	(void)signum;
+	ft_putstr_fd("\n", 1);
+	close(0);
+	g_sig = -1;
+}
+
 void	setup_signal(t_env *envp)
 {
 	(void)*envp;
 	set_terminal_print_off();
 	signal(SIGINT, ctrl_c);
 	signal(SIGQUIT, SIG_IGN);
-}
-
-void	do_sigint_heredoc(int signum)
-{
-	(void)signum;
-	ft_putstr_fd("\n", 1);
-	close(0);
-	g_sig = -1;
 }
 
 void	set_signal_heredoc(void)

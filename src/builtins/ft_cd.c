@@ -6,18 +6,17 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/18 18:49:44 by mregrag           #+#    #+#             */
-/*   Updated: 2024/07/22 01:29:10 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/07/22 14:56:15 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-static	void	cd_err(t_env *env)
+static	void	cd_err(void)
 {
 	ft_putstr_fd("cd: error retrieving current directory: getcwd: ", 2);
 	ft_putstr_fd("cannot access parent directories: ", 2);
 	ft_putstr_fd("No such file or directory\n", 2);
-	set_env_var(env, "?", "1");
 }
 
 static	char	*home(t_env *env)
@@ -52,10 +51,7 @@ static int	change_directory(char *path, t_env *env, char *old_pwd)
 		return (1);
 	new_pwd = getcwd(new, PATH_MAX);
 	if (!new_pwd)
-	{
-		cd_err(env);
-		return (1);
-	}
+		return (cd_err(), 1);
 	set_env_var(env, "OLDPWD", old_pwd);
 	set_env_var(env, "PWD", new_pwd);
 	exit_status(0, env);

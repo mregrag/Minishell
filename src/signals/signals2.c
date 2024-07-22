@@ -6,7 +6,7 @@
 /*   By: mkoualil <mkoualil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/10 23:38:35 by mregrag           #+#    #+#             */
-/*   Updated: 2024/07/22 04:59:07 by mkoualil         ###   ########.fr       */
+/*   Updated: 2024/07/22 13:59:51 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,10 +16,7 @@ void	block_signals(struct sigaction *sa_ignore)
 {
 	sigaction(SIGINT, sa_ignore, NULL);
 	sigaction(SIGQUIT, sa_ignore, NULL);
-
 }
-
-
 
 void	restore_signals(struct sigaction *sa_default)
 {

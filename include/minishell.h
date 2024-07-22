@@ -6,7 +6,7 @@
 /*   By: mkoualil <mkoualil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/10 16:16:44 by mregrag           #+#    #+#             */
-/*   Updated: 2024/07/22 05:52:44 by mkoualil         ###   ########.fr       */
+/*   Updated: 2024/07/22 14:46:59 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,6 @@ typedef struct s_node
 	t_type			type;
 	t_env			*env;
 	int				flag;
-	int				is_last;
 	int				fd_in;
 	int				fd_out;
 	struct s_node	*left;
@@ -84,7 +83,7 @@ t_type	get_operator_type(char *str);
 int		check_operators(char *str);
 int		is_operator(char *str);
 int		check_quotes(char **line);
-int	handle_redirections(t_node *node);
+int		handle_redirections(t_node *node);
 
 //------------------------parcing------------------------
 
@@ -98,7 +97,6 @@ t_node	*parse_redirection(t_token *tokens, t_env *env);
 void	free_tree(t_node *node);
 void	creat_cmd(t_node *node, t_token *tokens, int count, t_env *env);
 char	*extract_word(char **input);
-int		check_syntax(t_token *tokens);
 
 //-----------------------------bultin---------------------------------
 
@@ -114,8 +112,8 @@ int		ft_pwd(void);
 
 // ----------------------------env---------------------------------
 
-void	increment_shlvl(t_env *env);
 void	initialize_enviroment(t_env **env, char **envp);
+void	increment_shlvl(t_env *env);
 void	print_env(t_env *env);
 void	set_env_var(t_env *env, char *name, char *value);
 void	unset_env_var(t_env *env, char *name);
@@ -128,22 +126,20 @@ char	*get_env_var(t_env *env, char *name);
 
 //---------------------------execution------------------------------------
 
-int	ft_redir(t_node *node , t_env *env);
 char	*get_path(char *cmd, t_env *env);
 void	executing(t_node *node, t_env *env);
 void	execute_command(t_node *node, t_env *env);
+void	execute_pipe(t_node *node, t_env *env);
 void	heredoc_content(t_node *node, int fd, char *content, t_env *env);
 int		execute_builtin(t_node *node, t_env *env);
-int	heredoc(t_node *node, t_env *env);
-int		check_file(t_node *node);
+int		heredoc(t_node *node, t_env *env);
 int		ft_pipe(int ends[2]);
 int		ft_dup2(int filde1, int filde2);
+int		ft_dup(int oldfd);
 int		ft_open_append(char *file);
 int		ft_open_output(char *file);
 int		ft_open_input(char *file);
-void	execute_pipe(t_node *node, t_env *env);
 pid_t	ft_fork(void);
-int		ft_dup(int oldfd);
 
 //---------------------expansion-------------------------------
 
@@ -159,14 +155,14 @@ char	*handle_normal(char *ret, char *str, size_t *i);
 char	*handle_str(char *ret, char *str, size_t *i);
 
 //-----------------------signals------------------
-void	setup_signal(t_env *envp);
-void	exit_status(int status, t_env *env);
 void	block_signals(struct sigaction *sa_ignore);
-void	set_signal_heredoc(void);
 void	restore_signals(struct sigaction *sa_default);
 void	signal_handlers(struct sigaction *sa_ig, struct sigaction *sa_def);
-void	signal_middle_exec(t_env *env);
 void	handle_eof(t_env *envp);
-int		exec_err(char *path, char *cmd, t_env *env);
+void	set_signal_heredoc(void);
+void	setup_signal(t_env *envp);
+void	exit_status(int status, t_env *env);
 void	cleanup_fds(t_node *node);
+int		exec_err(char *path, char *cmd, t_env *env);
+int		check_syntax(t_token *tokens);
 #endif

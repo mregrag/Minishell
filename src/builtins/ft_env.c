@@ -6,27 +6,26 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/18 18:50:02 by mregrag           #+#    #+#             */
-/*   Updated: 2024/07/08 20:40:50 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/07/22 15:18:20 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
+#include <stdio.h>
 
 int	ft_env(t_node *node, t_env *env)
 {
 	char	*path;
 
 	path = get_path(node->cmd[0], env);
+	// printf("path = %s\n", path);
 	if (node->cmd[1] || !is_var_in_env(env, "PATH"))
 	{
 		print_error("env", node->cmd[1], "No such file or directory", NULL);
 		return (1);
 	}
 	if (path)
-	{
-		set_env_var(env, "_", path);
-		free(path);
-	}
+		(set_env_var(env, "_", path), free(path));
 	print_env(env);
 	return (1);
 }
