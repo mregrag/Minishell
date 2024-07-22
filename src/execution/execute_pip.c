@@ -6,7 +6,7 @@
 /*   By: mkoualil <mkoualil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/24 22:43:10 by mregrag           #+#    #+#             */
-/*   Updated: 2024/07/22 03:09:05 by mkoualil         ###   ########.fr       */
+/*   Updated: 2024/07/22 06:12:45 by mkoualil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,16 +45,10 @@ static void	wait_for_children(pid_t pid1, pid_t pid2, t_env *env, int *pipfd)
 		set_env_var(env, "?", exit_status);
 		free(exit_status);
 	}
+	(void) env;
 }
 
 
-void unblock_signals() {
-    sigset_t set;
-    sigemptyset(&set);
-    sigaddset(&set, SIGINT); // Unblock SIGINT
-    sigaddset(&set, SIGQUIT); // Unblock SIGQUIT
-    sigprocmask(SIG_UNBLOCK, &set, NULL); // Apply signal unblocking
-}
 
 void	execute_pipe(t_node *node, t_env *env)
 {
