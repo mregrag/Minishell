@@ -6,7 +6,7 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/18 04:37:41 by mregrag           #+#    #+#             */
-/*   Updated: 2024/07/18 04:38:01 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/07/21 20:43:48 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,4 +50,16 @@ int	ft_dup(int oldfd)
 	if (newfd == -1)
 		print_error("minish", "dup", strerror(errno), NULL);
 	return (newfd);
+}
+
+void	cleanup_fds(t_node *node)
+{
+	if (!node)
+		return ;
+	if (node->fd_in > 2)
+		close(node->fd_in);
+	if (node->fd_out > 2)
+		close(node->fd_out);
+	cleanup_fds(node->left);
+	cleanup_fds(node->right);
 }

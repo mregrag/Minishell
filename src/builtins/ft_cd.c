@@ -6,7 +6,7 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/18 18:49:44 by mregrag           #+#    #+#             */
-/*   Updated: 2024/07/21 06:41:00 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/07/22 01:29:10 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,32 +43,50 @@ static int	is_directory(const char *path)
 	return (S_ISDIR(statbuf.st_mode));
 }
 
+static int	change_directory(char *path, t_env *env, char *old_pwd)
+{
+	char	new[PATH_MAX];
+	char	*new_pwd;
+
+	if (chdir(path) < 0)
+		return (1);
+	new_pwd = getcwd(new, PATH_MAX);
+	if (!new_pwd)
+	{
+		cd_err(env);
+		return (1);
+	}
+	set_env_var(env, "OLDPWD", old_pwd);
+	set_env_var(env, "PWD", new_pwd);
+	exit_status(0, env);
+	return (1);
+}
+
 int	ft_cd(t_node *node, t_env *env)
 {
-	char	s[PATH_MAX];
-	char	new[PATH_MAX];
-	char	*path = NULL;
-	char	*old_pwd = NULL;
+	char	old[PATH_MAX];
+	char	*path;
+	char	*allocated_path;
+	char	*old_pwd;
 
+	path = NULL;
+	allocated_path = NULL;
+	old_pwd = getcwd(old, PATH_MAX);
 	if (!node->cmd[1])
-		path = home(env);
+	{
+		allocated_path = home(env);
+		if (!allocated_path)
+			return (1);
+		path = allocated_path;
+	}
 	else
 		path = node->cmd[1];
 	if (!is_directory(path))
 	{
 		print_error("minish", "cd", strerror(errno), NULL);
-		exit_status(1, env);
-		return (1);
+		return ((exit_status(1, env), free(allocated_path)), 1);
 	}
-	old_pwd = getcwd(s, PATH_MAX);
-	if (old_pwd)
-		set_env_var(env, "OLDPWD", old_pwd);
-	if (chdir(path) < 0)
-		return (1);
-	path = getcwd(new, PATH_MAX);
-	set_env_var(env, "PWD", path);
-	if (!path)
-		return (cd_err(env), 1);
-	exit_status(0, env);
-	return (1);
+	if (change_directory(path, env, old_pwd))
+		return (free(allocated_path), 1);
+	return (free(allocated_path), 1);
 }

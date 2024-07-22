@@ -6,7 +6,7 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/24 22:43:10 by mregrag           #+#    #+#             */
-/*   Updated: 2024/07/21 06:05:18 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/07/22 01:18:52 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,10 +49,14 @@ static void	wait_for_children(pid_t pid1, pid_t pid2, t_env *env, int *pipfd)
 
 void	execute_pipe(t_node *node, t_env *env)
 {
-	int		pipfd[2];
-	pid_t	pid1;
-	pid_t	pid2;
+	pid_t					pid1;
+	pid_t					pid2;
+	struct sigaction	sa_ignore;
+	struct sigaction	sa_default;
+	int	pipfd[2];
 
+	signal_handlers(&sa_ignore, &sa_default);
+	block_signals(&sa_ignore);
 	if (ft_pipe(pipfd) == -1)
 		return ;
 	pid1 = ft_fork();

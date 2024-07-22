@@ -6,7 +6,7 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/01 18:16:01 by mregrag           #+#    #+#             */
-/*   Updated: 2024/07/13 00:05:50 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/07/21 23:08:17 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ void	increment_shlvl(t_env *env)
 	}
 }
 
-int	is_var_in_env(t_env *env, const char *var_name)
+int	is_var_in_env(t_env *env, char *var_name)
 {
 	t_list	*current;
 	size_t	var_len;
@@ -55,7 +55,7 @@ int	is_var_in_env(t_env *env, const char *var_name)
 	return (0);
 }
 
-void	init_env(t_env **env, char **envp)
+void	initialize_enviroment(t_env **env, char **envp)
 {
 	char	*tmp;
 	char	cwd[PATH_MAX];

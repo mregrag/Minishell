@@ -6,53 +6,51 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 21:20:59 by mregrag           #+#    #+#             */
-/*   Updated: 2024/07/21 06:06:24 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/07/22 01:31:33 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-int	g_sig;
-
-void	cleanup_fds(t_node *node)
+static void	process_command(char *input, t_env *envp, int in_out[2])
 {
-	if (!node)
-		return;
-	if (node->fd_in > 2)
-		close(node->fd_in);
-	if (node->fd_out > 2)
-		close(node->fd_out);
-	cleanup_fds(node->left);
-	cleanup_fds(node->right);
+	t_node	*root;
+	t_token	*tokens;
+
+	if (*input)
+		add_history(input);
+	tokens = tokenize_input(input, envp);
+	root = parse_tokens(tokens, envp);
+	get_std_fds(in_out);
+	preorder_traversal(root, envp);
+	if (g_sig == 0)
+		executing(root, envp);
+	free_tree(root);
+	cleanup_fds(root);
+	set_std_fds(in_out[0], in_out[1]);
 }
 
 int	main(int argc, char **argv, char **env)
 {
 	char	*input;
-	t_node	*root;
 	t_env	*envp;
-	t_token	*tokens;
 	int		in_out[2];
 
-	((void)argv, (void)argc);
-	init_env(&envp, env);
+	(void)argv;
+	(void)argc;
+	initialize_enviroment(&envp, env);
 	while (1)
 	{
 		setup_signal(envp);
 		input = readline("minish-1.0$ ");
 		if (g_sig == 1 || g_sig == -1)
-			(exit_status(1, envp), g_sig = 0);
+		{
+			exit_status(1, envp);
+			g_sig = 0;
+		}
 		if (!input)
 			handle_eof(envp);
-		if (*input)
-			add_history(input);
-		tokens = tokenize_input(input, envp);
-		root = parse_tokens(tokens, envp);
-		get_std_fds(in_out);
-		Preorder_traversal(root, envp);
-		(executing(root, envp), free_tree(root));
-		cleanup_fds(root);
-		set_std_fds(in_out[0], in_out[1]);
+		process_command(input, envp, in_out);
 	}
 	return (free_env(envp), 0);
 }

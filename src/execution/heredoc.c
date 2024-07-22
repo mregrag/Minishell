@@ -6,7 +6,7 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/18 04:11:35 by mregrag           #+#    #+#             */
-/*   Updated: 2024/07/21 04:55:10 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/07/21 18:53:07 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,23 +17,23 @@ static int	process_heredoc_content(t_node *node, int *fd_heredoc, t_env *env)
 	char	*content;
 	char	*dilim;
 
+	dilim = expansion_dilim(node->cmd[0]);
 	while (1)
 	{
 		content = readline("> ");
-		if (!content)
-			return (-1);
 		if (!ttyname(0))
-			return (free(content), -1);
-		dilim = expansion_dilim(node->cmd[0]);
+			return (free(content), free(dilim), -1);
+		if (!content)
+			return (free(dilim), 0);
 		if (!dilim || !ft_strcmp(content, dilim))
 		{
-			(free(content), free(dilim));
+			(free(content));
 			break ;
 		}
 		heredoc_content(node, fd_heredoc[1], content, env);
-		(free(content), free(dilim));
+		free(content);
 	}
-	return (0);
+	return (free(dilim), 0);
 }
 
 int	heredoc(t_node *node, t_env *env)
