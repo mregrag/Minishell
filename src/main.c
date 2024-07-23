@@ -26,8 +26,8 @@ static void	process_command(char *input, t_env *envp, int in_out[2])
 	preorder_traversal_input_output(root);
 	if (g_sig == 0)
 		executing(root, envp);
-	free_tree(root);
 	cleanup_fds(root);
+	free_tree(root);
 	set_std_fds(in_out[0], in_out[1]);
 }
 

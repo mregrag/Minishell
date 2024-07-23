@@ -15,7 +15,8 @@ LIBFT		= libft.a
 LIBRAIRIE	= "lib/libft"
 FSS		=
 CC		= cc
-CFLAGS		= -Wall -Wextra -Werror
+CFLAGS		= -Wall -Wextra -Werror -fsanitize=address -fno-omit-frame-pointer -g2
+
 HEADER		= ./include/minishell.h
 RM		= rm -rf
 
@@ -80,12 +81,12 @@ all: $(NAME)
 $(LIBFT):
 	@make -C $(LIBRAIRIE)
 
+#$(NAME): $(LIBFT) $(OBJS)
+#	@$(CC) -o $(NAME) $(OBJS) -L$(LIBRAIRIE) -lft -lreadline $(READLINE_LIB)
+
+
 $(NAME): $(LIBFT) $(OBJS)
-	@$(CC) -o $(NAME) $(OBJS) -L$(LIBRAIRIE) -lft -lreadline $(READLINE_LIB)
-
-
-# $(NAME): $(LIBFT) $(OBJS)
-# 	@$(CC) $(CFLAGS) -o $(NAME) $(OBJS) -L$(LIBRAIRIE) -lft ${READLINE_LIB}
+	@$(CC) $(CFLAGS) -o $(NAME) $(OBJS) -L$(LIBRAIRIE) -lft ${READLINE_LIB}
 
 %.o: %.c $(HEADER)
 	$(CC) $(CFLAGS) $(READLINE_INC) -c $< -o $@

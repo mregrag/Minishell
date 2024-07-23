@@ -19,9 +19,6 @@ char	*expansion_input(char *str, t_env *env)
 	char	*temp;
 
 	i = 0;
-	ret = strdup("");
-	if (!ret)
-		return (NULL);
 	while (str[i])
 	{
 		temp = ret;

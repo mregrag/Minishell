@@ -21,35 +21,57 @@ void	exit_status(int status, t_env *env)
 	free(exit_stat);
 }
 
-int	exec_err(char *path, char *cmd, t_env *env)
+int exec_err(char *path, char *cmd, t_env *env)
 {
-	struct stat	path_stat;
-	char		*path_env;
+    struct stat path_stat;
+    char *path_env;
+    int ret = 0;
 
-	if (!cmd || !*cmd)
-		return (print_error("minishell", cmd, "command not found", NULL), 127);
-	path_env = get_env_var(env, "PATH");
-	if (!path_env && !ft_strchr(cmd, '/'))
-	{
-		print_error("minishell", cmd, "No such file or directory", NULL);
-		return (127);
-	}
-	if (!*path_env && !ft_strchr(cmd, '/'))
-		return (print_error("minishell", cmd, "command not found", NULL), 127);
-	else if (!ft_strchr(cmd, '/'))
-		return (print_error("minishell", cmd, "command not found", NULL), 127);
-	if (access(path, F_OK) == -1)
-	{
-		print_error("minishell", cmd, "No such file or directory", NULL);
-		return (127);
-	}
-	if (access(path, X_OK) == -1)
-		return (print_error("minishell", cmd, "Permission denied", NULL), 126);
-	if (stat(path, &path_stat) == 0 && S_ISDIR(path_stat.st_mode))
-		return (print_error("minishell", cmd, "is a directory", NULL), 126);
-	return (0);
+    if (!cmd || !*cmd)
+    {
+        print_error("minishell", cmd, "command not found", NULL);
+        return 127;
+    }
+
+    path_env = get_env_var(env, "PATH");
+    if (!path_env && !ft_strchr(cmd, '/'))
+    {
+        print_error("minishell", cmd, "No such file or directory", NULL);
+        return 127;
+    }
+
+    if (!*path_env && !ft_strchr(cmd, '/'))
+    {
+        free(path_env);  // Free path_env before returning
+        print_error("minishell", cmd, "command not found", NULL);
+        return 127;
+    }
+    else if (!ft_strchr(cmd, '/'))
+    {
+        free(path_env);  // Free path_env before returning
+        print_error("minishell", cmd, "command not found", NULL);
+        return 127;
+    }
+
+    if (access(path, F_OK) == -1)
+    {
+        print_error("minishell", cmd, "No such file or directory", NULL);
+        ret = 127;
+    }
+    else if (access(path, X_OK) == -1)
+    {
+        print_error("minishell", cmd, "Permission denied", NULL);
+        ret = 126;
+    }
+    else if (stat(path, &path_stat) == 0 && S_ISDIR(path_stat.st_mode))
+    {
+        print_error("minishell", cmd, "is a directory", NULL);
+        ret = 126;
+    }
+
+    free(path_env);  // Free path_env before returning
+    return ret;
 }
-
 void	malloc_error(void)
 {
 	print_error("minish", "malloc", strerror(errno), NULL);
