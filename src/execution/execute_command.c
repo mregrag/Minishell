@@ -6,7 +6,7 @@
 /*   By: mkoualil <mkoualil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/17 22:58:39 by mregrag           #+#    #+#             */
-/*   Updated: 2024/07/22 15:10:07 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/07/22 18:39:10 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,6 +100,6 @@ void	execute_command(t_node *node, t_env *env)
 		waitpid(pid, &status, 0);
 		exit_status = ft_itoa(update_status(status));
 		(set_env_var(env, "?", exit_status), free(exit_status));
+		set_env_var(env, "_", node->cmd[ft_strlen_arg(node->cmd) - 1]);
 	}
-	// set_env_var(env, "_", node->cmd[ft_strlen_arg(node->cmd) - 1]);
 }

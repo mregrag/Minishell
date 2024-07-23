@@ -6,7 +6,7 @@
 /*   By: mkoualil <mkoualil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/24 22:43:10 by mregrag           #+#    #+#             */
-/*   Updated: 2024/07/22 13:58:55 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/07/22 18:18:16 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,7 @@ void	execute_pipe(t_node *node, t_env *env)
 	pid_t				pid2;
 	int					pipfd[2];
 
+	set_env_var(env, "_", "");
 	signal_handlers(&sa_ignore, &sa_default);
 	block_signals(&sa_ignore);
 	if (ft_pipe(pipfd) == -1)

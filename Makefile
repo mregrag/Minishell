@@ -6,7 +6,7 @@
 #    By: mkoualil <mkoualil@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/05/10 16:12:48 by mregrag           #+#    #+#              #
-#    Updated: 2024/07/21 02:55:59 by mregrag          ###   ########.fr        #
+#    Updated: 2024/07/22 19:07:14 by mregrag          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,9 +16,6 @@ LIBRAIRIE	= "lib/libft"
 FSS		=
 CC		= cc
 CFLAGS		= -Wall -Wextra -Werror
-
-
-
 HEADER		= ./include/minishell.h
 RM		= rm -rf
 
@@ -83,14 +80,15 @@ all: $(NAME)
 $(LIBFT):
 	@make -C $(LIBRAIRIE)
 
-# $(NAME): $(LIBFT) $(OBJS)
-# 	@$(CC) -o $(NAME) $(OBJS) -L$(LIBRAIRIE) -lft -lreadline
-
 $(NAME): $(LIBFT) $(OBJS)
-	@$(CC) $(CFLAGS) -o $(NAME) $(OBJS) -L$(LIBRAIRIE) -lft ${READLINE_LIB}
+	@$(CC) -o $(NAME) $(OBJS) -L$(LIBRAIRIE) -lft -lreadline $(READLINE_LIB)
+
+
+# $(NAME): $(LIBFT) $(OBJS)
+# 	@$(CC) $(CFLAGS) -o $(NAME) $(OBJS) -L$(LIBRAIRIE) -lft ${READLINE_LIB}
 
 %.o: %.c $(HEADER)
-	$(CC) $(CFLAGS) ${READLINE_INC} -c $< -o $@
+	$(CC) $(CFLAGS) $(READLINE_INC) -c $< -o $@
 
 clean:
 	@make clean -C $(LIBRAIRIE)

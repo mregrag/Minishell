@@ -6,12 +6,11 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 05:26:24 by mregrag           #+#    #+#             */
-/*   Updated: 2024/07/22 15:27:53 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/07/23 13:05:57 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
-#include <sys/fcntl.h>
 
 void	heredoc_content(t_node *node, int fd, char *content, t_env *env)
 {
@@ -70,4 +69,21 @@ int	ft_open_append(char *file)
 	if (fd == -1)
 		print_error("minish", (char *)file, strerror(errno), NULL);
 	return (fd);
+}
+
+int	dfs_handle_redirections(t_node *node, t_env *env)
+{
+	if (!node)
+		return (1);
+	if (node->fd_in != 0)
+		if (node->fd_in == -1 || ft_dup2(node->fd_in, STDIN_FILENO) < 0)
+			return (exit_status(1, env), 0);
+	if (node->fd_out != 1)
+		if (node->fd_out == -1 || ft_dup2(node->fd_out, STDOUT_FILENO) < 0)
+			return (exit_status(1, env), 0);
+	if (!dfs_handle_redirections(node->left, env))
+		return (0);
+	if (!dfs_handle_redirections(node->right, env))
+		return (0);
+	return (1);
 }

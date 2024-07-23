@@ -6,7 +6,7 @@
 #    By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/11/07 01:45:00 by mregrag           #+#    #+#              #
-#    Updated: 2024/07/10 03:56:33 by mregrag          ###   ########.fr        #
+#    Updated: 2024/07/22 19:07:31 by mregrag          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -37,7 +37,7 @@ $(NAME): $(OBJS)
 	@$(LIBC) $(NAME) $(OBJS)
 
 %.o: %.c libft.h
-	$(CC) $(FLAGS) -c $< -o $@
+	@$(CC) $(FLAGS) -c $< -o $@
 
 clean:
 	@$(RM) $(OBJS)

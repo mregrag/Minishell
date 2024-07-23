@@ -6,7 +6,7 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 16:25:14 by mregrag           #+#    #+#             */
-/*   Updated: 2024/07/21 06:43:27 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/07/22 18:11:36 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,8 @@ void	set_env_var(t_env *env, char *var, char *value)
 	current = env->env;
 	while (current)
 	{
-		if (ft_strncmp(current->content, var, len) == 0)
+		if (ft_strncmp(current->content, var, len) == 0
+			&& ((char *)current->content)[len] == '=')
 		{
 			free(current->content);
 			current->content = new_var;
@@ -55,8 +56,7 @@ void	set_env_var(t_env *env, char *var, char *value)
 		}
 		current = current->next;
 	}
-	ft_lstadd_back(&(env->env), ft_lstnew(ft_strdup(new_var)));
-	free(new_var);
+	ft_lstadd_back(&(env->env), ft_lstnew(new_var));
 }
 
 void	unset_env_var(t_env *env, char *var)

@@ -6,7 +6,7 @@
 /*   By: mkoualil <mkoualil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/24 21:22:11 by mregrag           #+#    #+#             */
-/*   Updated: 2024/07/22 00:46:07 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/07/22 17:51:25 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,25 +15,14 @@
 t_node	*parse_command(t_token *tokens, t_env *env)
 {
 	t_node	*node;
-	t_token	*tmp;
 	int		count;
-	int		i;
 
 	node = new_node(T_CMD);
 	count = ft_lstsize_token(tokens);
 	node->cmd = malloc(sizeof(char *) * (count + 1));
 	if (!node->cmd)
 		malloc_error();
-	i = 0;
-	while (i < count)
-	{
-		node->cmd[i] = expansion_input(tokens->value, env);
-		tmp = tokens;
-		tokens = (tokens)->next;
-		free_token(tmp);
-		i++;
-	}
-	node->cmd[count] = NULL;
+	fill_cmd(node, tokens, env, count);
 	return (node);
 }
 

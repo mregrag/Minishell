@@ -6,7 +6,7 @@
 /*   By: mkoualil <mkoualil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 21:20:59 by mregrag           #+#    #+#             */
-/*   Updated: 2024/07/22 05:08:00 by mkoualil         ###   ########.fr       */
+/*   Updated: 2024/07/23 13:08:17 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,8 @@ static void	process_command(char *input, t_env *envp, int in_out[2])
 	tokens = tokenize_input(input, envp);
 	root = parse_tokens(tokens, envp);
 	get_std_fds(in_out);
-	preorder_traversal(root, envp);
+	preorder_traversal_hearedoc(root, envp);
+	preorder_traversal_input_output(root);
 	if (g_sig == 0)
 		executing(root, envp);
 	free_tree(root);

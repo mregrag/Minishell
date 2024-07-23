@@ -6,13 +6,13 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/18 21:49:59 by mregrag           #+#    #+#             */
-/*   Updated: 2024/07/13 03:52:21 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/07/23 12:56:18 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-char	*remov_quotes(char *str)
+static char	*remov_quotes(char *str)
 {
 	char	*ret;
 	size_t	i;
@@ -39,6 +39,29 @@ char	*remov_quotes(char *str)
 	}
 	ret[j] = '\0';
 	return (free(str), ret);
+}
+
+char	*handle_final_case(char *ret)
+{
+	size_t	i;
+	char	*temp;
+
+	i = 0;
+	if (ft_strchr(ret, '\'') || ft_strchr(ret, '"'))
+		while (ret[i] == '$')
+			i++;
+	if (i % 2 != 0)
+	{
+		temp = ft_substr(ret, 1, ft_strlen(ret) - 1);
+		if (!temp)
+			return (NULL);
+		free(ret);
+		ret = temp;
+	}
+	temp = remov_quotes(ret);
+	if (!temp)
+		return (NULL);
+	return (temp);
 }
 
 char	*handle_single_quotes(char *ret, char *str, size_t *i)

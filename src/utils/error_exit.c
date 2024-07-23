@@ -6,7 +6,7 @@
 /*   By: mkoualil <mkoualil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/12 18:33:04 by mregrag           #+#    #+#             */
-/*   Updated: 2024/07/22 17:00:07 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/07/22 18:51:06 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,13 +30,19 @@ int	exec_err(char *path, char *cmd, t_env *env)
 		return (print_error("minishell", cmd, "command not found", NULL), 127);
 	path_env = get_env_var(env, "PATH");
 	if (!path_env && !ft_strchr(cmd, '/'))
-		return (print_error("minishell", cmd, "No such file or directory", NULL), 127);
+	{
+		print_error("minishell", cmd, "No such file or directory", NULL);
+		return (127);
+	}
 	if (!*path_env && !ft_strchr(cmd, '/'))
 		return (print_error("minishell", cmd, "command not found", NULL), 127);
 	else if (!ft_strchr(cmd, '/'))
 		return (print_error("minishell", cmd, "command not found", NULL), 127);
 	if (access(path, F_OK) == -1)
-		return (print_error("minishell", cmd, "No such file or directory", NULL), 127);
+	{
+		print_error("minishell", cmd, "No such file or directory", NULL);
+		return (127);
+	}
 	if (access(path, X_OK) == -1)
 		return (print_error("minishell", cmd, "Permission denied", NULL), 126);
 	if (stat(path, &path_stat) == 0 && S_ISDIR(path_stat.st_mode))

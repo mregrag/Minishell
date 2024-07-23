@@ -6,7 +6,7 @@
 /*   By: mkoualil <mkoualil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/10 16:16:44 by mregrag           #+#    #+#             */
-/*   Updated: 2024/07/22 14:46:59 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/07/23 12:53:53 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,8 +67,13 @@ typedef struct s_node
 
 int	g_sig;
 
+char	*handle_final_case(char *ret);
 void	malloc_error(void);
-void	preorder_traversal(t_node *node, t_env *env);
+int	preorder_traversal(t_node *node, t_env *env);
+void	check_file_node(t_node *node, t_env *env);
+void	preorder_traversal_hearedoc(t_node *node, t_env *env);
+void	preorder_traversal_input_output(t_node *node);
+int	dfs_handle_redirections(t_node *node, t_env *env);
 //------------------------tokens------------------------
 t_token	*tokenize_input(char *input, t_env *env);
 t_token	*new_token(char *value, t_type type);
@@ -83,7 +88,7 @@ t_type	get_operator_type(char *str);
 int		check_operators(char *str);
 int		is_operator(char *str);
 int		check_quotes(char **line);
-int		handle_redirections(t_node *node);
+int		handle_redirections(t_node *node, t_env *env);
 
 //------------------------parcing------------------------
 
@@ -96,6 +101,7 @@ t_node	*new_node(t_type type);
 t_node	*parse_redirection(t_token *tokens, t_env *env);
 void	free_tree(t_node *node);
 void	creat_cmd(t_node *node, t_token *tokens, int count, t_env *env);
+void	fill_cmd(t_node *node, t_token *tokens, t_env *env, int count);
 char	*extract_word(char **input);
 
 //-----------------------------bultin---------------------------------
@@ -143,7 +149,6 @@ pid_t	ft_fork(void);
 
 //---------------------expansion-------------------------------
 
-char	*remov_quotes(char *str);
 char	*handle_quotes(char *ret, char *str, size_t *i, t_env *env);
 char	*expansion_dilim(char *str);
 char	*expansion_input(char *str, t_env *env);
