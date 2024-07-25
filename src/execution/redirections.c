@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirections.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mkoualil <mkoualil@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/06/07 18:05:58 by mregrag           #+#    #+#             */
-/*   Updated: 2024/07/23 13:07:34 by mregrag          ###   ########.fr       */
+/*   Created: 2024/07/23 17:38:38 by mregrag           #+#    #+#             */
+/*   Updated: 2024/07/25 17:14:21 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ static int	heredoc_redirection(t_node *node, t_env *env)
 {
 	if (node->type == T_HERDOC)
 	{
-		if (node->right && node->right->cmd && node->right->cmd[0])
+		if (node->right && node->right->cmd)
 			node->fd_in = heredoc(node->right, env);
 		if (node->fd_in == -1)
 			return (0);
@@ -28,7 +28,7 @@ static int	output_input_redirection(t_node *node)
 {
 	if (node->type == T_OUT || node->type == T_APPEND || node->type == T_IN)
 	{
-		if (node->right && node->right->cmd && node->right->cmd[0])
+		if (node->right && node->right->cmd)
 		{
 			if (node->type == T_OUT)
 				node->fd_out = ft_open_output(node->right->cmd[0]);
@@ -66,7 +66,7 @@ void	preorder_traversal_input_output(t_node *node)
 
 int	handle_redirections(t_node *node, t_env *env)
 {
-	if (!dfs_handle_redirections(node, env))
+	if (!preoredr_duplicat_file(node, env))
 		return (0);
 	return (1);
 }

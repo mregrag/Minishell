@@ -6,53 +6,37 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/08 19:26:45 by mregrag           #+#    #+#             */
-/*   Updated: 2024/07/11 04:24:22 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/07/24 17:37:27 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-static int	is_space(char c)
-{
-	return (c == ' ' || c == '\t' || c == '\n'
-		|| c == '\v' || c == '\f' || c == '\r');
-}
-
-static int	get_sign(const char **str)
-{
-	int	sign;
-
-	sign = 1;
-	if (**str == '-')
-	{
-		sign = -1;
-		(*str)++;
-	}
-	else if (**str == '+')
-		(*str)++;
-	return (sign);
-}
-
 long	ft_atol(const char *str)
 {
 	long	result;
+	long	new;
 	int		sign;
 
 	result = 0;
-	while (is_space(*str))
+	sign = 1;
+	while ((*str >= 9 && *str <= 13) || *str == 32)
 		str++;
-	sign = get_sign(&str);
-	while (*str >= '0' && *str <= '9')
+	if (*str == '-' || *str == '+')
 	{
-		if (result > (LONG_MAX - (*str - '0')) / 10)
-		{
-			if (sign == 1)
-				return (LONG_MAX);
-			else
-				return (LONG_MIN);
-		}
-		result = result * 10 + (*str - '0');
+		if (*str == '-')
+			sign = -1;
 		str++;
 	}
-	return (result * sign);
+	while (*str >= 48 && *str <= 57)
+	{
+		new = result * 10 + (*str - 48);
+		if ((new < result && sign == 1) || (result > 0 && new == LONG_MAX))
+			return (LONG_MAX);
+		if ((new < result && sign == -1) || (result > 0 && new == LONG_MAX))
+			return (LONG_MIN);
+		result = new;
+		str++;
+	}
+	return (sign * result);
 }

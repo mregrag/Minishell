@@ -6,7 +6,7 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/18 21:49:59 by mregrag           #+#    #+#             */
-/*   Updated: 2024/07/23 12:56:18 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/07/23 16:15:29 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,8 @@ char	*handle_final_case(char *ret)
 		free(ret);
 		ret = temp;
 	}
+	if (!ft_strlen(ret))
+		return (free(ret), NULL);
 	temp = remov_quotes(ret);
 	if (!temp)
 		return (NULL);

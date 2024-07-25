@@ -6,7 +6,7 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/25 01:29:14 by mregrag           #+#    #+#             */
-/*   Updated: 2024/07/22 19:02:21 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/07/25 15:59:48 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,6 @@ int			ft_lstsize(t_list *lst);
 int			ft_toupper(int c);
 int			ft_tolower(int c);
 int			ft_isspace(char c);
-int			ft_issamechar(char *str, int c);
 int			ft_isquotes(int c);
 long		ft_atol(const char *str);
 void		*ft_memset(void *b, int c, size_t len);

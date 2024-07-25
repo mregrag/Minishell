@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mkoualil <mkoualil@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/07/12 21:20:59 by mregrag           #+#    #+#             */
-/*   Updated: 2024/07/23 13:08:17 by mregrag          ###   ########.fr       */
+/*   Created: 2024/07/23 18:08:23 by mregrag           #+#    #+#             */
+/*   Updated: 2024/07/25 16:16:09 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,21 +37,23 @@ int	main(int argc, char **argv, char **env)
 	t_env	*envp;
 	int		in_out[2];
 
-	(void)argv;
-	(void)argc;
-	initialize_enviroment(&envp, env);
-	while (1)
+	envp = NULL;
+	if (argc == 1 && !argv[1])
 	{
-		setup_signal(envp);
-		input = readline("minish-1.0$ ");
-		if (g_sig == 1 || g_sig == -1)
+		initialize_enviroment(&envp, env);
+		while (1)
 		{
-			exit_status(1, envp);
-			g_sig = 0;
+			setup_signal(envp);
+			input = readline("minish-1.0$ ");
+			if (g_sig == 1 || g_sig == -1)
+			{
+				exit_status(1, envp);
+				g_sig = 0;
+			}
+			if (!input)
+				handle_eof(envp);
+			process_command(input, envp, in_out);
 		}
-		if (!input)
-			handle_eof(envp);
-		process_command(input, envp, in_out);
 	}
 	return (free_env(envp), 0);
 }

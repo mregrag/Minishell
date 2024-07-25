@@ -6,12 +6,12 @@
 #    By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/11/07 01:45:00 by mregrag           #+#    #+#              #
-#    Updated: 2024/07/22 19:07:31 by mregrag          ###   ########.fr        #
+#    Updated: 2024/07/25 15:59:29 by mregrag          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 SRCS = ft_isalpha.c ft_isdigit.c ft_isalnum.c ft_isascii.c \
-       ft_isprint.c ft_strlen.c ft_memset.c ft_bzero.c ft_issamechar.c \
+       ft_isprint.c ft_strlen.c ft_memset.c ft_bzero.c \
        ft_memcpy.c ft_memmove.c ft_strlcpy.c ft_strlcat.c ft_strjoin_free.c\
        ft_calloc.c ft_strdup.c ft_toupper.c ft_tolower.c ft_strcpy.c \
        ft_strchr.c ft_strncmp.c ft_memchr.c ft_memcmp.c ft_free.c ft_atol.c \
@@ -37,7 +37,7 @@ $(NAME): $(OBJS)
 	@$(LIBC) $(NAME) $(OBJS)
 
 %.o: %.c libft.h
-	@$(CC) $(FLAGS) -c $< -o $@
+	$(CC) $(FLAGS) -c $< -o $@
 
 clean:
 	@$(RM) $(OBJS)

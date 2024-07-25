@@ -6,7 +6,7 @@
 /*   By: mkoualil <mkoualil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/10 16:16:44 by mregrag           #+#    #+#             */
-/*   Updated: 2024/07/23 12:53:53 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/07/25 17:14:05 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,12 +20,10 @@
 # include <stdio.h>
 # include <readline/history.h>
 # include <readline/readline.h>
-# include <stdbool.h>
 # include <stdlib.h>
 # include <signal.h>
 # include <string.h>
 # include <termios.h>
-# include <sys/param.h>
 # include <sys/wait.h>
 # include <sys/stat.h>
 # include <unistd.h>
@@ -69,12 +67,9 @@ int	g_sig;
 
 char	*handle_final_case(char *ret);
 void	malloc_error(void);
-int	preorder_traversal(t_node *node, t_env *env);
 void	check_file_node(t_node *node, t_env *env);
 void	preorder_traversal_hearedoc(t_node *node, t_env *env);
 void	preorder_traversal_input_output(t_node *node);
-int	dfs_handle_redirections(t_node *node, t_env *env);
-//------------------------tokens------------------------
 t_token	*tokenize_input(char *input, t_env *env);
 t_token	*new_token(char *value, t_type type);
 void	clear_tokens(t_token **head);
@@ -84,14 +79,12 @@ void	skip_spaces(char **str);
 int		skip_quotes(char *line, size_t *i);
 int		is_redirection(t_type type);
 int		ft_lstsize_token(t_token *lst);
+int		preoredr_duplicat_file(t_node *node, t_env *env);
 t_type	get_operator_type(char *str);
 int		check_operators(char *str);
 int		is_operator(char *str);
 int		check_quotes(char **line);
 int		handle_redirections(t_node *node, t_env *env);
-
-//------------------------parcing------------------------
-
 t_node	*parse_command(t_token *tokens, t_env *env);
 t_node	*parse_expression(t_token *tokens, t_env *env);
 t_node	*parse_tokens(t_token *tokens, t_env *env);
@@ -104,8 +97,6 @@ void	creat_cmd(t_node *node, t_token *tokens, int count, t_env *env);
 void	fill_cmd(t_node *node, t_token *tokens, t_env *env, int count);
 char	*extract_word(char **input);
 
-//-----------------------------bultin---------------------------------
-
 int		ft_echo(t_node *node, t_env *env);
 int		ft_env(t_node *node, t_env *env);
 int		ft_cd(t_node *node, t_env *env);
@@ -115,8 +106,6 @@ int		ft_unset(t_node *node, t_env *env);
 int		print_error(char *s1, char *s2, char *s3, char *message);
 int		print_error_errno(char *s1, char *s2, char *s3);
 int		ft_pwd(void);
-
-// ----------------------------env---------------------------------
 
 void	initialize_enviroment(t_env **env, char **envp);
 void	increment_shlvl(t_env *env);
@@ -129,8 +118,6 @@ void	get_std_fds(int *in_out);
 void	append_env_var(t_env *env, char *var, char *value);
 int		is_var_in_env(t_env *env, char *var_name);
 char	*get_env_var(t_env *env, char *name);
-
-//---------------------------execution------------------------------------
 
 char	*get_path(char *cmd, t_env *env);
 void	executing(t_node *node, t_env *env);
@@ -147,8 +134,6 @@ int		ft_open_output(char *file);
 int		ft_open_input(char *file);
 pid_t	ft_fork(void);
 
-//---------------------expansion-------------------------------
-
 char	*handle_quotes(char *ret, char *str, size_t *i, t_env *env);
 char	*expansion_dilim(char *str);
 char	*expansion_input(char *str, t_env *env);
@@ -159,7 +144,6 @@ char	*handle_double_quotes(char *ret, char *str, size_t *i, t_env *env);
 char	*handle_normal(char *ret, char *str, size_t *i);
 char	*handle_str(char *ret, char *str, size_t *i);
 
-//-----------------------signals------------------
 void	block_signals(struct sigaction *sa_ignore);
 void	restore_signals(struct sigaction *sa_default);
 void	signal_handlers(struct sigaction *sa_ig, struct sigaction *sa_def);

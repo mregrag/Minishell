@@ -6,7 +6,7 @@
 #    By: mkoualil <mkoualil@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/05/10 16:12:48 by mregrag           #+#    #+#              #
-#    Updated: 2024/07/22 19:07:14 by mregrag          ###   ########.fr        #
+#    Updated: 2024/07/25 14:13:35 by mregrag          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,9 +15,9 @@ LIBFT		= libft.a
 LIBRAIRIE	= "lib/libft"
 FSS		=
 CC		= cc
-CFLAGS		= -Wall -Wextra -Werror -fsanitize=address -fno-omit-frame-pointer -g2
-
+CFLAGS		= -Wall -Wextra -Werror
 HEADER		= ./include/minishell.h
+HEADERLIBFT		= ./lib/libft/libft.h
 RM		= rm -rf
 
 READLINE_INC = -I$(shell brew --prefix readline)/include
@@ -81,14 +81,10 @@ all: $(NAME)
 $(LIBFT):
 	@make -C $(LIBRAIRIE)
 
-#$(NAME): $(LIBFT) $(OBJS)
-#	@$(CC) -o $(NAME) $(OBJS) -L$(LIBRAIRIE) -lft -lreadline $(READLINE_LIB)
-
-
 $(NAME): $(LIBFT) $(OBJS)
-	@$(CC) $(CFLAGS) -o $(NAME) $(OBJS) -L$(LIBRAIRIE) -lft ${READLINE_LIB}
+	@$(CC) $(OBJS) $(CFLAGS) -o $(NAME) -L$(LIBRAIRIE) -lft -lreadline $(READLINE_LIB)
 
-%.o: %.c $(HEADER)
+%.o: %.c $(HEADER) $(HEADERLIBFT)
 	$(CC) $(CFLAGS) $(READLINE_INC) -c $< -o $@
 
 clean:

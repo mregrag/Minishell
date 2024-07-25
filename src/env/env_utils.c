@@ -6,7 +6,7 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 16:25:14 by mregrag           #+#    #+#             */
-/*   Updated: 2024/07/22 18:11:36 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/07/24 17:08:20 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,25 +93,25 @@ void	append_env_var(t_env *env, char *var, char *value)
 	char	*old_value;
 	char	*new_value;
 	char	*new_var;
-	size_t	len;
 
 	if (!env || !var || !value)
 		return ;
-	len = ft_strlen(var);
 	current = env->env;
-	while (current)
-	{
-		if (ft_strncmp(current->content, var, len) == 0)
-		{
-			old_value = ft_strchr(current->content, '=') + 1;
-			new_value = ft_strjoin(old_value, value);
-			new_var = ft_strjoin_three(var, "=", new_value);
-			free(current->content);
-			current->content = new_var;
-			free(new_value);
-			return ;
-		}
+	while (current && (ft_strncmp(current->content, var, ft_strlen(var)) != 0
+			|| (((char *)current->content)[ft_strlen(var)] != '='
+			&& ((char *)current->content)[ft_strlen(var)] != '\0')))
 		current = current->next;
+	if (current)
+	{
+		old_value = ft_strchr(current->content, '=');
+		new_value = ft_strdup(value);
+		if (old_value)
+			new_value = ft_strjoin(old_value + 1, value);
+		new_var = ft_strjoin_three(var, "=", new_value);
+		free(current->content);
+		current->content = new_var;
+		free(new_value);
 	}
-	set_env_var(env, var, value);
+	else
+		set_env_var(env, var, value);
 }

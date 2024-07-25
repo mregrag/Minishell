@@ -6,7 +6,7 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/30 15:10:09 by mregrag           #+#    #+#             */
-/*   Updated: 2024/07/23 12:50:59 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/07/23 16:13:18 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@ char	*expansion_input(char *str, t_env *env)
 	char	*ret;
 	char	*temp;
 
+	ret = ft_strdup("");
 	i = 0;
 	while (str[i])
 	{

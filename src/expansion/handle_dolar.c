@@ -6,7 +6,7 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/30 15:14:43 by mregrag           #+#    #+#             */
-/*   Updated: 2024/07/23 12:14:17 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/07/23 16:16:51 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ static char	*handle_env_var(char *ret, char *str, size_t *i, t_env *env)
 	val = get_env_var(env, var);
 	free(var);
 	if (!val)
-		return (ft_strdup(""));
+		return (ret);
 	new_ret = ft_strjoin_free(ret, val);
 	return (new_ret);
 }
