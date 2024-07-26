@@ -6,24 +6,23 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/27 17:47:28 by mregrag           #+#    #+#             */
-/*   Updated: 2024/07/13 00:08:07 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/07/26 10:06:27 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-static int	is_numeric(char *s)
+static int	is_valid_number(const char *str)
 {
-	int	i;
-
-	i = 0;
-	if (s[i] == '+' || s[i] == '-')
-		i++;
-	while (s[i])
+	if (*str == '-' || *str == '+')
+		str++;
+	if (*str == '\0')
+		return (0);
+	while (*str)
 	{
-		if (!ft_isdigit(s[i]))
+		if (!ft_isdigit(*str))
 			return (0);
-		i++;
+		str++;
 	}
 	return (1);
 }
@@ -34,17 +33,39 @@ static void	error(char *cmd, char *arg, char *message)
 	exit(255);
 }
 
+static int	is_long(char *str)
+{
+	int				i;
+	unsigned long	result;
+	int				sign;
+
+	result = 0;
+	i = 0;
+	sign = 1;
+	if (str[i] == '-')
+		sign = -1;
+	if (str[i] == '-' || str[i] == '+')
+		i++;
+	while (str[i] != 0)
+	{
+		result = result * 10 + (str[i] - 48);
+		if (result > 9223372036854775807 && sign == 1)
+			return (0);
+		else if ((result) > 9223372036854775808UL && sign == -1)
+			return (0);
+		i++;
+	}
+	return (1);
+}
+
 int	ft_exit(t_node *node, t_env *env)
 {
-	long	exit_code;
-
 	ft_putendl_fd("exit", 2);
 	if (node->cmd[1])
 	{
-		if (!is_numeric(node->cmd[1]))
+		if (!is_valid_number(node->cmd[1]))
 			error(node->cmd[0], node->cmd[1], "numeric argument required");
-		exit_code = ft_atol(node->cmd[1]);
-		if (exit_code == LONG_MAX || exit_code == LONG_MIN)
+		if (!is_long(node->cmd[1]))
 			error(node->cmd[0], node->cmd[1], "numeric argument required");
 		if (node->cmd[2])
 		{
@@ -52,7 +73,7 @@ int	ft_exit(t_node *node, t_env *env)
 			exit_status(1, env);
 			return (1);
 		}
-		exit((unsigned char)exit_code);
+		exit(ft_atoi(node->cmd[1]));
 	}
-	exit((unsigned char)ft_atoi(get_env_var(env, "?")));
+	exit(ft_atoi(get_env_var(env, "?")));
 }

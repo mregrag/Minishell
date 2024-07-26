@@ -6,7 +6,7 @@
 /*   By: mkoualil <mkoualil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/12 18:33:04 by mregrag           #+#    #+#             */
-/*   Updated: 2024/07/25 21:07:52 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/07/26 11:20:10 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,10 +32,10 @@ int	exec_err(char *path, char *cmd, t_env *env)
 		print_error("minishell", cmd, "No such file or directory", NULL);
 		return (127);
 	}
-	if (access(path, F_OK | X_OK) == -1)
-		return (print_error("minishell", cmd, strerror(errno), NULL), 127);
-	else if (access(path, X_OK) == -1)
+	if (access(path, F_OK | X_OK) == -1 && (errno == 20 || errno == 13))
 		return (print_error("minishell", cmd, strerror(errno), NULL), 126);
+	else if (access(path, X_OK) == -1)
+		return (print_error("minishell", cmd, strerror(errno), NULL), 127);
 	else if (stat(path, &path_stat) == 0 && S_ISDIR(path_stat.st_mode))
 		return (print_error("minishell", cmd, "is a directory", NULL), 126);
 	return (0);

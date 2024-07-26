@@ -6,7 +6,7 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/11 23:05:33 by mregrag           #+#    #+#             */
-/*   Updated: 2024/07/21 17:02:01 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/07/26 11:20:38 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,14 +46,8 @@ int	check_quotes(char **line)
 	i = 0;
 	while ((*line)[i])
 	{
-		if (ft_isquotes((*line)[i]))
-		{
-			if (!skip_quotes(*line, &i))
-			{
-				print_error("minish", "unexpected EOF `", NULL, NULL);
-				return (0);
-			}
-		}
+		if (ft_isquotes((*line)[i]) && !skip_quotes(*line, &i))
+			return (print_error("minish", "unexpected EOF `", NULL, NULL), 0);
 		else
 			i++;
 	}
