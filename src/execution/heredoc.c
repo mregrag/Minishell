@@ -6,11 +6,25 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/18 04:11:35 by mregrag           #+#    #+#             */
-/*   Updated: 2024/07/21 18:53:07 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/07/29 00:38:52 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
+
+static void	heredoc_content(t_node *node, int fd, char *content, t_env *env)
+{
+	char	*new_content;
+
+	if (node->flag == 1)
+		ft_putendl_fd(content, fd);
+	else
+	{
+		new_content = expansion_content(content, env);
+		if (new_content)
+			(ft_putendl_fd(new_content, fd), free(new_content));
+	}
+}
 
 static int	process_heredoc_content(t_node *node, int *fd_heredoc, t_env *env)
 {
@@ -36,7 +50,7 @@ static int	process_heredoc_content(t_node *node, int *fd_heredoc, t_env *env)
 	return (free(dilim), 0);
 }
 
-int	heredoc(t_node *node, t_env *env)
+static int	heredoc(t_node *node, t_env *env)
 {
 	int	fd_heredoc[2];
 
@@ -52,4 +66,26 @@ int	heredoc(t_node *node, t_env *env)
 	}
 	close(fd_heredoc[1]);
 	return (fd_heredoc[0]);
+}
+
+static int	heredoc_redirection(t_node *node, t_env *env)
+{
+	if (node->type == T_HERDOC)
+	{
+		if (node->right && node->right->cmd)
+			node->fd_in = heredoc(node->right, env);
+		if (node->fd_in == -1)
+			return (0);
+	}
+	return (1);
+}
+
+void	preorder_hearedoc(t_node *node, t_env *env)
+{
+	if (!node || g_sig == -1)
+		return;
+	if (!heredoc_redirection(node, env))
+		return ;
+	preorder_hearedoc(node->left, env);
+	preorder_hearedoc(node->right, env);
 }

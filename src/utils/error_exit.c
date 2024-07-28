@@ -6,7 +6,7 @@
 /*   By: mkoualil <mkoualil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/12 18:33:04 by mregrag           #+#    #+#             */
-/*   Updated: 2024/07/26 11:20:10 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/07/28 18:24:08 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ int	exec_err(char *path, char *cmd, t_env *env)
 {
 	struct stat	path_stat;
 
-	if (!cmd || !*cmd || !path)
+	if (!cmd || !*cmd)
 		return (print_error("minishell", cmd, "command not found", NULL), 127);
 	if (!is_var_in_env(env, "PATH"))
 	{

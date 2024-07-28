@@ -6,7 +6,7 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 20:13:20 by mregrag           #+#    #+#             */
-/*   Updated: 2024/07/18 11:48:44 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/07/27 22:00:10 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,6 @@ int	skip_quotes(char *line, size_t *i)
 		(*i)++;
 		while (line[*i] != q)
 			(*i)++;
-		(*i)++;
 		return (1);
 	}
 	return (0);

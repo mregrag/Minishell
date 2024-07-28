@@ -6,62 +6,56 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 17:38:38 by mregrag           #+#    #+#             */
-/*   Updated: 2024/07/25 17:14:21 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/07/29 00:42:53 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-static int	heredoc_redirection(t_node *node, t_env *env)
+static int	input_redirection(t_node *node)
 {
-	if (node->type == T_HERDOC)
-	{
-		if (node->right && node->right->cmd)
-			node->fd_in = heredoc(node->right, env);
-		if (node->fd_in == -1)
-			return (0);
-	}
+	if (node->right && node->right->cmd)
+		if (node->type == T_IN)
+			node->fd_in = ft_open_input(node->right->cmd[0]);
+	if (node->fd_in == -1)
+		return (0);
 	return (1);
 }
 
-static int	output_input_redirection(t_node *node)
+static int	output_redirection(t_node *node)
 {
-	if (node->type == T_OUT || node->type == T_APPEND || node->type == T_IN)
+	if (node->right && node->right->cmd)
 	{
-		if (node->right && node->right->cmd)
-		{
-			if (node->type == T_OUT)
-				node->fd_out = ft_open_output(node->right->cmd[0]);
-			else if (node->type == T_APPEND)
-				node->fd_out = ft_open_append(node->right->cmd[0]);
-			else if (node->type == T_IN)
-				node->fd_in = ft_open_input(node->right->cmd[0]);
-			if (node->fd_out == -1 || node->fd_in == -1)
-				return (0);
-		}
+		if (node->type == T_OUT)
+			node->fd_out = ft_open_output(node->right->cmd[0]);
+		else if (node->type == T_APPEND)
+			node->fd_out = ft_open_append(node->right->cmd[0]);
 	}
+	if (node->fd_out == -1 || node->fd_in == -1)
+		return (0);
 	return (1);
 }
 
-void	preorder_traversal_hearedoc(t_node *node, t_env *env)
-{
-	if (!node || g_sig == -1)
-		return ;
-	if (!heredoc_redirection(node, env))
-		return ;
-	preorder_traversal_hearedoc(node->left, env);
-	preorder_traversal_hearedoc(node->right, env);
-	return ;
-}
-
-void	preorder_traversal_input_output(t_node *node)
+int	preorder_input(t_node *node)
 {
 	if (!node)
-		return ;
-	if (!output_input_redirection(node))
-		return ;
-	preorder_traversal_input_output(node->left);
-	preorder_traversal_input_output(node->right);
+		return (0);
+	if (!input_redirection(node))
+		return (0);
+	preorder_input(node->left);
+	preorder_input(node->right);
+	return (1);
+}
+
+int	preorder_output(t_node *node)
+{
+	if (!node)
+		return (0);
+	if (!output_redirection(node))
+		return (0);
+	preorder_output(node->left);
+	preorder_output(node->right);
+	return (1);
 }
 
 int	handle_redirections(t_node *node, t_env *env)

@@ -6,7 +6,7 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/18 18:50:47 by mregrag           #+#    #+#             */
-/*   Updated: 2024/07/12 23:56:57 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/07/28 18:17:14 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,8 +31,8 @@ static void	export_list(t_list *env)
 				printf("declare -x %s=\"%s\"\n", var, value);
 			else
 				printf("declare -x %s\n", var);
-			ft_free(&value);
-			ft_free(&var);
+			free(value);
+			free(var);
 		}
 		env = env->next;
 	}
@@ -55,16 +55,18 @@ static int	check_var(const char *str)
 	return (1);
 }
 
-void	add_arg_to_env(char *argv, t_env *env)
+static	void	add_arg_to_env(const char *argv, t_env *env)
 {
+	char	*equals;
 	char	*var;
 	char	*value;
 	char	*trimmed;
-	char	*equals;
 
 	equals = ft_strchr(argv, '=');
 	var = NULL;
 	value = NULL;
+	if (!argv || !env)
+		return ;
 	if (equals)
 	{
 		var = ft_substr(argv, 0, equals - argv);
@@ -72,14 +74,14 @@ void	add_arg_to_env(char *argv, t_env *env)
 	}
 	else
 		var = ft_strdup(argv);
+	set_env_var(env, "_", argv);
 	trimmed = ft_strtrim(var, "+");
-	set_env_var(env, "_", trimmed);
 	if (equals && *(equals - 1) == '+')
 		append_env_var(env, trimmed, value);
 	else if (equals)
 		set_env_var(env, trimmed, value);
-	else if (!is_var_in_env(env, argv))
-		ft_lstadd_back(&(env->env), ft_lstnew(ft_strdup(argv)));
+	else if (!is_var_in_env(env, var))
+		set_env_var(env, var, value);
 	(free(trimmed), free(var), free(value));
 }
 

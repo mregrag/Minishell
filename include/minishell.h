@@ -6,7 +6,7 @@
 /*   By: mkoualil <mkoualil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/10 16:16:44 by mregrag           #+#    #+#             */
-/*   Updated: 2024/07/25 17:14:05 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/07/29 00:43:11 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,11 +65,12 @@ typedef struct s_node
 
 int	g_sig;
 
+int	preorder_output(t_node *node);
+int	preorder_input(t_node *node);
 char	*handle_final_case(char *ret);
 void	malloc_error(void);
 void	check_file_node(t_node *node, t_env *env);
-void	preorder_traversal_hearedoc(t_node *node, t_env *env);
-void	preorder_traversal_input_output(t_node *node);
+void	preorder_hearedoc(t_node *node, t_env *env);
 t_token	*tokenize_input(char *input, t_env *env);
 t_token	*new_token(char *value, t_type type);
 void	clear_tokens(t_token **head);
@@ -110,7 +111,8 @@ int		ft_pwd(void);
 void	initialize_enviroment(t_env **env, char **envp);
 void	increment_shlvl(t_env *env);
 void	print_env(t_env *env);
-void	set_env_var(t_env *env, char *name, char *value);
+// void	set_env_var(t_env *env, char *name, char *value);
+void set_env_var(t_env *env, const char *var, const char *value);
 void	unset_env_var(t_env *env, char *name);
 void	free_env(t_env *env);
 void	set_std_fds(int in, int out);
@@ -123,9 +125,7 @@ char	*get_path(char *cmd, t_env *env);
 void	executing(t_node *node, t_env *env);
 void	execute_command(t_node *node, t_env *env);
 void	execute_pipe(t_node *node, t_env *env);
-void	heredoc_content(t_node *node, int fd, char *content, t_env *env);
 int		execute_builtin(t_node *node, t_env *env);
-int		heredoc(t_node *node, t_env *env);
 int		ft_pipe(int ends[2]);
 int		ft_dup2(int filde1, int filde2);
 int		ft_dup(int oldfd);
@@ -154,4 +154,6 @@ void	exit_status(int status, t_env *env);
 void	cleanup_fds(t_node *node);
 int		exec_err(char *path, char *cmd, t_env *env);
 int		check_syntax(t_token *tokens);
+
+int	preorder_input_output(t_node *node);
 #endif
