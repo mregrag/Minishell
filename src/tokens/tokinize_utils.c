@@ -6,7 +6,7 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/11 23:05:33 by mregrag           #+#    #+#             */
-/*   Updated: 2024/07/26 11:20:38 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/07/30 11:36:59 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,50 @@ char	*extract_word(char **input)
 	return (ft_substr(start, 0, len));
 }
 
+int	handle_operator(char **input, t_token **tokens)
+{
+	t_type	type;
+	char	*word;
+	char	*start;
+
+	start = *input;
+	type = get_operator_type(*input);
+	if (type == T_HERDOC || type == T_APPEND)
+		*input += 2;
+	else
+		*input += 1;
+	word = ft_substr(start, 0, *input - start);
+	if (!word)
+		return (0);
+	token_add_back(tokens, new_token(word, type));
+	return (1);
+}
+
+char	*extract_word_dollar(char **input)
+{
+	char	*start;
+	size_t	len;
+	char	quote;
+
+	quote = 0;
+	start = *input;
+	while (**input)
+	{
+		if (!quote && ft_isspace(**input))
+			break ;
+		if (ft_isquotes(**input))
+		{
+			if (!quote)
+				quote = **input;
+			else if (**input == quote)
+				quote = 0;
+		}
+		(*input)++;
+	}
+	len = *input - start;
+	return (ft_substr(start, 0, len));
+}
+
 int	check_quotes(char **line)
 {
 	size_t	i;
@@ -54,17 +98,6 @@ int	check_quotes(char **line)
 	return (1);
 }
 
-int	is_operator(char *str)
-{
-	if (!str)
-		return (0);
-	return (!ft_strncmp(str, "<<", 2)
-		|| !ft_strncmp(str, ">>", 2)
-		|| *str == '<'
-		|| *str == '>'
-		|| *str == '|');
-}
-
 t_type	get_operator_type(char *str)
 {
 	if (ft_strncmp(str, "<<", 2) == 0)
@@ -78,15 +111,4 @@ t_type	get_operator_type(char *str)
 	if (*str == '|')
 		return (T_PIPE);
 	return (T_CMD);
-}
-
-int	check_operators(char *str)
-{
-	while (*str)
-	{
-		if (is_operator(str))
-			return (1);
-		str++;
-	}
-	return (0);
 }

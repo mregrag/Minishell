@@ -6,7 +6,7 @@
 /*   By: mkoualil <mkoualil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/10 16:16:44 by mregrag           #+#    #+#             */
-/*   Updated: 2024/07/29 00:43:11 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/07/30 12:09:53 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,11 +65,10 @@ typedef struct s_node
 
 int	g_sig;
 
-int	preorder_output(t_node *node);
-int	preorder_input(t_node *node);
+void	preorder_output(t_node *node, t_env *env);
+void	preorder_input(t_node *node, t_env *env);
 char	*handle_final_case(char *ret);
 void	malloc_error(void);
-void	check_file_node(t_node *node, t_env *env);
 void	preorder_hearedoc(t_node *node, t_env *env);
 t_token	*tokenize_input(char *input, t_env *env);
 t_token	*new_token(char *value, t_type type);
@@ -83,9 +82,10 @@ int		ft_lstsize_token(t_token *lst);
 int		preoredr_duplicat_file(t_node *node, t_env *env);
 t_type	get_operator_type(char *str);
 int		check_operators(char *str);
+int		handle_operator(char **input, t_token **tokens);
 int		is_operator(char *str);
 int		check_quotes(char **line);
-int		handle_redirections(t_node *node, t_env *env);
+int		handle_redirections(t_node **node, t_env *env);
 t_node	*parse_command(t_token *tokens, t_env *env);
 t_node	*parse_expression(t_token *tokens, t_env *env);
 t_node	*parse_tokens(t_token *tokens, t_env *env);
@@ -97,6 +97,7 @@ void	free_tree(t_node *node);
 void	creat_cmd(t_node *node, t_token *tokens, int count, t_env *env);
 void	fill_cmd(t_node *node, t_token *tokens, t_env *env, int count);
 char	*extract_word(char **input);
+char	*extract_word_dollar(char **input);
 
 int		ft_echo(t_node *node, t_env *env);
 int		ft_env(t_node *node, t_env *env);
@@ -111,8 +112,7 @@ int		ft_pwd(void);
 void	initialize_enviroment(t_env **env, char **envp);
 void	increment_shlvl(t_env *env);
 void	print_env(t_env *env);
-// void	set_env_var(t_env *env, char *name, char *value);
-void set_env_var(t_env *env, const char *var, const char *value);
+void	set_env_var(t_env *env, char *var, char *value);
 void	unset_env_var(t_env *env, char *name);
 void	free_env(t_env *env);
 void	set_std_fds(int in, int out);
@@ -155,5 +155,4 @@ void	cleanup_fds(t_node *node);
 int		exec_err(char *path, char *cmd, t_env *env);
 int		check_syntax(t_token *tokens);
 
-int	preorder_input_output(t_node *node);
 #endif

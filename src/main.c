@@ -6,29 +6,33 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 18:08:23 by mregrag           #+#    #+#             */
-/*   Updated: 2024/07/29 00:44:51 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/07/30 13:18:59 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-static void	process_command(char *input, t_env *envp, int in_out[2])
+void	process_tokens_and_parse(char *input, t_env *envp, t_node **root)
 {
-	t_node	*root;
 	t_token	*tokens;
 
-	if (*input)
-		add_history(input);
 	tokens = tokenize_input(input, envp);
-	root = parse_tokens(tokens, envp);
+	*root = parse_tokens(tokens, envp);
+}
+
+void	process_execution(t_node *root, t_env *envp)
+{
+	int	in_out[2];
+
 	get_std_fds(in_out);
 	preorder_hearedoc(root, envp);
-	if (!preorder_input(root) || !preorder_output(root))
-		return;
 	if (g_sig == 0)
+	{
+		preorder_input(root, envp);
+		preorder_output(root, envp);
 		executing(root, envp);
+	}
 	cleanup_fds(root);
-	free_tree(root);
 	set_std_fds(in_out[0], in_out[1]);
 }
 
@@ -36,10 +40,9 @@ int	main(int argc, char **argv, char **env)
 {
 	char	*input;
 	t_env	*envp;
-	int		in_out[2];
+	t_node	*root;
 
 	((void)argc, (void)argv);
-	envp = NULL;
 	initialize_enviroment(&envp, env);
 	while (1)
 	{
@@ -52,7 +55,12 @@ int	main(int argc, char **argv, char **env)
 		}
 		if (!input)
 			handle_eof(envp);
-		process_command(input, envp, in_out);
+		if (*input)
+			add_history(input);
+		process_tokens_and_parse(input, envp, &root);
+		process_execution(root, envp);
+		free_tree(root);
 	}
-	return (free_env(envp), 0);
+	free_env(envp);
+	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 20:13:20 by mregrag           #+#    #+#             */
-/*   Updated: 2024/07/27 22:00:10 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/07/30 02:30:44 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,4 +36,26 @@ void	skip_spaces(char **str)
 int	is_redirection(t_type type)
 {
 	return (type >= T_IN && type <= T_HERDOC);
+}
+
+int	is_operator(char *str)
+{
+	if (!str)
+		return (0);
+	return (!ft_strncmp(str, "<<", 2)
+		|| !ft_strncmp(str, ">>", 2)
+		|| *str == '<'
+		|| *str == '>'
+		|| *str == '|');
+}
+
+int	check_operators(char *str)
+{
+	while (*str)
+	{
+		if (is_operator(str))
+			return (1);
+		str++;
+	}
+	return (0);
 }

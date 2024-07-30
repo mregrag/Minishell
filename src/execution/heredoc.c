@@ -6,7 +6,7 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/18 04:11:35 by mregrag           #+#    #+#             */
-/*   Updated: 2024/07/29 00:38:52 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/07/30 11:28:35 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,7 @@ static int	heredoc_redirection(t_node *node, t_env *env)
 void	preorder_hearedoc(t_node *node, t_env *env)
 {
 	if (!node || g_sig == -1)
-		return;
+		return ;
 	if (!heredoc_redirection(node, env))
 		return ;
 	preorder_hearedoc(node->left, env);

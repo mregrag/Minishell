@@ -6,7 +6,7 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 16:25:14 by mregrag           #+#    #+#             */
-/*   Updated: 2024/07/28 18:38:58 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/07/30 12:06:14 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ char	*get_env_var(t_env *env, char *var)
 	return (NULL);
 }
 
-void	set_env_var(t_env *env, const char *var, const char *value)
+void	set_env_var(t_env *env, char *var, char *value)
 {
 	t_list	*current;
 	size_t	var_len;
@@ -88,6 +88,24 @@ void	unset_env_var(t_env *env, char *var)
 	}
 }
 
+static t_list	*find_env_var(t_env *env, char *var)
+{
+	t_list	*current;
+	size_t	var_len;
+
+	current = env->env;
+	var_len = ft_strlen(var);
+	while (current)
+	{
+		if (ft_strncmp(current->content, var, var_len) == 0
+			&& (((char *)current->content)[var_len] == '='
+			|| ((char *)current->content)[var_len] == '\0'))
+			return (current);
+		current = current->next;
+	}
+	return (NULL);
+}
+
 void	append_env_var(t_env *env, char *var, char *value)
 {
 	t_list	*current;
@@ -97,18 +115,17 @@ void	append_env_var(t_env *env, char *var, char *value)
 
 	if (!env || !var || !value)
 		return ;
-	current = env->env;
-	while (current && (ft_strncmp(current->content, var, ft_strlen(var)) != 0
-			|| (((char *)current->content)[ft_strlen(var)] != '='
-			&& ((char *)current->content)[ft_strlen(var)] != '\0')))
-		current = current->next;
+	current = find_env_var(env, var);
 	if (current)
 	{
-		new_value = ft_strdup(value);
 		old_value = ft_strchr(current->content, '=');
 		if (old_value)
 			new_value = ft_strjoin(old_value + 1, value);
+		else
+			new_value = ft_strdup(value);
 		new_content = ft_strjoin_three(var, "=", new_value);
+		if (!new_content)
+			return (free(new_value));
 		free(current->content);
 		current->content = new_content;
 		free(new_value);

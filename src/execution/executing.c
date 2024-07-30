@@ -6,7 +6,7 @@
 /*   By: mkoualil <mkoualil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/17 22:24:25 by mregrag           #+#    #+#             */
-/*   Updated: 2024/07/22 21:53:17 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/07/29 21:00:12 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,9 +19,8 @@ void	executing(t_node *node, t_env *env)
 	if (!node || !env)
 		return ;
 	tcgetattr(STDIN_FILENO, &term);
-	if (is_redirection(node->type) && handle_redirections(node, env))
-		while (node && node->left)
-			node = node->left;
+	if (!handle_redirections(&node, env))
+		return ;
 	if (execute_builtin(node, env))
 		return ;
 	if (node->type == T_PIPE)

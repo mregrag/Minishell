@@ -6,11 +6,28 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/18 18:50:47 by mregrag           #+#    #+#             */
-/*   Updated: 2024/07/28 18:17:14 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/07/30 12:49:18 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
+
+static int	check_var(char *str)
+{
+	int	i;
+
+	if (!ft_isalpha(*str) && *str != '_')
+		return (0);
+	i = 1;
+	while (str[i] && str[i] != '=')
+	{
+		if (!ft_isalnum(str[i]) && str[i] != '_'
+			&& !(str[i] == '+' && str[i + 1] == '='))
+			return (0);
+		i++;
+	}
+	return (1);
+}
 
 static void	export_list(t_list *env)
 {
@@ -31,31 +48,13 @@ static void	export_list(t_list *env)
 				printf("declare -x %s=\"%s\"\n", var, value);
 			else
 				printf("declare -x %s\n", var);
-			free(value);
-			free(var);
+			(free(value), free(var));
 		}
 		env = env->next;
 	}
 }
 
-static int	check_var(const char *str)
-{
-	int	i;
-
-	if (!ft_isalpha(*str) && *str != '_')
-		return (0);
-	i = 1;
-	while (str[i] && str[i] != '=')
-	{
-		if (!ft_isalnum(str[i]) && str[i] != '_'
-			&& !(str[i] == '+' && str[i + 1] == '='))
-			return (0);
-		i++;
-	}
-	return (1);
-}
-
-static	void	add_arg_to_env(const char *argv, t_env *env)
+static	void	add_arg_to_env(char *argv, t_env *env)
 {
 	char	*equals;
 	char	*var;
@@ -63,7 +62,6 @@ static	void	add_arg_to_env(const char *argv, t_env *env)
 	char	*trimmed;
 
 	equals = ft_strchr(argv, '=');
-	var = NULL;
 	value = NULL;
 	if (!argv || !env)
 		return ;
