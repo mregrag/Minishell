@@ -6,7 +6,7 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 16:25:14 by mregrag           #+#    #+#             */
-/*   Updated: 2024/07/30 12:06:14 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/08/01 17:19:13 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ char	*get_env_var(t_env *env, char *var)
 	{
 		tmp = (char *)current->content;
 		if (ft_strncmp(tmp, var, len) == 0 && tmp[len] == '=')
-			return (ft_strdup(tmp + len + 1));
+			return (ft_strjoin_three("\"", tmp + len + 1, "\""));
 		current = current->next;
 	}
 	return (NULL);

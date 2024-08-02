@@ -6,37 +6,69 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/11 22:02:39 by mregrag           #+#    #+#             */
-/*   Updated: 2024/07/30 11:36:26 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/08/02 18:31:07 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-static int	handle_word(char **input, t_token **tokens)
+char	*extract_operator(char **input, t_type type)
+{
+	char	*start;
+	char	*operator;
+	int		length;
+
+	start = *input;
+	if (type == T_HERDOC || type == T_APPEND)
+		length = 2;
+	else
+		length = 1;
+	operator = ft_substr(start, 0, length);
+	if (!operator)
+		return (NULL);
+	*input += length;
+	return (operator);
+}
+
+static int	add_operator_token(char **input, t_token **tokens, t_type type)
 {
 	char	*word;
+
+	word = extract_operator(input, type);
+	if (!word)
+		return (0);
+	token_add_back(tokens, new_token(word, type));
+	return (1);
+}
+
+static int	add_word_token(char **input, t_token **tokens, t_env *env)
+{
+	char	*word;
+	char	*expanded_word;
 
 	word = extract_word(input);
 	if (!word)
 		return (0);
-	token_add_back(tokens, new_token(word, T_CMD));
+	if (ft_strchr(word, '$') && !ft_strchr(word, '=') && !ft_strchr(word, ' '))
+	{
+		expanded_word = expansion_dollar(word, env);
+		if (!add_split_tokens(tokens, expanded_word))
+		{
+			free(expanded_word);
+			return (free(word), free(expanded_word), 0);
+		}
+		free(expanded_word);
+		free(word);
+	}
+	else
+		token_add_back(tokens, new_token(word, T_CMD));
 	return (1);
 }
 
-static int	handle_word_dollar(char **input, t_token **tokens)
-{
-	char	*word;
-
-	word = extract_word_dollar(input);
-	if (!word)
-		return (0);
-	token_add_back(tokens, new_token(word, T_CMD));
-	return (1);
-}
-
-static t_token	*creat_tokens(char *input)
+t_token	*create_tokens(char *input, t_env *env)
 {
 	t_token	*tokens;
+	t_type	type;
 
 	tokens = NULL;
 	if (!check_quotes(&input))
@@ -44,32 +76,16 @@ static t_token	*creat_tokens(char *input)
 	while (*input)
 	{
 		skip_spaces(&input);
+		type = get_operator_type(input);
 		if (is_operator(input))
 		{
-			if (!handle_operator(&input, &tokens))
+			if (!add_operator_token(&input, &tokens, type))
 				return (clear_tokens(&tokens), NULL);
 		}
 		else
-			if (!handle_word(&input, &tokens))
-				return (clear_tokens(&tokens), NULL);
-	}
-	return (tokens);
-}
-
-static t_token	*tokenize_dollar(char *input)
-{
-	t_token	*tokens;
-
-	tokens = NULL;
-	if (!check_quotes(&input))
-		return (NULL);
-	while (*input)
-	{
-		skip_spaces(&input);
-		if (!handle_word_dollar(&input, &tokens))
 		{
-			clear_tokens(&tokens);
-			return (NULL);
+			if (!add_word_token(&input, &tokens, env))
+				return (clear_tokens(&tokens), NULL);
 		}
 	}
 	return (tokens);
@@ -78,24 +94,11 @@ static t_token	*tokenize_dollar(char *input)
 t_token	*tokenize_input(char *input, t_env *env)
 {
 	char	*new_input;
-	char	*value;
 	t_token	*tokens;
 
 	tokens = NULL;
-	value = NULL;
 	new_input = ft_strtrim(input, " \t\n\v\f\r");
 	free(input);
-	if (new_input[0] == '$' && new_input[1] != '$')
-	{
-		if (!check_quotes(&input))
-			return (free(new_input), NULL);
-		value = expansion_input(new_input, env);
-		free(new_input);
-		if (!value)
-			return (NULL);
-		tokens = tokenize_dollar(value);
-		return (free(value), tokens);
-	}
-	tokens = creat_tokens(new_input);
+	tokens = create_tokens(new_input, env);
 	return (free(new_input), tokens);
 }

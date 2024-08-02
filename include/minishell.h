@@ -6,7 +6,7 @@
 /*   By: mkoualil <mkoualil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/10 16:16:44 by mregrag           #+#    #+#             */
-/*   Updated: 2024/07/30 12:09:53 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/08/02 14:35:33 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,7 @@ typedef struct s_token
 {
 	char			*value;
 	t_type			type;
+	int			flag;
 	struct s_token	*next;
 }	t_token;
 
@@ -65,8 +66,9 @@ typedef struct s_node
 
 int	g_sig;
 
-void	preorder_output(t_node *node, t_env *env);
-void	preorder_input(t_node *node, t_env *env);
+char	*expansion_dollar(char *str, t_env *env);
+int	add_split_tokens(t_token **tokens, char *expanded_word);
+char	**prepare_command(char **original_cmd);
 char	*handle_final_case(char *ret);
 void	malloc_error(void);
 void	preorder_hearedoc(t_node *node, t_env *env);

@@ -6,7 +6,7 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/18 04:11:35 by mregrag           #+#    #+#             */
-/*   Updated: 2024/07/30 11:28:35 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/08/01 21:03:53 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,12 +70,12 @@ static int	heredoc(t_node *node, t_env *env)
 
 static int	heredoc_redirection(t_node *node, t_env *env)
 {
-	if (node->type == T_HERDOC)
+	if (node->right && node->right->cmd)
 	{
-		if (node->right && node->right->cmd)
+		if (node->type == T_HERDOC)
 			node->fd_in = heredoc(node->right, env);
 		if (node->fd_in == -1)
-			return (0);
+			return (exit_status(1, env), 0);
 	}
 	return (1);
 }

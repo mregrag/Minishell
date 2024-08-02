@@ -6,7 +6,7 @@
 #    By: mkoualil <mkoualil@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/05/10 16:12:48 by mregrag           #+#    #+#              #
-#    Updated: 2024/07/29 14:31:20 by mregrag          ###   ########.fr        #
+#    Updated: 2024/08/01 13:16:01 by mregrag          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -36,6 +36,7 @@ ENV		:=	src/env/env_utils.c \
 
 EXECUTION	:=	src/execution/execute_builtin.c \
 			src/execution/execute_command.c \
+			src/execution/execute_utils.c\
 			src/execution/execute_pip.c \
 			src/execution/executing.c \
 			src/execution/redirections.c \

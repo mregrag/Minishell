@@ -6,7 +6,7 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 18:08:23 by mregrag           #+#    #+#             */
-/*   Updated: 2024/07/30 13:18:59 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/08/01 21:04:32 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,11 +27,7 @@ void	process_execution(t_node *root, t_env *envp)
 	get_std_fds(in_out);
 	preorder_hearedoc(root, envp);
 	if (g_sig == 0)
-	{
-		preorder_input(root, envp);
-		preorder_output(root, envp);
 		executing(root, envp);
-	}
 	cleanup_fds(root);
 	set_std_fds(in_out[0], in_out[1]);
 }

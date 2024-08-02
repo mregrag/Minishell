@@ -6,7 +6,7 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/11 23:05:33 by mregrag           #+#    #+#             */
-/*   Updated: 2024/07/30 11:36:59 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/08/01 13:38:50 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,48 +39,21 @@ char	*extract_word(char **input)
 	return (ft_substr(start, 0, len));
 }
 
-int	handle_operator(char **input, t_token **tokens)
+int	add_split_tokens(t_token **tokens, char *expanded_word)
 {
-	t_type	type;
-	char	*word;
-	char	*start;
+	char	**split_words;
+	int		i;
 
-	start = *input;
-	type = get_operator_type(*input);
-	if (type == T_HERDOC || type == T_APPEND)
-		*input += 2;
-	else
-		*input += 1;
-	word = ft_substr(start, 0, *input - start);
-	if (!word)
+	i = 0;
+	split_words = ft_split(expanded_word, ' ');
+	if (!split_words)
 		return (0);
-	token_add_back(tokens, new_token(word, type));
-	return (1);
-}
-
-char	*extract_word_dollar(char **input)
-{
-	char	*start;
-	size_t	len;
-	char	quote;
-
-	quote = 0;
-	start = *input;
-	while (**input)
+	while (split_words[i])
 	{
-		if (!quote && ft_isspace(**input))
-			break ;
-		if (ft_isquotes(**input))
-		{
-			if (!quote)
-				quote = **input;
-			else if (**input == quote)
-				quote = 0;
-		}
-		(*input)++;
+		token_add_back(tokens, new_token(split_words[i], T_CMD));
+		i++;
 	}
-	len = *input - start;
-	return (ft_substr(start, 0, len));
+	return (free(split_words), 1);
 }
 
 int	check_quotes(char **line)
@@ -110,5 +83,7 @@ t_type	get_operator_type(char *str)
 		return (T_OUT);
 	if (*str == '|')
 		return (T_PIPE);
+	else
+		return (T_CMD);
 	return (T_CMD);
 }

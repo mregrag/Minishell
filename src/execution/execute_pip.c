@@ -6,7 +6,7 @@
 /*   By: mkoualil <mkoualil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/24 22:43:10 by mregrag           #+#    #+#             */
-/*   Updated: 2024/07/22 18:18:16 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/08/02 18:33:25 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,19 +15,19 @@
 static void	execute_left_command(t_node *node, t_env *env, int *pipfd)
 {
 	close(pipfd[0]);
-	dup2(pipfd[1], STDOUT_FILENO);
+	ft_dup2(pipfd[1], STDOUT_FILENO);
 	close(pipfd[1]);
 	executing(node, env);
-	exit(ft_atoi(get_env_var(env, "?")));
+	exit(ft_atoi(ft_strtrim(get_env_var(env, "?"), "\"")));
 }
 
 static void	execute_right_command(t_node *node, t_env *env, int *pipfd)
 {
 	close(pipfd[1]);
-	dup2(pipfd[0], STDIN_FILENO);
+	ft_dup2(pipfd[0], STDIN_FILENO);
 	close(pipfd[0]);
 	executing(node, env);
-	exit(ft_atoi(get_env_var(env, "?")));
+	exit(ft_atoi(ft_strtrim(get_env_var(env, "?"), "\"")));
 }
 
 static void	cleanup_pipe(int pipfd[2])
