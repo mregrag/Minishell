@@ -6,7 +6,7 @@
 /*   By: mkoualil <mkoualil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/12 18:33:04 by mregrag           #+#    #+#             */
-/*   Updated: 2024/08/02 15:05:04 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/08/03 18:54:38 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,6 @@ int	exec_err(char *path, char *cmd, t_env *env)
 		return (print_error("minishell", cmd, "is a directory", NULL), 126);
 	return (0);
 }
-
 
 void	malloc_error(void)
 {

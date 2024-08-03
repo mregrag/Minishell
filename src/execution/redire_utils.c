@@ -6,7 +6,7 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 05:26:24 by mregrag           #+#    #+#             */
-/*   Updated: 2024/08/02 18:22:59 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/08/03 15:55:02 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,17 +50,19 @@ int	ft_open_append(char *file)
 
 int	preoredr_duplicat_file(t_node *node, t_env *env)
 {
-	if (!node)
-		return (1);
-	if (node->fd_in != 0)
-		if (node->fd_in == -1 || ft_dup2(node->fd_in, STDIN_FILENO) < 0)
-			return (exit_status(1, env), 0);
-	if (node->fd_out != 1)
-		if (node->fd_out == -1 || ft_dup2(node->fd_out, STDOUT_FILENO) < 0)
-			return (exit_status(1, env), 0);
-	if (!preoredr_duplicat_file(node->left, env))
-		return (0);
-	if (!preoredr_duplicat_file(node->right, env))
-		return (0);
+	while (node)
+	{
+		if (node->fd_in != 0)
+			if (node->fd_in == -1 || ft_dup2(node->fd_in, STDIN_FILENO) < 0)
+				return (exit_status(1, env), 0);
+		if (node->fd_out != 1)
+			if (node->fd_out == -1 || ft_dup2(node->fd_out, STDOUT_FILENO) < 0)
+				return (exit_status(1, env), 0);
+		if (node->fd_in != 0)
+			close (node->fd_in);
+		if (node->fd_out != 1)
+			close (node->fd_out);
+		node = node->left;
+	}
 	return (1);
 }

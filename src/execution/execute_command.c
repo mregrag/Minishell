@@ -6,7 +6,7 @@
 /*   By: mkoualil <mkoualil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/17 22:58:39 by mregrag           #+#    #+#             */
-/*   Updated: 2024/08/02 14:37:21 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/08/03 16:07:59 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,8 +47,6 @@ char	*get_path(char *command, t_env *env)
 	while (paths[i])
 	{
 		full_path = ft_strjoin_three(paths[i], "/", command);
-		if (!full_path)
-			break ;
 		if (access(full_path, X_OK | F_OK) == 0)
 			return (ft_free_array(paths), full_path);
 		free(full_path);

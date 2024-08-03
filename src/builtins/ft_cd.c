@@ -6,7 +6,7 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/18 18:49:44 by mregrag           #+#    #+#             */
-/*   Updated: 2024/07/24 18:11:05 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/08/02 23:42:33 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,15 +22,18 @@ static	void	cd_err(void)
 static	char	*home(t_env *env)
 {
 	char	*path;
+	char	*trim;
 
 	path = get_env_var(env, "HOME");
-	if (!path)
+	trim = ft_strtrim(path, "\"");
+	free(path);
+	if (!trim)
 	{
 		ft_putstr_fd("bash: cd: HOME not set\n", 2);
 		exit_status(1, env);
 		return (NULL);
 	}
-	return (path);
+	return (trim);
 }
 
 static int	is_directory(char *path)

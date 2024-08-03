@@ -6,7 +6,7 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/11 22:02:39 by mregrag           #+#    #+#             */
-/*   Updated: 2024/08/02 18:31:07 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/08/03 15:33:33 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,8 +57,7 @@ static int	add_word_token(char **input, t_token **tokens, t_env *env)
 			free(expanded_word);
 			return (free(word), free(expanded_word), 0);
 		}
-		free(expanded_word);
-		free(word);
+		(free(expanded_word), free(word));
 	}
 	else
 		token_add_back(tokens, new_token(word, T_CMD));

@@ -6,12 +6,11 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/30 15:14:43 by mregrag           #+#    #+#             */
-/*   Updated: 2024/08/01 16:41:53 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/08/03 20:12:21 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
-#include <stdio.h>
 
 static char	*handle_special_cases(char *ret, char *str, size_t *i, t_env *env)
 {
@@ -50,7 +49,7 @@ static char	*handle_env_var(char *ret, char *str, size_t *i, t_env *env)
 	val = get_env_var(env, var);
 	trim = ft_strtrim(val, " \t\n\v\f\r");
 	(free(var), free(val));
-	if (!val)
+	if (!trim)
 		return (ret);
 	new_ret = ft_strjoin_free(ret, trim);
 	return (new_ret);

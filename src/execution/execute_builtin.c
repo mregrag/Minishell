@@ -6,7 +6,7 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/20 20:49:46 by mregrag           #+#    #+#             */
-/*   Updated: 2024/07/21 03:46:41 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/08/03 18:50:24 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ int	execute_builtin(t_node *node, t_env *env)
 	else if (ft_strcmp(node->cmd[0], "env") == 0)
 		return (ft_env(node, env));
 	else if (ft_strcmp(node->cmd[0], "pwd") == 0)
-		return (ft_pwd());
+		return (ft_pwd(node, env));
 	else if (ft_strcmp(node->cmd[0], "cd") == 0)
 		return (ft_cd(node, env));
 	else if (ft_strcmp(node->cmd[0], "exit") == 0)

@@ -6,7 +6,7 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/30 15:10:09 by mregrag           #+#    #+#             */
-/*   Updated: 2024/08/01 17:26:29 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/08/03 20:07:36 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ char	*expansion_content(char *str, t_env *env)
 		if (str[i] == '\'' || str[i] == '"')
 			ret = handle_quotes(ret, str, &i, env);
 		else if (str[i] == '$')
-			ret = handle_dollar(ret, str, &i, env);
+			ret = handle_dollar_content(ret, str, &i, env);
 		else
 			ret = handle_normal(ret, str, &i);
 		if (!ret)
