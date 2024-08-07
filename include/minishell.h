@@ -6,7 +6,7 @@
 /*   By: mkoualil <mkoualil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/10 16:16:44 by mregrag           #+#    #+#             */
-/*   Updated: 2024/08/03 20:07:24 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/08/07 17:22:47 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,7 @@ int	g_sig;
 char	*expansion_dollar(char *str, t_env *env);
 char	*handle_final_case(char *ret);
 void	malloc_error(void);
+void	handle_allocation_failure(void);
 void	preorder_hearedoc(t_node *node, t_env *env);
 t_token	*tokenize_input(char *input, t_env *env);
 t_token	*new_token(char *value, t_type type);
@@ -78,14 +79,14 @@ void	skip_spaces(char **str);
 int		skip_quotes(char *line, size_t *i);
 int		is_redirection(t_type type);
 int		ft_lstsize_token(t_token *lst);
-int		preoredr_duplicat_file(t_node *node, t_env *env);
+int		preoredr_duplicat_file(t_node *node);
 int		add_split_tokens(t_token **tokens, char *expanded_word);
 t_type	get_operator_type(char *str);
 int		check_operators(char *str);
 int		handle_operator(char **input, t_token **tokens);
 int		is_operator(char *str);
-int		check_quotes(char **line);
-int		handle_redirections(t_node **node, t_env *env);
+int		check_quotes(char *line);
+int		execute_redirections(t_node **node, t_env *env);
 t_node	*parse_command(t_token *tokens, t_env *env);
 t_node	*parse_expression(t_token *tokens, t_env *env);
 t_node	*parse_tokens(t_token *tokens, t_env *env);
@@ -96,7 +97,6 @@ t_node	*parse_redirection(t_token *tokens, t_env *env);
 void	free_tree(t_node *node);
 void	creat_cmd(t_node *node, t_token *tokens, int count, t_env *env);
 void	fill_cmd(t_node *node, t_token *tokens, t_env *env, int count);
-char	*extract_word(char **input);
 char	*extract_word_dollar(char **input);
 
 int		ft_echo(t_node *node, t_env *env);
@@ -109,7 +109,6 @@ int		ft_pwd(t_node *node, t_env *env);
 int		print_error(char *s1, char *s2, char *s3, char *message);
 
 void	initialize_enviroment(t_env **env, char **envp);
-void	increment_shlvl(t_env *env);
 void	print_env(t_env *env);
 void	set_env_var(t_env *env, char *var, char *value);
 void	unset_env_var(t_env *env, char *name);
@@ -119,6 +118,7 @@ void	get_std_fds(int *in_out);
 void	append_env_var(t_env *env, char *var, char *value);
 int		is_var_in_env(t_env *env, char *var_name);
 char	*get_env_var(t_env *env, char *name);
+char	*get_env_var_dollar(t_env *env, char *var);
 
 char	*get_path(char *cmd, t_env *env);
 void	executing(t_node *node, t_env *env);
@@ -143,6 +143,7 @@ char	*handle_single_quotes(char *ret, char *str, size_t *i);
 char	*handle_double_quotes(char *ret, char *str, size_t *i, t_env *env);
 char	*handle_normal(char *ret, char *str, size_t *i);
 char	*handle_str(char *ret, char *str, size_t *i);
+char	*consecutive_dollars(char *ret, char *str, size_t *i, size_t count);
 
 void	block_signals(struct sigaction *sa_ignore);
 void	restore_signals(struct sigaction *sa_default);
@@ -153,5 +154,7 @@ void	setup_signal(t_env *envp);
 void	exit_status(int status, t_env *env);
 int		exec_err(char *path, char *cmd, t_env *env);
 int		check_syntax(t_token *tokens);
+int		ft_is_directory(char *path);
+t_list	*find_env_var(t_env *env, char *var);
 
 #endif

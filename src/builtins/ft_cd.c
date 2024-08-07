@@ -6,7 +6,7 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/18 18:49:44 by mregrag           #+#    #+#             */
-/*   Updated: 2024/08/02 23:42:33 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/08/06 19:12:47 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,27 +22,15 @@ static	void	cd_err(void)
 static	char	*home(t_env *env)
 {
 	char	*path;
-	char	*trim;
 
 	path = get_env_var(env, "HOME");
-	trim = ft_strtrim(path, "\"");
-	free(path);
-	if (!trim)
+	if (!path)
 	{
 		ft_putstr_fd("bash: cd: HOME not set\n", 2);
 		exit_status(1, env);
 		return (NULL);
 	}
-	return (trim);
-}
-
-static int	is_directory(char *path)
-{
-	struct stat	statbuf;
-
-	if (stat(path, &statbuf) != 0)
-		return (0);
-	return (S_ISDIR(statbuf.st_mode));
+	return (path);
 }
 
 static int	change_directory(char *path, t_env *env, char *old_pwd)
@@ -80,9 +68,9 @@ int	ft_cd(t_node *node, t_env *env)
 	}
 	else
 		path = node->cmd[1];
-	if (!is_directory(path))
+	if (!ft_is_directory(path))
 	{
-		print_error("minish", "cd", strerror(errno), NULL);
+		print_error("minish", "cd", path, strerror(errno));
 		return ((exit_status(1, env), free(home_path)), 1);
 	}
 	if (change_directory(path, env, old_pwd))

@@ -6,7 +6,7 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/11 23:05:33 by mregrag           #+#    #+#             */
-/*   Updated: 2024/08/03 15:48:41 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/08/07 17:19:03 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,28 +46,22 @@ int	add_split_tokens(t_token **tokens, char *expanded_word)
 
 	i = 0;
 	split_words = ft_split(expanded_word, ' ');
-	if (!split_words || !split_words[0])
-		token_add_back(tokens, new_token(ft_strdup(expanded_word), T_CMD));
-	else
+	while (split_words[i])
 	{
-		while (split_words[i])
-		{
-			token_add_back(tokens, new_token(split_words[i], T_CMD));
-			i++;
-		}
+		token_add_back(tokens, new_token(split_words[i], T_CMD));
+		i++;
 	}
-	free(split_words);
-	return (1);
+	return(free(split_words), 1);
 }
 
-int	check_quotes(char **line)
+int	check_quotes(char *line)
 {
 	size_t	i;
 
 	i = 0;
-	while ((*line)[i])
+	while ((line)[i])
 	{
-		if (ft_isquotes((*line)[i]) && !skip_quotes(*line, &i))
+		if (ft_isquotes((line)[i]) && !skip_quotes(line, &i))
 			return (print_error("minish", "unexpected EOF `", NULL, NULL), 0);
 		else
 			i++;

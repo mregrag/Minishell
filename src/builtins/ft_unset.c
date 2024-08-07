@@ -6,7 +6,7 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/18 18:51:07 by mregrag           #+#    #+#             */
-/*   Updated: 2024/07/12 05:57:50 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/08/06 21:54:25 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ int	ft_unset(t_node *node, t_env *env)
 		if (!check_var_unset(*args))
 		{
 			print_error("minishell", "unset", *args, "not a valid identifier");
-			return (1);
+			return (exit_status(1, env), 1);
 		}
 		else
 			unset_env_var(env, *args);

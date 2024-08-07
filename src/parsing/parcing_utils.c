@@ -6,12 +6,11 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/24 21:23:34 by mregrag           #+#    #+#             */
-/*   Updated: 2024/08/03 13:57:21 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/08/06 21:58:57 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
-#include <stdio.h>
 
 t_node	*new_node(t_type type)
 {
@@ -19,7 +18,7 @@ t_node	*new_node(t_type type)
 
 	node = malloc(sizeof(t_node));
 	if (!node)
-		malloc_error();
+		handle_allocation_failure();
 	node->type = type;
 	node->cmd = NULL;
 	node->left = NULL;

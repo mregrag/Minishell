@@ -6,7 +6,7 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/18 18:50:47 by mregrag           #+#    #+#             */
-/*   Updated: 2024/08/01 15:31:11 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/08/06 21:52:23 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,10 +61,10 @@ static	void	add_arg_to_env(char *argv, t_env *env)
 	char	*value;
 	char	*trimmed;
 
-	equals = ft_strchr(argv, '=');
-	value = NULL;
 	if (!argv || !env)
 		return ;
+	equals = ft_strchr(argv, '=');
+	value = NULL;
 	if (equals)
 	{
 		var = ft_substr(argv, 0, equals - argv);
@@ -86,12 +86,10 @@ static	void	add_arg_to_env(char *argv, t_env *env)
 int	ft_export(t_node *node, t_env *env)
 {
 	char	**argv;
-	t_list	*envp;
 
-	envp = env->env;
 	argv = node->cmd;
 	if (!argv[1])
-		return (export_list(envp), 1);
+		return (export_list(env->env), 1);
 	while (*(++argv))
 	{
 		if (!check_var(*argv))

@@ -6,7 +6,7 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/18 21:49:59 by mregrag           #+#    #+#             */
-/*   Updated: 2024/07/29 20:50:49 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/08/05 21:53:30 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,50 +66,39 @@ char	*handle_single_quotes(char *ret, char *str, size_t *i)
 {
 	size_t	start;
 	char	*content;
-	char	*new_ret;
 
 	start = *i;
 	(*i)++;
 	while (str[*i] && str[*i] != '\'')
 		(*i)++;
-	if (str[*i] == '\'')
-		(*i)++;
+	(*i) += (str[*i] == '"');
 	content = ft_substr(str, start, *i - start);
-	if (!content)
-		return (ret);
-	new_ret = ft_strjoin(ret, content);
-	free(content);
-	if (new_ret)
-		return (free(ret), new_ret);
-	return (ret);
+	return (ft_strjoin_free(ret, content));
 }
 
 char	*handle_double_quotes(char *ret, char *str, size_t *i, t_env *env)
 {
 	char	*content;
-	char	*sub;
 	char	*new_ret;
 
 	(*i)++;
 	content = ft_strdup("");
 	if (!content)
-		return (ret);
+		handle_allocation_failure();
 	while (str[*i] && str[*i] != '"')
 	{
 		if (str[*i] == '$')
 			content = handle_dollar(content, str, i, env);
 		else
 		{
-			sub = ft_substr(str, *i, 1);
-			new_ret = ft_strjoin_free(content, sub);
+			new_ret = ft_strjoin_free(content, ft_substr(str, *i, 1));
 			content = new_ret;
 			(*i)++;
 		}
 	}
 	(*i) += (str[*i] == '"');
 	new_ret = ft_strjoin_three("\"", content, "\"");
-	free(content);
-	return (ft_strjoin_free(ret, new_ret));
+	return (free(content), ft_strjoin_free(ret, new_ret));
 }
 
 char	*handle_normal(char *ret, char *str, size_t *i)

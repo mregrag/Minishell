@@ -6,7 +6,7 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/27 17:47:28 by mregrag           #+#    #+#             */
-/*   Updated: 2024/08/03 18:03:39 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/08/06 21:48:13 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,8 +36,8 @@ static void	error(char *cmd, char *arg, char *message)
 static int	is_long(char *str)
 {
 	int				i;
-	unsigned long	result;
 	int				sign;
+	unsigned long	result;
 
 	result = 0;
 	i = 0;
@@ -46,7 +46,7 @@ static int	is_long(char *str)
 		sign = -1;
 	if (str[i] == '-' || str[i] == '+')
 		i++;
-	while (str[i] != 0)
+	while (str[i])
 	{
 		result = result * 10 + (str[i] - 48);
 		if (result > 9223372036854775807 && sign == 1)
@@ -70,10 +70,9 @@ int	ft_exit(t_node *node, t_env *env)
 		if (node->cmd[2])
 		{
 			print_error("minish", node->cmd[0], "too many arguments", NULL);
-			exit_status(1, env);
-			return (1);
+			return (exit_status(1, env), 1);
 		}
 		exit(ft_atoi(node->cmd[1]));
 	}
-	exit(ft_atoi(ft_strtrim(get_env_var(env, "?"), "\"")));
+	exit(ft_atoi(get_env_var(env, "?")));
 }

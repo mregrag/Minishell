@@ -6,7 +6,7 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 05:26:24 by mregrag           #+#    #+#             */
-/*   Updated: 2024/08/03 15:55:02 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/08/06 00:44:06 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,16 +48,16 @@ int	ft_open_append(char *file)
 	return (fd);
 }
 
-int	preoredr_duplicat_file(t_node *node, t_env *env)
+int	preoredr_duplicat_file(t_node *node)
 {
 	while (node)
 	{
 		if (node->fd_in != 0)
 			if (node->fd_in == -1 || ft_dup2(node->fd_in, STDIN_FILENO) < 0)
-				return (exit_status(1, env), 0);
+				return (0);
 		if (node->fd_out != 1)
 			if (node->fd_out == -1 || ft_dup2(node->fd_out, STDOUT_FILENO) < 0)
-				return (exit_status(1, env), 0);
+				return (0);
 		if (node->fd_in != 0)
 			close (node->fd_in);
 		if (node->fd_out != 1)

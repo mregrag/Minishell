@@ -6,7 +6,7 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 16:25:14 by mregrag           #+#    #+#             */
-/*   Updated: 2024/08/03 13:56:45 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/08/07 17:48:36 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,111 +14,110 @@
 
 char	*get_env_var(t_env *env, char *var)
 {
-	t_list	*current;
-	char	*tmp;
-	size_t	len;
+	t_list	*var_node;
+	char	*content;
+	char	*value;
+	size_t	var_len;
 
 	if (!env || !var)
 		return (NULL);
-	len = ft_strlen(var);
-	current = env->env;
-	while (current)
-	{
-		tmp = (char *)current->content;
-		if (ft_strncmp(tmp, var, len) == 0 && tmp[len] == '=')
-			return (ft_strjoin_three("\"", tmp + len + 1, "\""));
-		current = current->next;
-	}
-	return (NULL);
+	var_node = find_env_var(env, var);
+	if (!var_node)
+		return (NULL);
+	content = (char *)var_node->content;
+	var_len = ft_strlen(var);
+	if (content[var_len] != '=')
+		return (NULL);
+	value = ft_strdup(content + var_len + 1);
+	if (!value)
+		handle_allocation_failure();
+	return (value);
+}
+
+char	*get_env_var_dollar(t_env *env, char *var)
+{
+	t_list	*var_node;
+	char	*content;
+	char	*value;
+	size_t	var_len;
+
+	if (!env || !var)
+		return (NULL);
+	var_node = find_env_var(env, var);
+	if (!var_node)
+		return (NULL);
+	content = (char *)var_node->content;
+	var_len = ft_strlen(var);
+	if (content[var_len] != '=')
+		return (NULL);
+	value = ft_strjoin_three("\"", content + var_len + 1, "\"");
+	if (!value)
+		handle_allocation_failure();
+	return (value);
 }
 
 void	set_env_var(t_env *env, char *var, char *value)
 {
-	t_list	*current;
-	size_t	var_len;
+	t_list	*existing_var;
 	char	*new_var;
-	char	*content;
 
-	current = env->env;
-	var_len = ft_strlen(var);
+	if (!env || !var)
+		return ;
 	if (value)
 		new_var = ft_strjoin_three(var, "=", value);
 	else
 		new_var = ft_strdup(var);
-	while (current)
+	if (!new_var)
+		handle_allocation_failure();
+	existing_var = find_env_var(env, var);
+	if (existing_var)
 	{
-		content = (char *)current->content;
-		if (!ft_strncmp(content, var, var_len)
-			&& (content[var_len] == '=' || !content[var_len]))
-		{
-			free(current->content);
-			current->content = new_var;
-			return ;
-		}
-		current = current->next;
+		free(existing_var->content);
+		existing_var->content = new_var;
 	}
-	ft_lstadd_back(&(env->env), ft_lstnew(new_var));
+	else
+		ft_lstadd_back(&(env->env), ft_lstnew(new_var));
 }
 
 void	unset_env_var(t_env *env, char *var)
 {
-	t_list	*current;
-	t_list	*prev;
-	size_t	len;
+	t_list	*current_node;
+	t_list	*prev_node;
 
 	if (!env || !var)
 		return ;
-	len = ft_strlen(var);
-	current = env->env;
-	prev = NULL;
-	while (current)
+	current_node = env->env;
+	prev_node = NULL;
+	while (current_node)
 	{
-		if (ft_strncmp(current->content, var, len) == 0)
+		if (current_node == find_env_var(env, var))
 		{
-			if (prev)
-				prev->next = current->next;
+			if (prev_node)
+				prev_node->next = current_node->next;
 			else
-				env->env = current->next;
-			free(current->content);
-			free(current);
+				env->env = current_node->next;
+			free(current_node->content);
+			free(current_node);
 			return ;
 		}
-		prev = current;
-		current = current->next;
+		prev_node = current_node;
+		current_node = current_node->next;
 	}
-}
-
-static t_list	*find_env_var(t_env *env, char *var)
-{
-	t_list	*current;
-	size_t	var_len;
-
-	current = env->env;
-	var_len = ft_strlen(var);
-	while (current)
-	{
-		if (ft_strncmp(current->content, var, var_len) == 0
-			&& (((char *)current->content)[var_len] == '='
-			|| ((char *)current->content)[var_len] == '\0'))
-			return (current);
-		current = current->next;
-	}
-	return (NULL);
 }
 
 void	append_env_var(t_env *env, char *var, char *value)
 {
-	t_list	*current;
+	t_list	*current_node;
 	char	*old_value;
 	char	*new_value;
 	char	*new_content;
 
 	if (!env || !var || !value)
 		return ;
-	current = find_env_var(env, var);
-	if (current)
+	current_node = find_env_var(env, var);
+	if (current_node)
 	{
-		old_value = ft_strchr(current->content, '=');
+		old_value = ft_strchr(current_node->content, '=');
 		if (old_value)
 			new_value = ft_strjoin(old_value + 1, value);
 		else
@@ -126,8 +125,8 @@ void	append_env_var(t_env *env, char *var, char *value)
 		new_content = ft_strjoin_three(var, "=", new_value);
 		if (!new_content)
 			return (free(new_value));
-		free(current->content);
-		current->content = new_content;
+		free(current_node->content);
+		current_node->content = new_content;
 		free(new_value);
 	}
 	else

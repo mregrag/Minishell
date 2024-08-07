@@ -6,7 +6,7 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/18 04:37:41 by mregrag           #+#    #+#             */
-/*   Updated: 2024/08/03 17:46:10 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/08/06 19:13:11 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,4 +50,13 @@ int	ft_dup(int oldfd)
 	if (newfd == -1)
 		print_error("minish", "dup", strerror(errno), NULL);
 	return (newfd);
+}
+
+int	ft_is_directory(char *path)
+{
+	struct stat	statbuf;
+
+	if (stat(path, &statbuf) != 0)
+		return (0);
+	return (S_ISDIR(statbuf.st_mode));
 }

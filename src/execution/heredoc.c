@@ -6,7 +6,7 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/18 04:11:35 by mregrag           #+#    #+#             */
-/*   Updated: 2024/08/03 20:01:59 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/08/07 00:43:12 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,11 +59,7 @@ static int	heredoc(t_node *node, t_env *env)
 	set_signal_heredoc();
 	node->flag = ft_strchr(node->cmd[0], '\'') || ft_strchr(node->cmd[0], '"');
 	if (process_heredoc_content(node, fd_heredoc, env) < 0)
-	{
-		close(fd_heredoc[0]);
-		close(fd_heredoc[1]);
-		return (-1);
-	}
+		return (close(fd_heredoc[0]), close(fd_heredoc[1]), -1);
 	close(fd_heredoc[1]);
 	return (fd_heredoc[0]);
 }

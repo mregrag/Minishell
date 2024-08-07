@@ -6,83 +6,57 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/01 18:16:01 by mregrag           #+#    #+#             */
-/*   Updated: 2024/08/03 14:00:28 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/08/07 17:55:09 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-void	increment_shlvl(t_env *env)
+static void	increment_shlvl(t_env *env)
 {
 	char	*shlvl_str;
-	char	*trim_shlvl;
 	int		shlvl;
 
 	shlvl_str = get_env_var(env, "SHLVL");
-	trim_shlvl = ft_strtrim(shlvl_str, "\"");
-	free(shlvl_str);
-	if (!trim_shlvl)
-		shlvl = 0;
+	if (!shlvl_str)
+		shlvl = 1;
 	else
 	{
-		shlvl = ft_atoi(trim_shlvl);
-		free(trim_shlvl);
+		shlvl = ft_atoi(shlvl_str);
+		if (shlvl == -1)
+			shlvl++;
+		free(shlvl_str);
 	}
 	shlvl++;
-	trim_shlvl = ft_itoa(shlvl);
-	if (trim_shlvl)
-	{
-		set_env_var(env, "SHLVL", trim_shlvl);
-		free(trim_shlvl);
-	}
-}
-
-int	is_var_in_env(t_env *env, char *var_name)
-{
-	t_list	*current;
-	size_t	var_len;
-	char	*content;
-
-	if (!env || !var_name)
-		return (0);
-	var_len = ft_strlen(var_name);
-	current = env->env;
-	while (current)
-	{
-		content = (char *)current->content;
-		if (ft_strncmp(content, var_name, var_len) == 0
-			&& (content[var_len] == '=' || content[var_len] == '\0'))
-			return (1);
-		current = current->next;
-	}
-	return (0);
+	shlvl_str = ft_itoa(shlvl);
+	if (shlvl_str)
+		(set_env_var(env, "SHLVL", shlvl_str), free(shlvl_str));
 }
 
 void	initialize_enviroment(t_env **env, char **envp)
 {
-	char	*tmp;
 	char	cwd[PATH_MAX];
 
 	if (!env || !envp)
 		return ;
-	*env = malloc(sizeof(t_env));
+	*env = ft_calloc(sizeof(t_env), 1);
 	if (!*env)
-		malloc_error();
-	(*env)->env = NULL;
+		handle_allocation_failure();
 	while (*envp)
 	{
-		tmp = ft_strdup(*envp);
-		if (!tmp)
-			malloc_error();
-		ft_lstadd_back(&((*env)->env), ft_lstnew(tmp));
+		if (!ft_strncmp(*envp, "OLDPWD", 6))
+		{
+			set_env_var(*env, "OLDPWD", NULL);
+			envp++;
+		}
+		ft_lstadd_back(&((*env)->env), ft_lstnew(ft_strdup(*envp)));
 		envp++;
 	}
 	set_env_var(*env, "?", "0");
 	if (!is_var_in_env(*env, "PWD"))
-		if (getcwd(cwd, sizeof(cwd)))
-			set_env_var(*env, "PWD", cwd);
+		set_env_var(*env, "PWD", getcwd(cwd, sizeof(cwd)));
 	if (!is_var_in_env(*env, "PATH"))
-		set_env_var(*env, "PATH", "/usr/local/bin:/usr/bin:/bin");
+		set_env_var(*env, "PATH", "/usr/local/bin:/usr/bin:/bin:.");
 	increment_shlvl(*env);
 }
 
@@ -101,23 +75,4 @@ void	print_env(t_env *env)
 			ft_putendl_fd(content, 1);
 		current = current->next;
 	}
-}
-
-void	free_env(t_env *env)
-{
-	t_list	*current;
-	t_list	*next;
-
-	if (!env)
-		return ;
-	current = env->env;
-	while (current)
-	{
-		next = current->next;
-		free(current->content);
-		free(current);
-		current = next;
-	}
-	free(env);
-	rl_clear_history();
 }

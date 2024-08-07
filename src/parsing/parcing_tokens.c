@@ -6,7 +6,7 @@
 /*   By: mkoualil <mkoualil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/24 21:22:11 by mregrag           #+#    #+#             */
-/*   Updated: 2024/07/26 21:21:33 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/08/06 23:02:27 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ t_node	*parse_command(t_token *tokens, t_env *env)
 	count = ft_lstsize_token(tokens);
 	node->cmd = malloc(sizeof(char *) * (count + 1));
 	if (!node->cmd)
-		malloc_error();
+		handle_allocation_failure();
 	fill_cmd(node, tokens, env, count);
 	return (node);
 }
@@ -33,17 +33,13 @@ t_node	*parse_file(t_token *token, t_type type, t_env *env)
 	node = new_node(type);
 	node->cmd = malloc(sizeof(char *) * 2);
 	if (!node->cmd)
-		malloc_error();
+		handle_allocation_failure();
 	if (type == T_IN || type == T_APPEND || type == T_OUT)
-	{
 		node->cmd[0] = expansion_input(token->value, env);
-		free(token->value);
-	}
 	else if (type == T_HERDOC)
-		node->cmd[0] = token->value;
+		node->cmd[0] = ft_strdup(token->value);
 	node->cmd[1] = NULL;
-	free(token);
-	return (node);
+	return (free_token(token), node);
 }
 
 t_node	*parse_redirection(t_token *tokens, t_env *env)
@@ -66,9 +62,7 @@ t_node	*parse_redirection(t_token *tokens, t_env *env)
 			tokens->next = next_token->next->next;
 			node->left = parse_redirection(tmp, env);
 			node->right = parse_file(next_token->next, next_token->type, env);
-			free(next_token->value);
-			free(next_token);
-			return (node);
+			return (free_token(next_token), node);
 		}
 		tokens = next_token;
 	}
@@ -91,8 +85,7 @@ t_node	*parse_expression(t_token *tokens, t_env *env)
 			tokens->next = NULL;
 			node->left = parse_redirection(tmp, env);
 			node->right = parse_expression(next_token->next, env);
-			free_token(next_token);
-			return (node);
+			return (free_token(next_token), node);
 		}
 		tokens = next_token;
 	}
@@ -104,10 +97,6 @@ t_node	*parse_tokens(t_token *tokens, t_env *env)
 	if (!tokens)
 		return (NULL);
 	if (check_syntax(tokens))
-	{
-		clear_tokens(&tokens);
-		exit_status(258, env);
-		return (NULL);
-	}
+		return (clear_tokens(&tokens), exit_status(258, env), NULL);
 	return (parse_expression(tokens, env));
 }

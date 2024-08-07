@@ -1,0 +1,192 @@
+.
+├── Makefile
+├── include
+│   └── minishell.h
+├── lib
+│   └── libft
+│       ├── Makefile
+│       ├── ft_atoi.c
+│       ├── ft_atoi.o
+│       ├── ft_bzero.c
+│       ├── ft_bzero.o
+│       ├── ft_calloc.c
+│       ├── ft_calloc.o
+│       ├── ft_free.c
+│       ├── ft_free.o
+│       ├── ft_isalnum.c
+│       ├── ft_isalnum.o
+│       ├── ft_isalpha.c
+│       ├── ft_isalpha.o
+│       ├── ft_isascii.c
+│       ├── ft_isascii.o
+│       ├── ft_isdigit.c
+│       ├── ft_isdigit.o
+│       ├── ft_isprint.c
+│       ├── ft_isprint.o
+│       ├── ft_isquotes.c
+│       ├── ft_isquotes.o
+│       ├── ft_isspace.c
+│       ├── ft_isspace.o
+│       ├── ft_itoa.c
+│       ├── ft_itoa.o
+│       ├── ft_list_to_arrg.c
+│       ├── ft_list_to_arrg.o
+│       ├── ft_lstadd_back_bonus.c
+│       ├── ft_lstadd_back_bonus.o
+│       ├── ft_lstadd_front_bonus.c
+│       ├── ft_lstadd_front_bonus.o
+│       ├── ft_lstclear_bonus.c
+│       ├── ft_lstclear_bonus.o
+│       ├── ft_lstdelone_bonus.c
+│       ├── ft_lstdelone_bonus.o
+│       ├── ft_lstiter_bonus.c
+│       ├── ft_lstiter_bonus.o
+│       ├── ft_lstlast_bonus.c
+│       ├── ft_lstlast_bonus.o
+│       ├── ft_lstmap_bonus.c
+│       ├── ft_lstmap_bonus.o
+│       ├── ft_lstnew_bonus.c
+│       ├── ft_lstnew_bonus.o
+│       ├── ft_lstsize_bonus.c
+│       ├── ft_lstsize_bonus.o
+│       ├── ft_memchr.c
+│       ├── ft_memchr.o
+│       ├── ft_memcmp.c
+│       ├── ft_memcmp.o
+│       ├── ft_memcpy.c
+│       ├── ft_memcpy.o
+│       ├── ft_memmove.c
+│       ├── ft_memmove.o
+│       ├── ft_memset.c
+│       ├── ft_memset.o
+│       ├── ft_putchar_fd.c
+│       ├── ft_putchar_fd.o
+│       ├── ft_putendl_fd.c
+│       ├── ft_putendl_fd.o
+│       ├── ft_putnbr_fd.c
+│       ├── ft_putnbr_fd.o
+│       ├── ft_putstr_fd.c
+│       ├── ft_putstr_fd.o
+│       ├── ft_split.c
+│       ├── ft_split.o
+│       ├── ft_strchr.c
+│       ├── ft_strchr.o
+│       ├── ft_strcmp.c
+│       ├── ft_strcmp.o
+│       ├── ft_strcpy.c
+│       ├── ft_strcpy.o
+│       ├── ft_strdup.c
+│       ├── ft_strdup.o
+│       ├── ft_striteri.c
+│       ├── ft_striteri.o
+│       ├── ft_strjoin.c
+│       ├── ft_strjoin.o
+│       ├── ft_strjoin_free.c
+│       ├── ft_strjoin_free.o
+│       ├── ft_strjoin_tree.c
+│       ├── ft_strjoin_tree.o
+│       ├── ft_strlcat.c
+│       ├── ft_strlcat.o
+│       ├── ft_strlcpy.c
+│       ├── ft_strlcpy.o
+│       ├── ft_strlen.c
+│       ├── ft_strlen.o
+│       ├── ft_strlen_arg.c
+│       ├── ft_strlen_arg.o
+│       ├── ft_strmapi.c
+│       ├── ft_strmapi.o
+│       ├── ft_strncmp.c
+│       ├── ft_strncmp.o
+│       ├── ft_strnstr.c
+│       ├── ft_strnstr.o
+│       ├── ft_strrchr.c
+│       ├── ft_strrchr.o
+│       ├── ft_strtrim.c
+│       ├── ft_strtrim.o
+│       ├── ft_substr.c
+│       ├── ft_substr.o
+│       ├── ft_tolower.c
+│       ├── ft_tolower.o
+│       ├── ft_toupper.c
+│       ├── ft_toupper.o
+│       ├── libft.a
+│       └── libft.h
+├── minishell
+├── src
+│   ├── builtins
+│   │   ├── ft_cd.c
+│   │   ├── ft_cd.o
+│   │   ├── ft_echo.c
+│   │   ├── ft_echo.o
+│   │   ├── ft_env.c
+│   │   ├── ft_env.o
+│   │   ├── ft_exit.c
+│   │   ├── ft_exit.o
+│   │   ├── ft_export.c
+│   │   ├── ft_export.o
+│   │   ├── ft_pwd.c
+│   │   ├── ft_pwd.o
+│   │   ├── ft_unset.c
+│   │   └── ft_unset.o
+│   ├── env
+│   │   ├── env_utils.c
+│   │   ├── env_utils.o
+│   │   ├── init_env.c
+│   │   ├── init_env.o
+│   │   ├── utils.c
+│   │   └── utils.o
+│   ├── execution
+│   │   ├── execute_builtin.c
+│   │   ├── execute_builtin.o
+│   │   ├── execute_command.c
+│   │   ├── execute_command.o
+│   │   ├── execute_pip.c
+│   │   ├── execute_pip.o
+│   │   ├── executing.c
+│   │   ├── executing.o
+│   │   ├── heredoc.c
+│   │   ├── heredoc.o
+│   │   ├── redire_utils.c
+│   │   ├── redire_utils.o
+│   │   ├── redirections.c
+│   │   └── redirections.o
+│   ├── expansion
+│   │   ├── expansion.c
+│   │   ├── expansion.o
+│   │   ├── expansion_utils.c
+│   │   ├── expansion_utils.o
+│   │   ├── expansion_utils1.c
+│   │   ├── expansion_utils1.o
+│   │   ├── handle_dolar.c
+│   │   └── handle_dolar.o
+│   ├── main.c
+│   ├── main.o
+│   ├── parsing
+│   │   ├── parcing_tokens.c
+│   │   ├── parcing_tokens.o
+│   │   ├── parcing_utils.c
+│   │   └── parcing_utils.o
+│   ├── signals
+│   │   ├── signals1.c
+│   │   ├── signals1.o
+│   │   ├── signals2.c
+│   │   └── signals2.o
+│   ├── tokens
+│   │   ├── tokinize.c
+│   │   ├── tokinize.o
+│   │   ├── tokinize_lst.c
+│   │   ├── tokinize_lst.o
+│   │   ├── tokinize_utils.c
+│   │   ├── tokinize_utils.o
+│   │   ├── tokinize_utils1.c
+│   │   └── tokinize_utils1.o
+│   └── utils
+│       ├── error_exit.c
+│       ├── error_exit.o
+│       ├── syntax_errors.c
+│       ├── syntax_errors.o
+│       ├── system_utils.c
+│       └── system_utils.o
+└── tree
+
+13 directories, 177 files

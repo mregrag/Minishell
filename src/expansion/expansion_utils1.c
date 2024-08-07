@@ -6,7 +6,7 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/01 16:51:41 by mregrag           #+#    #+#             */
-/*   Updated: 2024/07/10 04:11:46 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/08/06 23:09:19 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ char	*handle_quotes(char *ret, char *str, size_t *i, t_env *env)
 			len = *i - start;
 			if (len > 0)
 				new_ret = ft_strjoin_free(new_ret, ft_substr(str, start, len));
-			new_ret = handle_dollar(new_ret, str, i, env);
+			new_ret = handle_dollar_content(new_ret, str, i, env);
 			start = *i;
 		}
 		else
@@ -58,4 +58,32 @@ char	*handle_str(char *ret, char *str, size_t *i)
 		return (free(ret), new_ret);
 	else
 		return (ret);
+}
+
+char	*consecutive_dollars(char *ret, char *str, size_t *i, size_t count)
+{
+	char	*result;
+	char	*dollars;
+	size_t	start;
+
+	start = *i - count;
+	if (count % 2 == 0)
+	{
+		dollars = ft_substr(str, start, count);
+		if (!dollars)
+			return (free(ret), NULL);
+		result = ft_strjoin_free(ret, dollars);
+		return (result);
+	}
+	if (count > 1)
+	{
+		dollars = ft_substr(str, start, count - 1);
+		if (!dollars)
+			return (free(ret), NULL);
+		result = ft_strjoin_free(ret, dollars);
+		if (!result)
+			return (NULL);
+		ret = result;
+	}
+	return (ret);
 }
