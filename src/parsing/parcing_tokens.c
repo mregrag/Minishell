@@ -6,7 +6,7 @@
 /*   By: mkoualil <mkoualil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/24 21:22:11 by mregrag           #+#    #+#             */
-/*   Updated: 2024/08/06 23:02:27 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/08/08 15:39:00 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ t_node	*parse_command(t_token *tokens, t_env *env)
 	count = ft_lstsize_token(tokens);
 	node->cmd = malloc(sizeof(char *) * (count + 1));
 	if (!node->cmd)
-		handle_allocation_failure();
+		malloc_error();
 	fill_cmd(node, tokens, env, count);
 	return (node);
 }
@@ -33,7 +33,7 @@ t_node	*parse_file(t_token *token, t_type type, t_env *env)
 	node = new_node(type);
 	node->cmd = malloc(sizeof(char *) * 2);
 	if (!node->cmd)
-		handle_allocation_failure();
+		malloc_error();
 	if (type == T_IN || type == T_APPEND || type == T_OUT)
 		node->cmd[0] = expansion_input(token->value, env);
 	else if (type == T_HERDOC)

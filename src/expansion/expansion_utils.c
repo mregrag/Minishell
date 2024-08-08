@@ -6,7 +6,7 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/18 21:49:59 by mregrag           #+#    #+#             */
-/*   Updated: 2024/08/05 21:53:30 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/08/08 15:40:25 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,7 @@ char	*handle_double_quotes(char *ret, char *str, size_t *i, t_env *env)
 	(*i)++;
 	content = ft_strdup("");
 	if (!content)
-		handle_allocation_failure();
+		malloc_error();
 	while (str[*i] && str[*i] != '"')
 	{
 		if (str[*i] == '$')

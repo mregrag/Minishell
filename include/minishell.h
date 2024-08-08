@@ -6,7 +6,7 @@
 /*   By: mkoualil <mkoualil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/10 16:16:44 by mregrag           #+#    #+#             */
-/*   Updated: 2024/08/07 17:22:47 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/08/08 15:56:48 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,6 @@ int	g_sig;
 char	*expansion_dollar(char *str, t_env *env);
 char	*handle_final_case(char *ret);
 void	malloc_error(void);
-void	handle_allocation_failure(void);
 void	preorder_hearedoc(t_node *node, t_env *env);
 t_token	*tokenize_input(char *input, t_env *env);
 t_token	*new_token(char *value, t_type type);
@@ -97,7 +96,6 @@ t_node	*parse_redirection(t_token *tokens, t_env *env);
 void	free_tree(t_node *node);
 void	creat_cmd(t_node *node, t_token *tokens, int count, t_env *env);
 void	fill_cmd(t_node *node, t_token *tokens, t_env *env, int count);
-char	*extract_word_dollar(char **input);
 
 int		ft_echo(t_node *node, t_env *env);
 int		ft_env(t_node *node, t_env *env);
@@ -155,6 +153,6 @@ void	exit_status(int status, t_env *env);
 int		exec_err(char *path, char *cmd, t_env *env);
 int		check_syntax(t_token *tokens);
 int		ft_is_directory(char *path);
-t_list	*find_env_var(t_env *env, char *var);
+t_list		*find_env_var(t_env *env, char *var);
 
 #endif

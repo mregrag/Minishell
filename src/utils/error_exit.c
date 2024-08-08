@@ -6,7 +6,7 @@
 /*   By: mkoualil <mkoualil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/12 18:33:04 by mregrag           #+#    #+#             */
-/*   Updated: 2024/08/05 15:16:05 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/08/08 15:38:02 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,12 +42,6 @@ int	exec_err(char *path, char *cmd, t_env *env)
 }
 
 void	malloc_error(void)
-{
-	print_error("minish", "malloc", strerror(errno), NULL);
-	exit(EXIT_FAILURE);
-}
-
-void	handle_allocation_failure()
 {
 	print_error("minish", "malloc", strerror(errno), NULL);
 	exit(EXIT_FAILURE);

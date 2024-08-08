@@ -6,7 +6,7 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/30 15:10:09 by mregrag           #+#    #+#             */
-/*   Updated: 2024/08/06 23:07:45 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/08/08 15:39:57 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ char	*expansion_input(char *str, t_env *env)
 
 	ret = ft_strdup("");
 	if (!ret)
-		handle_allocation_failure();
+		malloc_error();
 	i = 0;
 	while (str[i])
 	{
@@ -47,7 +47,7 @@ char	*expansion_dollar(char *str, t_env *env)
 
 	ret = ft_strdup("");
 	if (!ret)
-		handle_allocation_failure();
+		malloc_error();
 	i = 0;
 	while (str[i])
 	{
@@ -75,7 +75,7 @@ char	*expansion_content(char *str, t_env *env)
 	i = 0;
 	ret = strdup("");
 	if (!ret)
-		handle_allocation_failure();
+		malloc_error();
 	while (str[i])
 	{
 		temp = ret;
@@ -98,7 +98,7 @@ char	*expansion_dilim(char *str)
 
 	ret = strdup("");
 	if (!ret)
-		handle_allocation_failure();
+		malloc_error();
 	i = 0;
 	while (str[i])
 		ret = handle_str(ret, str, &i);

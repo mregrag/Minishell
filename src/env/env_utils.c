@@ -6,7 +6,7 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 16:25:14 by mregrag           #+#    #+#             */
-/*   Updated: 2024/08/07 17:48:36 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/08/08 15:41:26 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ char	*get_env_var(t_env *env, char *var)
 		return (NULL);
 	value = ft_strdup(content + var_len + 1);
 	if (!value)
-		handle_allocation_failure();
+		malloc_error();
 	return (value);
 }
 
@@ -52,7 +52,7 @@ char	*get_env_var_dollar(t_env *env, char *var)
 		return (NULL);
 	value = ft_strjoin_three("\"", content + var_len + 1, "\"");
 	if (!value)
-		handle_allocation_failure();
+		malloc_error();
 	return (value);
 }
 
@@ -68,7 +68,7 @@ void	set_env_var(t_env *env, char *var, char *value)
 	else
 		new_var = ft_strdup(var);
 	if (!new_var)
-		handle_allocation_failure();
+		malloc_error();
 	existing_var = find_env_var(env, var);
 	if (existing_var)
 	{

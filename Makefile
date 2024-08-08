@@ -6,14 +6,13 @@
 #    By: mkoualil <mkoualil@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/05/10 16:12:48 by mregrag           #+#    #+#              #
-#    Updated: 2024/08/08 00:44:29 by mregrag          ###   ########.fr        #
+#    Updated: 2024/08/08 15:36:48 by mregrag          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME		= minishell
 LIBFT		= libft.a
 LIBRAIRIE	= "lib/libft"
-FSS		=
 CC		= cc
 CFLAGS		= -Wall -Wextra -Werror
 HEADER		= ./include/minishell.h

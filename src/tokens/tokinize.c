@@ -6,13 +6,13 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/11 22:02:39 by mregrag           #+#    #+#             */
-/*   Updated: 2024/08/08 00:38:06 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/08/08 15:56:19 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-char	*extract_operator(char **input, t_type type)
+static char	*extract_operator(char **input, t_type type)
 {
 	char	*start;
 	char	*operator;

@@ -6,7 +6,7 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/11 22:02:54 by mregrag           #+#    #+#             */
-/*   Updated: 2024/08/06 22:36:20 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/08/08 15:38:15 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ t_token	*new_token(char *value, t_type type)
 
 	token = malloc(sizeof(t_token));
 	if (!token)
-		handle_allocation_failure();
+		malloc_error();
 	token->value = value;
 	token->type = type;
 	token->next = NULL;

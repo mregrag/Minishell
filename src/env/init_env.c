@@ -6,7 +6,7 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/01 18:16:01 by mregrag           #+#    #+#             */
-/*   Updated: 2024/08/07 17:55:09 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/08/08 15:39:13 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ void	initialize_enviroment(t_env **env, char **envp)
 		return ;
 	*env = ft_calloc(sizeof(t_env), 1);
 	if (!*env)
-		handle_allocation_failure();
+		malloc_error();
 	while (*envp)
 	{
 		if (!ft_strncmp(*envp, "OLDPWD", 6))

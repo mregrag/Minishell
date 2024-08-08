@@ -6,7 +6,7 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/24 21:23:34 by mregrag           #+#    #+#             */
-/*   Updated: 2024/08/06 21:58:57 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/08/08 15:40:55 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ t_node	*new_node(t_type type)
 
 	node = malloc(sizeof(t_node));
 	if (!node)
-		handle_allocation_failure();
+		malloc_error();
 	node->type = type;
 	node->cmd = NULL;
 	node->left = NULL;
