@@ -6,7 +6,7 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/11 22:02:39 by mregrag           #+#    #+#             */
-/*   Updated: 2024/08/07 17:18:56 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/08/08 00:38:06 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ static int	add_operator_token(char **input, t_token **tokens)
 	type = get_operator_type(*input);
 	word = extract_operator(input, type);
 	if (!word)
-		return (0);
+		return (clear_tokens(tokens), 0);
 	token_add_back(tokens, new_token(word, type));
 	return (1);
 }
@@ -71,7 +71,7 @@ static int	add_operator_token(char **input, t_token **tokens)
 static int	add_word_token(char **input, t_token **tokens, t_env *env, int flag)
 {
 	char	*word;
-	char	*expanded_word;
+	char	*expand_word;
 
 	word = extract_word(input);
 	if (!word)
@@ -79,10 +79,10 @@ static int	add_word_token(char **input, t_token **tokens, t_env *env, int flag)
 	if (!flag && ft_strchr(word, '$')
 		&& !ft_strchr(word, '=') && !ft_strchr(word, ' '))
 	{
-		expanded_word = expansion_dollar(word, env);
-		if (!add_split_tokens(tokens, expanded_word))
-			return (free(word), free(expanded_word), 0);
-		(free(expanded_word), free(word));
+		expand_word = expansion_dollar(word, env);
+		if (!add_split_tokens(tokens, expand_word))
+			return (free(word), free(expand_word), clear_tokens(tokens), 0);
+		(free(expand_word), free(word));
 	}
 	else
 		token_add_back(tokens, new_token(word, T_CMD));
@@ -93,25 +93,27 @@ t_token	*tokenize_input(char *input, t_env *env)
 {
 	t_token	*tokens;
 	char	*new_input;
-	char	*original_new_input;
+	char	*current;
 	int		flag;
 
 	tokens = NULL;
 	new_input = ft_strtrim(input, " \t\n\v\f\r");
-	original_new_input = new_input;
-	free(input);
+	current = new_input;
 	flag = 0;
 	if (!check_quotes(new_input))
-		return (free(original_new_input), NULL);
-	while (*new_input)
+		return (free(current), free(input), NULL);
+	while (*current)
 	{
-		skip_spaces(&new_input);
-		if (get_operator_type(new_input) == T_HERDOC)
+		skip_spaces(&current);
+		if (get_operator_type(current) == T_HERDOC)
 			flag = 1;
-		if (is_operator(new_input) && !add_operator_token(&new_input, &tokens))
-			return (free(original_new_input), clear_tokens(&tokens), NULL);
-		else if (!add_word_token(&new_input, &tokens, env, flag))
-			return (free(original_new_input), clear_tokens(&tokens), NULL);
+		if (is_operator(current))
+		{
+			if (!add_operator_token(&current, &tokens))
+				return (free(input), free(new_input), NULL);
+		}
+		else if (!add_word_token(&current, &tokens, env, flag))
+			return (free(input), free(new_input), NULL);
 	}
-	return (free(original_new_input), tokens);
+	return (free(new_input), free(input), tokens);
 }

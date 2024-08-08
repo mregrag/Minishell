@@ -6,7 +6,7 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/30 15:14:43 by mregrag           #+#    #+#             */
-/*   Updated: 2024/08/05 22:06:32 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/08/08 00:43:48 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,9 @@ static char	*handle_special_cases(char *ret, char *str, size_t *i, t_env *env)
 		new_ret = ft_strjoin_free(ret, val);
 		return ((*i)++, new_ret);
 	}
-	if (!(ft_isalnum(str[*i]) || str[*i] == '_'))
+	else if (str[*i] == '_')
+		return ((*i)++, ret);
+	else if (!ft_isalnum(str[*i]))
 	{
 		new_ret = ft_strjoin(ret, "$");
 		return (free(ret), new_ret);

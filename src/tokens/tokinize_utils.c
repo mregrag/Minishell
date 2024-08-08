@@ -6,38 +6,11 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/11 23:05:33 by mregrag           #+#    #+#             */
-/*   Updated: 2024/08/07 17:19:03 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/08/07 23:38:24 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
-
-char	*extract_word(char **input)
-{
-	char	*start;
-	size_t	len;
-	char	quote;
-
-	quote = 0;
-	start = *input;
-	while (**input)
-	{
-		if (!quote && is_operator(*input))
-			break ;
-		if (!quote && ft_isspace(**input))
-			break ;
-		if (ft_isquotes(**input))
-		{
-			if (!quote)
-				quote = **input;
-			else if (**input == quote)
-				quote = 0;
-		}
-		(*input)++;
-	}
-	len = *input - start;
-	return (ft_substr(start, 0, len));
-}
 
 int	add_split_tokens(t_token **tokens, char *expanded_word)
 {
@@ -46,12 +19,18 @@ int	add_split_tokens(t_token **tokens, char *expanded_word)
 
 	i = 0;
 	split_words = ft_split(expanded_word, ' ');
-	while (split_words[i])
+	if (!split_words || !split_words[0])
+		token_add_back(tokens, new_token(ft_strdup(expanded_word), T_CMD));
+	else
 	{
-		token_add_back(tokens, new_token(split_words[i], T_CMD));
-		i++;
+		while (split_words[i])
+		{
+			token_add_back(tokens, new_token(split_words[i], T_CMD));
+			i++;
+		}
 	}
-	return(free(split_words), 1);
+	free(split_words);
+	return (1);
 }
 
 int	check_quotes(char *line)
