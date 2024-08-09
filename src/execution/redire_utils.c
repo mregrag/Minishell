@@ -6,7 +6,7 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 05:26:24 by mregrag           #+#    #+#             */
-/*   Updated: 2024/08/06 00:44:06 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/08/09 20:22:22 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,19 @@ int	ft_open_append(char *file)
 	return (fd);
 }
 
-int	preoredr_duplicat_file(t_node *node)
+void	cleanup_fds(t_node *node)
+{
+	if (!node)
+		return ;
+	if (node->fd_in > 2)
+		close(node->fd_in);
+	if (node->fd_out > 2)
+		close(node->fd_out);
+	cleanup_fds(node->left);
+	cleanup_fds(node->right);
+}
+
+int	duplicat_file(t_node *node)
 {
 	while (node)
 	{
@@ -58,10 +70,10 @@ int	preoredr_duplicat_file(t_node *node)
 		if (node->fd_out != 1)
 			if (node->fd_out == -1 || ft_dup2(node->fd_out, STDOUT_FILENO) < 0)
 				return (0);
-		if (node->fd_in != 0)
-			close (node->fd_in);
-		if (node->fd_out != 1)
-			close (node->fd_out);
+		// if (node->fd_in != 0)
+		// 	close (node->fd_in);
+		// if (node->fd_out != 1)
+		// 	close (node->fd_out);
 		node = node->left;
 	}
 	return (1);

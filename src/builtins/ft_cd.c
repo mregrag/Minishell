@@ -6,7 +6,7 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/18 18:49:44 by mregrag           #+#    #+#             */
-/*   Updated: 2024/08/08 01:04:14 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/08/08 16:56:32 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,10 @@ static int	change_directory(char *path, t_env *env, char *old_pwd)
 	char	*new_pwd;
 
 	if (chdir(path) < 0)
-		return (1);
+	{
+		print_error("minish", "cd", path, strerror(errno));
+		return (exit_status(1, env), 1);
+	}
 	new_pwd = getcwd(new, sizeof(new));
 	if (!new_pwd)
 		return (cd_err(), 1);

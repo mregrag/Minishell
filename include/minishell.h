@@ -6,7 +6,7 @@
 /*   By: mkoualil <mkoualil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/10 16:16:44 by mregrag           #+#    #+#             */
-/*   Updated: 2024/08/08 15:56:48 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/08/09 20:14:53 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ void	skip_spaces(char **str);
 int		skip_quotes(char *line, size_t *i);
 int		is_redirection(t_type type);
 int		ft_lstsize_token(t_token *lst);
-int		preoredr_duplicat_file(t_node *node);
+int		duplicat_file(t_node *node);
 int		add_split_tokens(t_token **tokens, char *expanded_word);
 t_type	get_operator_type(char *str);
 int		check_operators(char *str);
@@ -150,9 +150,11 @@ void	handle_eof(t_env *envp);
 void	set_signal_heredoc(void);
 void	setup_signal(t_env *envp);
 void	exit_status(int status, t_env *env);
+void	cleanup_fds(t_node *node);
 int		exec_err(char *path, char *cmd, t_env *env);
 int		check_syntax(t_token *tokens);
 int		ft_is_directory(char *path);
-t_list		*find_env_var(t_env *env, char *var);
+t_list	*find_env_var(t_env *env, char *var);
+
 
 #endif

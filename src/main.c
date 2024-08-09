@@ -6,7 +6,7 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 18:08:23 by mregrag           #+#    #+#             */
-/*   Updated: 2024/08/06 21:42:22 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/08/09 20:19:31 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,7 @@ int	main(int argc, char **argv, char **envp)
 		process_tokens_and_parse(input, env, &root);
 		process_execution(root, env);
 		free_tree(root);
+		cleanup_fds(root);
 	}
 	free_env(env);
 	return (0);

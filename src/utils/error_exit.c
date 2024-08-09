@@ -6,7 +6,7 @@
 /*   By: mkoualil <mkoualil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/12 18:33:04 by mregrag           #+#    #+#             */
-/*   Updated: 2024/08/08 15:38:02 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/08/08 16:32:20 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,6 @@ void	exit_status(int status, t_env *env)
 
 int	exec_err(char *path, char *cmd, t_env *env)
 {
-	struct stat	path_stat;
-
 	if (!is_var_in_env(env, "PATH"))
 	{
 		print_error("minishell", cmd, "No such file or directory", NULL);
@@ -36,7 +34,7 @@ int	exec_err(char *path, char *cmd, t_env *env)
 		return (print_error("minishell", cmd, strerror(errno), NULL), 126);
 	else if (access(path, X_OK) == -1)
 		return (print_error("minishell", cmd, strerror(errno), NULL), 127);
-	else if (stat(path, &path_stat) == 0 && S_ISDIR(path_stat.st_mode))
+	else if (ft_is_directory(path))
 		return (print_error("minishell", cmd, "is a directory", NULL), 126);
 	return (0);
 }

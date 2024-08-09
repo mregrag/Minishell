@@ -6,7 +6,7 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/18 04:11:35 by mregrag           #+#    #+#             */
-/*   Updated: 2024/08/07 00:43:12 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/08/09 21:11:23 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ static int	process_heredoc_content(t_node *node, int *fd_heredoc, t_env *env)
 			return (free(dilim), 0);
 		if (!dilim || !ft_strcmp(content, dilim))
 		{
-			(free(content));
+			(free(content), exit_status(0, env));
 			break ;
 		}
 		heredoc_content(node, fd_heredoc[1], content, env);

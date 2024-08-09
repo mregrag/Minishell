@@ -6,7 +6,7 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/01 18:16:01 by mregrag           #+#    #+#             */
-/*   Updated: 2024/08/08 15:39:13 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/08/09 20:06:02 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,22 +15,25 @@
 static void	increment_shlvl(t_env *env)
 {
 	char	*shlvl_str;
+	char	*new_shlvl;
 	int		shlvl;
 
+	shlvl = 0;
 	shlvl_str = get_env_var(env, "SHLVL");
 	if (!shlvl_str)
+		shlvl = 0;
+	else
+		shlvl = ft_atoi(shlvl_str);
+	if (shlvl < 0 && shlvl != -1)
+		shlvl = 0;
+	else if (shlvl == -1)
 		shlvl = 1;
 	else
-	{
-		shlvl = ft_atoi(shlvl_str);
-		if (shlvl == -1)
-			shlvl++;
-		free(shlvl_str);
-	}
-	shlvl++;
-	shlvl_str = ft_itoa(shlvl);
-	if (shlvl_str)
-		(set_env_var(env, "SHLVL", shlvl_str), free(shlvl_str));
+		shlvl++;
+	new_shlvl = ft_itoa(shlvl);
+	set_env_var(env, "SHLVL", new_shlvl);
+	free(shlvl_str);
+	free(new_shlvl);
 }
 
 void	initialize_enviroment(t_env **env, char **envp)

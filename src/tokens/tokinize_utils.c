@@ -6,7 +6,7 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/11 23:05:33 by mregrag           #+#    #+#             */
-/*   Updated: 2024/08/07 23:38:24 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/08/09 21:16:14 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ int	add_split_tokens(t_token **tokens, char *expanded_word)
 	{
 		while (split_words[i])
 		{
+			printf("split  = %s\n", split_words[i]);
 			token_add_back(tokens, new_token(split_words[i], T_CMD));
 			i++;
 		}
@@ -58,7 +59,7 @@ t_type	get_operator_type(char *str)
 		return (T_IN);
 	if (*str == '>')
 		return (T_OUT);
-	if (*str == '|')
+	if (*str == ' ')
 		return (T_PIPE);
 	else
 		return (T_CMD);

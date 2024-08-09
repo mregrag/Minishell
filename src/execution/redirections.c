@@ -6,7 +6,7 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 17:38:38 by mregrag           #+#    #+#             */
-/*   Updated: 2024/08/07 17:22:13 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/08/08 16:30:24 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ int	execute_redirections(t_node **node, t_env *env)
 	{
 		if (!input_output_redirection(*node))
 			return (exit_status(1, env), 0);
-		if (!preoredr_duplicat_file(*node))
+		if (!duplicat_file(*node))
 			return (exit_status(1, env), 0);
 		while (*node && (*node)->left)
 			*node = (*node)->left;
