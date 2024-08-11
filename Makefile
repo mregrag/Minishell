@@ -6,7 +6,7 @@
 #    By: mkoualil <mkoualil@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/05/10 16:12:48 by mregrag           #+#    #+#              #
-#    Updated: 2024/08/08 15:36:48 by mregrag          ###   ########.fr        #
+#    Updated: 2024/08/11 05:05:41 by mregrag          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,7 +14,7 @@ NAME		= minishell
 LIBFT		= libft.a
 LIBRAIRIE	= "lib/libft"
 CC		= cc
-CFLAGS		= -Wall -Wextra -Werror
+CFLAGS		= -Wall -Wextra -Werror -fsanitize=address -g2
 HEADER		= ./include/minishell.h
 HEADERLIBFT	= ./lib/libft/libft.h
 RM		= rm -rf

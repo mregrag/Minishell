@@ -6,7 +6,7 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/01 16:51:41 by mregrag           #+#    #+#             */
-/*   Updated: 2024/08/06 23:09:19 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/08/10 20:15:08 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ char	*handle_quotes(char *ret, char *str, size_t *i, t_env *env)
 			len = *i - start;
 			if (len > 0)
 				new_ret = ft_strjoin_free(new_ret, ft_substr(str, start, len));
-			new_ret = handle_dollar_content(new_ret, str, i, env);
+			new_ret = handle_dollar(new_ret, str, i, env);
 			start = *i;
 		}
 		else

@@ -6,7 +6,7 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/30 15:10:09 by mregrag           #+#    #+#             */
-/*   Updated: 2024/08/09 20:04:48 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/08/11 06:15:25 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,33 +39,6 @@ char	*expansion_input(char *str, t_env *env)
 	return (handle_final_case(ret));
 }
 
-char	*expansion_dollar(char *str, t_env *env)
-{
-	size_t	i;
-	char	*ret;
-	char	*temp;
-
-	ret = ft_strdup("");
-	if (!ret)
-		malloc_error();
-	i = 0;
-	while (str[i])
-	{
-		temp = ret;
-		if (str[i] == '\'')
-			ret = handle_single_quotes(ret, str, &i);
-		else if (str[i] == '"')
-			ret = handle_double_quotes(ret, str, &i, env);
-		else if (str[i] == '$')
-			ret = handle_dollar(ret, str, &i, env);
-		else
-			ret = handle_normal(ret, str, &i);
-		if (!ret)
-			return (free(temp), NULL);
-	}
-	return (ret);
-}
-
 char	*expansion_content(char *str, t_env *env)
 {
 	size_t	i;
@@ -82,7 +55,7 @@ char	*expansion_content(char *str, t_env *env)
 		if (str[i] == '\'' || str[i] == '"')
 			ret = handle_quotes(ret, str, &i, env);
 		else if (str[i] == '$')
-			ret = handle_dollar_content(ret, str, &i, env);
+			ret = handle_dollar(ret, str, &i, env);
 		else
 			ret = handle_normal(ret, str, &i);
 		if (!ret)

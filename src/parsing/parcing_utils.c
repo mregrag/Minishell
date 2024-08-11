@@ -6,12 +6,13 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/24 21:23:34 by mregrag           #+#    #+#             */
-/*   Updated: 2024/08/09 21:38:31 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/08/10 21:23:52 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 #include <stdio.h>
+#include <time.h>
 
 t_node	*new_node(t_type type)
 {
@@ -50,52 +51,20 @@ void	free_tree(t_node *node)
 	free(node);
 }
 
-// static int is_espace(char *str)
-// {
-// 	char *s = str;
-// 	size_t count = 0;
-// 	while (*str)
-// 	{
-// 		if (*str != ' ')
-// 			count++;
-// 		str++;
-// 	}
-// 	if (count == ft_strlen(s))
-// 		return -1;
-// 	return 0;
-// }
-
-void	fill_cmd(t_node *node, t_token *tokens, t_env *env, int count)
+void	fill_cmd(t_node *node, t_token *tokens, int count)
 {
 	int		i;
 	int		j;
-	char	*expanded;
-	char	*trim_expand;
 	t_token	*tmp;
-
 	i = 0;
 	j = 0;
 	while (i < count)
 	{
-		expanded = expansion_input(tokens->value, env);
-
-		if (expanded != NULL)
-		{
-
-			printf("expanded %s\n", expanded);
-			trim_expand = ft_strtrim(expanded, " \t\n\v\f\r");
-			node->cmd[j++] = trim_expand;
-// ;			if (is_espace(expanded) == 0)
-// 			{
-// 				printf("expanded %s\n", expanded);
-// 				trim_expand = ft_strtrim(expanded, " \t\n\v\f\r");
-// 				node->cmd[j++] = trim_expand;
-// 			}
-
-		}
+		if (tokens->value != NULL)
+			node->cmd[j++] = ft_strdup(tokens->value);
 		tmp = tokens;
 		tokens = tokens->next;
-		(free_token(tmp), free(expanded));
+		free_token(tmp);
 		i++;
 	}
 	node->cmd[j] = NULL;

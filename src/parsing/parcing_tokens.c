@@ -6,13 +6,13 @@
 /*   By: mkoualil <mkoualil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/24 21:22:11 by mregrag           #+#    #+#             */
-/*   Updated: 2024/08/08 15:39:00 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/08/10 21:24:58 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-t_node	*parse_command(t_token *tokens, t_env *env)
+t_node	*parse_command(t_token *tokens)
 {
 	t_node	*node;
 	int		count;
@@ -22,7 +22,7 @@ t_node	*parse_command(t_token *tokens, t_env *env)
 	node->cmd = malloc(sizeof(char *) * (count + 1));
 	if (!node->cmd)
 		malloc_error();
-	fill_cmd(node, tokens, env, count);
+	fill_cmd(node, tokens, count);
 	return (node);
 }
 
@@ -66,7 +66,7 @@ t_node	*parse_redirection(t_token *tokens, t_env *env)
 		}
 		tokens = next_token;
 	}
-	return (parse_command(tmp, env));
+	return (parse_command(tmp));
 }
 
 t_node	*parse_expression(t_token *tokens, t_env *env)

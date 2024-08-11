@@ -6,7 +6,7 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/11 22:02:39 by mregrag           #+#    #+#             */
-/*   Updated: 2024/08/09 20:56:59 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/08/11 04:39:59 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,14 +57,14 @@ static char	*extract_word(char **input)
 
 static int	add_operator_token(char **input, t_token **tokens)
 {
-	char	*word;
+	char	*operator;
 	t_type	type;
 
 	type = get_operator_type(*input);
-	word = extract_operator(input, type);
-	if (!word)
+	operator = extract_operator(input, type);
+	if (!operator)
 		return (clear_tokens(tokens), 0);
-	token_add_back(tokens, new_token(word, type));
+	token_add_back(tokens, new_token(operator, type));
 	return (1);
 }
 
@@ -74,19 +74,17 @@ static int	add_word_token(char **input, t_token **tokens, t_env *env, int flag)
 	char	*expand_word;
 
 	word = extract_word(input);
-	if (!word)
-		return (0);
-	if (!flag && ft_strchr(word, '$')
-		&& !ft_strchr(word, '=') && !ft_strchr(word, ' '))
+	if (flag)
+		return (token_add_back(tokens, new_token(word, T_CMD)), 1);
+	expand_word = expansion_input(word, env);
+	if ((ft_strchr(word,'\'') || ft_strchr(word, '\"')) && !ft_strchr(word, ' '))
 	{
-		expand_word = expansion_dollar(word, env);
-		if (!add_split_tokens(tokens, expand_word))
+		if (!split_into_tokens(tokens, expand_word))
 			return (free(word), free(expand_word), clear_tokens(tokens), 0);
-		(free(expand_word), free(word));
+		return (free(expand_word), free(word), 1);
 	}
-	else
-		token_add_back(tokens, new_token(word, T_CMD));
-	return (1);
+	token_add_back(tokens, new_token(expand_word, T_CMD));
+	return (free(word), 1);
 }
 
 t_token	*tokenize_input(char *input, t_env *env)

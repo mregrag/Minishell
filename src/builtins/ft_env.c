@@ -6,7 +6,7 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/18 18:50:02 by mregrag           #+#    #+#             */
-/*   Updated: 2024/08/09 21:09:35 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/08/11 04:40:58 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,5 @@ int	ft_env(t_node *node, t_env *env)
 		return (exit_status(127, env), 1);
 	}
 	print_env(env);
-	set_env_var(env, "_", node->cmd[ft_strlen_arg(node->cmd) - 1]);
 	return (1);
 }

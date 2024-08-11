@@ -6,7 +6,7 @@
 /*   By: mkoualil <mkoualil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/10 16:16:44 by mregrag           #+#    #+#             */
-/*   Updated: 2024/08/09 20:14:53 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/08/11 06:15:12 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,14 +79,14 @@ int		skip_quotes(char *line, size_t *i);
 int		is_redirection(t_type type);
 int		ft_lstsize_token(t_token *lst);
 int		duplicat_file(t_node *node);
-int		add_split_tokens(t_token **tokens, char *expanded_word);
+int		split_into_tokens(t_token **tokens, char *expanded_word);
 t_type	get_operator_type(char *str);
 int		check_operators(char *str);
 int		handle_operator(char **input, t_token **tokens);
 int		is_operator(char *str);
 int		check_quotes(char *line);
 int		execute_redirections(t_node **node, t_env *env);
-t_node	*parse_command(t_token *tokens, t_env *env);
+t_node	*parse_command(t_token *tokens);
 t_node	*parse_expression(t_token *tokens, t_env *env);
 t_node	*parse_tokens(t_token *tokens, t_env *env);
 t_node	*parse_file(t_token *token, t_type type, t_env *env);
@@ -95,7 +95,7 @@ t_node	*new_node(t_type type);
 t_node	*parse_redirection(t_token *tokens, t_env *env);
 void	free_tree(t_node *node);
 void	creat_cmd(t_node *node, t_token *tokens, int count, t_env *env);
-void	fill_cmd(t_node *node, t_token *tokens, t_env *env, int count);
+void	fill_cmd(t_node *node, t_token *tokens, int count);
 
 int		ft_echo(t_node *node, t_env *env);
 int		ft_env(t_node *node, t_env *env);
@@ -155,6 +155,5 @@ int		exec_err(char *path, char *cmd, t_env *env);
 int		check_syntax(t_token *tokens);
 int		ft_is_directory(char *path);
 t_list	*find_env_var(t_env *env, char *var);
-
 
 #endif
