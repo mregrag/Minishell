@@ -6,7 +6,7 @@
 /*   By: mkoualil <mkoualil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/10 16:16:44 by mregrag           #+#    #+#             */
-/*   Updated: 2024/08/11 06:15:12 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/08/12 22:14:52 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,8 +65,7 @@ typedef struct s_node
 
 int	g_sig;
 
-char	*expansion_dollar(char *str, t_env *env);
-char	*handle_final_case(char *ret);
+char	*remov_quotes(char *str);
 void	malloc_error(void);
 void	preorder_hearedoc(t_node *node, t_env *env);
 t_token	*tokenize_input(char *input, t_env *env);
@@ -131,17 +130,17 @@ int		ft_open_output(char *file);
 int		ft_open_input(char *file);
 pid_t	ft_fork(void);
 
-char	*handle_quotes(char *ret, char *str, size_t *i, t_env *env);
+char	*handle_quotes(char *ret, char **str, t_env *env);
 char	*expansion_dilim(char *str);
 char	*expansion_input(char *str, t_env *env);
-char	*handle_dollar(char *ret, char *str, size_t *i, t_env *env);
+char	*handle_dollar(char *ret, char **str, int flag, t_env *env);
 char	*handle_dollar_content(char *ret, char *str, size_t *i, t_env *env);
 char	*expansion_content(char *str, t_env *env);
-char	*handle_single_quotes(char *ret, char *str, size_t *i);
-char	*handle_double_quotes(char *ret, char *str, size_t *i, t_env *env);
-char	*handle_normal(char *ret, char *str, size_t *i);
+char	*handle_single_quotes(char *ret, char **str);
+char	*handle_double_quotes(char *ret, char **str, t_env *env);
+char	*handle_normal(char *ret, char **str);
 char	*handle_str(char *ret, char *str, size_t *i);
-char	*consecutive_dollars(char *ret, char *str, size_t *i, size_t count);
+char *consecutive_dollars(char *ret, char **str, size_t count, t_env *env);
 
 void	block_signals(struct sigaction *sa_ignore);
 void	restore_signals(struct sigaction *sa_default);
@@ -155,5 +154,7 @@ int		exec_err(char *path, char *cmd, t_env *env);
 int		check_syntax(t_token *tokens);
 int		ft_is_directory(char *path);
 t_list	*find_env_var(t_env *env, char *var);
+char	*expansion_dollar(char *str, t_env *env);
+char	*get_env_var_list(t_env *env, char *var);
 
 #endif

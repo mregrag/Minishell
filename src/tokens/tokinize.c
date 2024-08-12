@@ -6,11 +6,46 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/11 22:02:39 by mregrag           #+#    #+#             */
-/*   Updated: 2024/08/11 04:39:59 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/08/12 23:38:50 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
+
+#include <stdbool.h>
+#include <ctype.h>
+#include <stdio.h>
+
+bool has_space_between_quotes(const char *str)
+{
+    char quote = 0;
+    bool in_quotes = false;
+    bool has_content = false;
+
+    while (*str) {
+        if (*str == '\'' || *str == '"')
+	{
+            if (!in_quotes)
+	    {
+                quote = *str;
+                in_quotes = true;
+                has_content = false;
+            } else if (*str == quote) {
+                return has_content;
+            }
+        } else if (in_quotes) {
+            if (isspace(*str)) {
+                if (has_content) {
+                    return true;
+                }
+            } else {
+                has_content = true;
+            }
+        }
+        str++;
+    }
+    return false;
+}
 
 static char	*extract_operator(char **input, t_type type)
 {
@@ -77,7 +112,9 @@ static int	add_word_token(char **input, t_token **tokens, t_env *env, int flag)
 	if (flag)
 		return (token_add_back(tokens, new_token(word, T_CMD)), 1);
 	expand_word = expansion_input(word, env);
-	if ((ft_strchr(word,'\'') || ft_strchr(word, '\"')) && !ft_strchr(word, ' '))
+	if (!expand_word)
+		return (free(word), free(expand_word), clear_tokens(tokens), 0);
+	if (!has_space_between_quotes(word))
 	{
 		if (!split_into_tokens(tokens, expand_word))
 			return (free(word), free(expand_word), clear_tokens(tokens), 0);

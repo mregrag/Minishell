@@ -6,7 +6,7 @@
 /*   By: mkoualil <mkoualil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/24 21:22:11 by mregrag           #+#    #+#             */
-/*   Updated: 2024/08/10 21:24:58 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/08/12 23:04:28 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,12 +30,13 @@ t_node	*parse_file(t_token *token, t_type type, t_env *env)
 {
 	t_node	*node;
 
+	(void)env;
 	node = new_node(type);
 	node->cmd = malloc(sizeof(char *) * 2);
 	if (!node->cmd)
 		malloc_error();
-	if (type == T_IN || type == T_APPEND || type == T_OUT)
-		node->cmd[0] = expansion_input(token->value, env);
+	if ((type == T_IN || type == T_APPEND || type == T_OUT))
+		node->cmd[0] = ft_strdup(token->value);
 	else if (type == T_HERDOC)
 		node->cmd[0] = ft_strdup(token->value);
 	node->cmd[1] = NULL;

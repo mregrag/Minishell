@@ -6,13 +6,11 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/24 21:23:34 by mregrag           #+#    #+#             */
-/*   Updated: 2024/08/10 21:23:52 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/08/12 22:31:39 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
-#include <stdio.h>
-#include <time.h>
 
 t_node	*new_node(t_type type)
 {
@@ -60,8 +58,7 @@ void	fill_cmd(t_node *node, t_token *tokens, int count)
 	j = 0;
 	while (i < count)
 	{
-		if (tokens->value != NULL)
-			node->cmd[j++] = ft_strdup(tokens->value);
+		node->cmd[j++] = ft_strdup(tokens->value);
 		tmp = tokens;
 		tokens = tokens->next;
 		free_token(tmp);

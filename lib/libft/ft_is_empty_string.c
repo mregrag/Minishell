@@ -1,21 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_isspace.c                                       :+:      :+:    :+:   */
+/*   ft_is_empty_string.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/06/23 16:21:35 by mregrag           #+#    #+#             */
-/*   Updated: 2024/06/23 16:22:01 by mregrag          ###   ########.fr       */
+/*   Created: 2024/08/12 05:59:11 by mregrag           #+#    #+#             */
+/*   Updated: 2024/08/12 06:04:53 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-int	ft_isspace(char c)
+int	ft_is_empty_string(const char *str)
 {
-	if (c == '\t' || c == '\n' || c == '\v'
-	|| c == '\f' || c == '\r' || c == ' ')
-		return (1);
-	return (0);
+	while (*str)
+	{
+		if (!ft_isspace((unsigned char)*str))
+			return (0);
+		str++;
+	}
+	return (1);
 }

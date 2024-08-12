@@ -1,0 +1,40 @@
+minish-1.0$ export x="     <tab>     "
+minish-1.0$ $x
+minishell:              : command not found 
+
+--------------------------------------------------
+
+echo "                                         ''              "
+
+l's              '
+
+--------------------------------------------------
+
+minish-1.0$ export x="'"
+minish-1.0$ echo $x yassine $x
+yassine 
+minish-1.0$ echo $x yassine $x
+yassine 
+
+--------------------------------------------------
+
+minish-1.0$ ls >> $X
+syntax error near unexpected token `newline'
+minish-1.0$ echo $?
+258
+
+--------------------------------------------------
+
+declare -x x="a b"
+declare -x a
+declare -x b="yassine"
+declare -x y="a"
+minish-1.0$ export y=$x
+
+--------------------------------------------------
+
+inish-1.0$ cd ..
+cd: error retrieving current directory: getcwd: cannot access parent directories: No such file or directory
+minish-1.0$ echo $?
+0
+minish-1.0$ 
