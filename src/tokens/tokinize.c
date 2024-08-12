@@ -6,7 +6,7 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/11 22:02:39 by mregrag           #+#    #+#             */
-/*   Updated: 2024/08/12 23:38:50 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/08/13 00:45:41 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,9 +112,7 @@ static int	add_word_token(char **input, t_token **tokens, t_env *env, int flag)
 	if (flag)
 		return (token_add_back(tokens, new_token(word, T_CMD)), 1);
 	expand_word = expansion_input(word, env);
-	if (!expand_word)
-		return (free(word), free(expand_word), clear_tokens(tokens), 0);
-	if (!has_space_between_quotes(word))
+	if (expand_word && !has_space_between_quotes(word))
 	{
 		if (!split_into_tokens(tokens, expand_word))
 			return (free(word), free(expand_word), clear_tokens(tokens), 0);

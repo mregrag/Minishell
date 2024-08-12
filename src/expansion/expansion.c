@@ -6,7 +6,7 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/30 15:10:09 by mregrag           #+#    #+#             */
-/*   Updated: 2024/08/12 22:26:20 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/08/13 00:48:56 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ char	*expansion_input(char *str, t_env *env)
 		else
 			ret = handle_normal(ret, &str);
 		if (!ret)
-			return (free(temp), NULL);
+			return (NULL);
 	}
 	return (remov_quotes(ret));
 }

@@ -6,7 +6,7 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/24 21:23:34 by mregrag           #+#    #+#             */
-/*   Updated: 2024/08/12 22:31:39 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/08/13 00:47:45 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,8 @@ void	fill_cmd(t_node *node, t_token *tokens, int count)
 	j = 0;
 	while (i < count)
 	{
-		node->cmd[j++] = ft_strdup(tokens->value);
+		if (tokens->value)
+			node->cmd[j++] = ft_strdup(tokens->value);
 		tmp = tokens;
 		tokens = tokens->next;
 		free_token(tmp);
