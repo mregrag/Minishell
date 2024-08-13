@@ -6,7 +6,7 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/30 15:10:09 by mregrag           #+#    #+#             */
-/*   Updated: 2024/08/13 20:04:09 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/08/13 20:38:10 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ char	*expansion_input(char *str, t_env *env)
 	}
 	if (ft_is_empty_string(ret))
 		return (free(ret), NULL);
-	return (remov_quotes(ret));
+	return (handle_final_case(ret));
 }
 
 char	*expansion_content(char *str, t_env *env)
@@ -67,5 +67,5 @@ char	*expansion_dilim(char *str)
 	i = 0;
 	while (str[i])
 		ret = handle_str(ret, str, &i);
-	return (remov_quotes(ret));
+	return (handle_final_case(ret));
 }
