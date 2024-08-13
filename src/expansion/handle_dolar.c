@@ -6,7 +6,7 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/30 15:14:43 by mregrag           #+#    #+#             */
-/*   Updated: 2024/08/13 00:35:27 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/08/13 02:28:10 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,31 +36,44 @@ static char	*expand_var(char *ret, char *var_value, int count)
 	if (var_value)
 		new_ret = ft_strjoin(new_ret, var_value);
 	ret = ft_strjoin_free(ret, new_ret);
-	if (ft_is_empty_string(ret))
-		return (NULL);
 	return (ret);
+}
+
+static char	*handle_special_cases(char **str, char *ret, t_env *env)
+{
+	char	*var_value;
+
+	if (ft_isdigit(**str) || **str == '@')
+	{
+		(*str)++;
+		return (ret);
+	}
+	if (**str == '?')
+	{
+		var_value = get_env_var(env, "?");
+		ret = ft_strjoin_free(ret, var_value);
+		(*str)++;
+		return (ret);
+	}
+	if (!ft_isalnum(**str) && **str != '_')
+		return (ft_strjoin_free(ret, ft_strdup("$")));
+	return (NULL);
 }
 
 char	*handle_dollar(char *ret, char **str, int flag, t_env *env)
 {
 	char	*var_name;
 	char	*var_value;
+	char	*special_case;
 	int		count;
 
 	count = 0;
 	while ((*str)[count] == '$')
 		count++;
 	*str += count;
-	if (ft_isdigit(**str) || **str == '@')
-		return ((*str)++, ret);
-	if (**str == '?')
-	{
-		var_value = get_env_var(env, "?");
-		ret = ft_strjoin_free(ret, var_value);
-		return ((*str)++, ret);
-	}
-	if (!ft_isalnum(**str) && **str != '_')
-		return (ft_strjoin_free(ret, ft_strdup("$")));
+	special_case = handle_special_cases(str, ret, env);
+	if (special_case)
+		return (special_case);
 	if (count % 2 == 0)
 		return (ft_strjoin_free(ret, strndup(*str - count, count)));
 	var_name = get_var_name(*str);

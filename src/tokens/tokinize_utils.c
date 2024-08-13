@@ -6,7 +6,7 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/11 23:05:33 by mregrag           #+#    #+#             */
-/*   Updated: 2024/08/12 23:56:14 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/08/13 02:08:00 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ int	split_into_tokens(t_token **tokens, char *expanded_word)
 	split_words = ft_split(expanded_word, ' ');
 	if (ft_is_empty_string(expanded_word))
 	{
-		token_add_back(tokens, new_token(ft_strdup(""), T_CMD));
+		token_add_back(tokens, new_token(ft_strdup(expanded_word), T_CMD));
 		return (free(split_words), 1);
 	}
 	while (split_words[i])
