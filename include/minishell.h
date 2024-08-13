@@ -6,7 +6,7 @@
 /*   By: mkoualil <mkoualil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/10 16:16:44 by mregrag           #+#    #+#             */
-/*   Updated: 2024/08/12 22:14:52 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/08/13 20:03:39 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,7 @@ int		execute_redirections(t_node **node, t_env *env);
 t_node	*parse_command(t_token *tokens);
 t_node	*parse_expression(t_token *tokens, t_env *env);
 t_node	*parse_tokens(t_token *tokens, t_env *env);
-t_node	*parse_file(t_token *token, t_type type, t_env *env);
+t_node	*parse_file(t_token *token, t_type type);
 t_node	*create_redire(t_token *tokens, t_token *tmp, t_env *env);
 t_node	*new_node(t_type type);
 t_node	*parse_redirection(t_token *tokens, t_env *env);
@@ -156,5 +156,6 @@ int		ft_is_directory(char *path);
 t_list	*find_env_var(t_env *env, char *var);
 char	*expansion_dollar(char *str, t_env *env);
 char	*get_env_var_list(t_env *env, char *var);
+int	is_hase_qoutes(const char *str);
 
 #endif

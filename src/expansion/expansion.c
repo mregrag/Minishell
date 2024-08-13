@@ -6,7 +6,7 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/30 15:10:09 by mregrag           #+#    #+#             */
-/*   Updated: 2024/08/13 02:08:56 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/08/13 20:04:09 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,6 @@ char	*expansion_content(char *str, t_env *env)
 {
 	size_t	i;
 	char	*ret;
-	char	*temp;
 
 	i = 0;
 	ret = strdup("");
@@ -47,7 +46,6 @@ char	*expansion_content(char *str, t_env *env)
 		malloc_error();
 	while (str[i])
 	{
-		temp = ret;
 		if (str[i] == '\'' || str[i] == '"')
 			ret = handle_quotes(ret, &str, env);
 		else if (str[i] == '$')

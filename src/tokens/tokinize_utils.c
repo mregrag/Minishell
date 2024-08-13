@@ -6,7 +6,7 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/11 23:05:33 by mregrag           #+#    #+#             */
-/*   Updated: 2024/08/13 02:08:00 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/08/13 06:02:14 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,21 @@ int	check_quotes(char *line)
 	return (1);
 }
 
+
+int	is_hase_qoutes(const char *str)
+{
+	size_t	len;
+
+	if (!str)
+		return (0);
+	len = ft_strlen(str);
+	if (len < 2)
+		return (0);
+	if (str[0] == '"' && str[len - 1] == '"')
+		return (1);
+	return (0);
+}
+
 t_type	get_operator_type(char *str)
 {
 	if (ft_strncmp(str, "<<", 2) == 0)
@@ -62,3 +77,4 @@ t_type	get_operator_type(char *str)
 		return (T_PIPE);
 	return (T_CMD);
 }
+

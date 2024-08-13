@@ -6,77 +6,39 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/18 21:49:59 by mregrag           #+#    #+#             */
-/*   Updated: 2024/08/12 22:29:33 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/08/13 20:03:15 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-// static char	*remov_quotes(char *str)
-// {
-// 	char	*ret;
-// 	size_t	i;
-// 	size_t	j;
-// 	int		double_q;
-// 	int		single_q;
-//
-// 	ret = malloc(strlen(str) + 1);
-// 	if (!ret)
-// 		malloc_error();
-// 	i = 0;
-// 	j = 0;
-// 	double_q = 0;
-// 	single_q = 0;
-// 	while (str[i])
-// 	{
-// 		if (str[i] == '"' && !single_q)
-// 			double_q = !double_q;
-// 		else if (str[i] == '\'' && !double_q)
-// 			single_q = !single_q;
-// 		else
-// 			ret[j++] = str[i];
-// 		i++;
-// 	}
-// 	ret[j] = '\0';
-// 	return (ret);
-// }
-//
-
-char *remov_quotes(char *str)
+char	*remov_quotes(char *str)
 {
-    char *ret;
-    size_t i;
-    size_t j;
-    int double_q;
-    int single_q;
+	char	*ret;
+	size_t	i;
+	size_t	j;
+	int		double_q;
+	int		single_q;
 
-    ret = malloc(strlen(str) + 1);
-    if (!ret)
-        malloc_error();
-    i = 0;
-    j = 0;
-    double_q = 0;
-    single_q = 0;
-    while (str[i])
-    {
-        if (str[i] == '$' && (str[i + 1] == '"' || str[i + 1] == '\''))
-            i++;
-        if (str[i] == '"' && !single_q)
-        {
-            double_q = !double_q;
-            i++;
-        }
-        else if (str[i] == '\'' && !double_q)
-        {
-            single_q = !single_q;
-            i++;
-        }
-        else
-            ret[j++] = str[i++];
-    }
-    ret[j] = '\0';
-    free(str);
-    return ret;
+	ret = malloc(strlen(str) + 1);
+	if (!ret)
+		malloc_error();
+	i = 0;
+	j = 0;
+	double_q = 0;
+	single_q = 0;
+	while (str[i])
+	{
+		if (str[i] == '"' && !single_q)
+			double_q = !double_q;
+		else if (str[i] == '\'' && !double_q)
+			single_q = !single_q;
+		else
+			ret[j++] = str[i];
+		i++;
+	}
+	ret[j] = '\0';
+	return (free(str), ret);
 }
 
 char	*handle_single_quotes(char *ret, char **str)

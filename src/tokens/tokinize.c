@@ -6,45 +6,41 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/11 22:02:39 by mregrag           #+#    #+#             */
-/*   Updated: 2024/08/13 00:45:41 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/08/13 06:38:57 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-#include <stdbool.h>
-#include <ctype.h>
-#include <stdio.h>
-
-bool has_space_between_quotes(const char *str)
+int	has_space_between_quotes(const char *str)
 {
-    char quote = 0;
-    bool in_quotes = false;
-    bool has_content = false;
+	char	quote;
+	int		in_quotes;
+	int		has_content;
 
-    while (*str) {
-        if (*str == '\'' || *str == '"')
+	quote = 0;
+	in_quotes = 0;
+	has_content = 0;
+	while (*str)
 	{
-            if (!in_quotes)
-	    {
-                quote = *str;
-                in_quotes = true;
-                has_content = false;
-            } else if (*str == quote) {
-                return has_content;
-            }
-        } else if (in_quotes) {
-            if (isspace(*str)) {
-                if (has_content) {
-                    return true;
-                }
-            } else {
-                has_content = true;
-            }
-        }
-        str++;
-    }
-    return false;
+		if ((*str == '\'' || *str == '"') && !in_quotes)
+		{
+			quote = *str;
+			in_quotes = 1;
+			has_content = 0;
+		}
+		else if (*str == quote && in_quotes)
+			return (has_content);
+		else if (in_quotes)
+		{
+			if (ft_isspace(*str) && has_content)
+				return (1);
+			else if (!ft_isspace(*str))
+				has_content = 1;
+		}
+		str++;
+	}
+	return (0);
 }
 
 static char	*extract_operator(char **input, t_type type)
@@ -112,7 +108,7 @@ static int	add_word_token(char **input, t_token **tokens, t_env *env, int flag)
 	if (flag)
 		return (token_add_back(tokens, new_token(word, T_CMD)), 1);
 	expand_word = expansion_input(word, env);
-	if (expand_word && !has_space_between_quotes(word))
+	if (expand_word && !has_space_between_quotes(word) && !ft_strchr(word, '='))
 	{
 		if (!split_into_tokens(tokens, expand_word))
 			return (free(word), free(expand_word), clear_tokens(tokens), 0);

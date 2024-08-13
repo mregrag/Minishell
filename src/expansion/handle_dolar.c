@@ -6,7 +6,7 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/30 15:14:43 by mregrag           #+#    #+#             */
-/*   Updated: 2024/08/13 02:28:10 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/08/13 20:30:16 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ static char	*expand_var(char *ret, char *var_value, int count)
 	while (++i < (count - 1) / 2)
 		new_ret = ft_strjoin_free(new_ret, ft_strdup("$"));
 	if (var_value)
-		new_ret = ft_strjoin(new_ret, var_value);
+		new_ret = ft_strjoin_free(new_ret, var_value);
 	ret = ft_strjoin_free(ret, new_ret);
 	return (ret);
 }
