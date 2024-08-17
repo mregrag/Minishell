@@ -6,11 +6,13 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/11 23:05:33 by mregrag           #+#    #+#             */
-/*   Updated: 2024/08/13 06:02:14 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/08/14 07:33:08 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
+
+
 
 int	split_into_tokens(t_token **tokens, char *expanded_word)
 {
@@ -19,7 +21,7 @@ int	split_into_tokens(t_token **tokens, char *expanded_word)
 
 	i = 0;
 	split_words = NULL;
-	split_words = ft_split(expanded_word, ' ');
+	split_words = ft_splite_by_spaces(expanded_word);
 	if (ft_is_empty_string(expanded_word))
 	{
 		token_add_back(tokens, new_token(ft_strdup(expanded_word), T_CMD));

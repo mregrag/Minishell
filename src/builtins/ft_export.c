@@ -6,7 +6,7 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/18 18:50:47 by mregrag           #+#    #+#             */
-/*   Updated: 2024/08/06 21:52:23 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/08/15 06:16:17 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,6 +92,7 @@ int	ft_export(t_node *node, t_env *env)
 		return (export_list(env->env), 1);
 	while (*(++argv))
 	{
+		// printf("arg = %s\n", *argv);
 		if (!check_var(*argv))
 		{
 			print_error("minish", "export", *argv, "not a valid identifier");

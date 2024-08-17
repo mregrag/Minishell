@@ -6,7 +6,7 @@
 #    By: mkoualil <mkoualil@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/05/10 16:12:48 by mregrag           #+#    #+#              #
-#    Updated: 2024/08/13 00:47:08 by mregrag          ###   ########.fr        #
+#    Updated: 2024/08/16 00:58:13 by mregrag          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -43,6 +43,7 @@ EXECUTION	:=	src/execution/execute_builtin.c \
 
 EXPANSION	:=	src/expansion/expansion.c \
 			src/expansion/handle_dolar.c \
+			src/expansion/expand_heredoc.c \
 			src/expansion/expansion_utils.c \
 			src/expansion/expansion_utils1.c \
 

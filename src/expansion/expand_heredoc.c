@@ -1,34 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   handle_dolar.c                                     :+:      :+:    :+:   */
+/*   expand_heredoc.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/06/30 15:14:43 by mregrag           #+#    #+#             */
-/*   Updated: 2024/08/17 01:19:23 by mregrag          ###   ########.fr       */
+/*   Created: 2024/08/14 03:29:28 by mregrag           #+#    #+#             */
+/*   Updated: 2024/08/14 03:40:47 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
-
-static int	is_only_whitespace(const char *str)
-{
-	int	i;
-
-	if (!str || str[0] != '"')
-		return (0);
-	i = 1;
-	while (str[i] && str[i] != '"')
-	{
-		if (!ft_isspace(str[i]))
-			return (0);
-		i++;
-	}
-	if (str[i] != '"')
-		return (0);
-	return (1);
-}
 
 static char	*handle_special_cases(char *ret, char *str, size_t *i, t_env *env)
 {
@@ -65,45 +47,21 @@ static char	*handle_env_var(char *ret, char *str, size_t *i, t_env *env)
 		(*i)++;
 	var = ft_substr(str, start, *i - start);
 	val = get_env_var(env, var);
-	val = ft_strtrim(val, " \t\n\v\f\r");
 	(free(var));
 	if (!val)
-		return (ret);
-	else if (is_only_whitespace(val))
 		return (ret);
 	new_ret = ft_strjoin(ret, val);
 	return (new_ret);
 }
 
-static char	*handle_env_var_list(char *ret, char *str, size_t *i, t_env *env)
-{
-	char	*var;
-	char	*val;
-	char	*new_ret;
-	size_t	start;
-
-	start = *i;
-	while (ft_isalnum(str[*i]) || str[*i] == '_')
-		(*i)++;
-	var = ft_substr(str, start, *i - start);
-	val = get_env_var_list(env, var);
-	val = ft_strtrim(val, " \t\n\v\f\r");
-	(free(var));
-	if (!val)
-		return (ret);
-	else if (is_only_whitespace(val))
-		return (ret);
-	new_ret = ft_strjoin(ret, val);
-	return (new_ret);
-}
-
-
-char	*handle_dollar(char *ret, char *str, size_t *i, t_env *env)
+char	*handle_dollar_her(char *ret, char *str, size_t *i, t_env *env)
 {
 	char	*result;
-	int		count;
+	int	count;
 	size_t	start;
+	int	j;
 
+	j= -1;
 	start = *i;
 	count = 0;
 	while (str[*i] == '$')
@@ -116,31 +74,7 @@ char	*handle_dollar(char *ret, char *str, size_t *i, t_env *env)
 		return (result);
 	if (count % 2 == 0)
 		return (ft_strjoin_free(ret, ft_substr(str, start, count)));
-	result = handle_env_var(ret, str, i, env);
-	while (count-- > 1)
-		result = ft_strjoin_free(ft_strdup("$"), result);
-	return (result);
-}
-
-char	*handle_dollar_export(char *ret, char *str, size_t *i, t_env *env)
-{
-	char	*result;
-	int		count;
-	size_t	start;
-
-	start = *i;
-	count = 0;
-	while (str[*i] == '$')
-	{
-		count++;
-		(*i)++;
-	}
-	result = handle_special_cases(ret, str, i, env);
-	if (result)
-		return (result);
-	if (count % 2 == 0)
-		return (ft_strjoin_free(ret, ft_substr(str, start, count)));
-	result = handle_env_var_list(ret, str, i, env);
+	result = handle_env_var(ret, str, i,env);
 	while (count-- > 1)
 		result = ft_strjoin_free(ft_strdup("$"), result);
 	return (result);

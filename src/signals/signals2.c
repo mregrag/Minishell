@@ -6,7 +6,7 @@
 /*   By: mkoualil <mkoualil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/10 23:38:35 by mregrag           #+#    #+#             */
-/*   Updated: 2024/08/03 18:00:50 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/08/14 00:13:42 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,11 +37,9 @@ void	signal_handlers(struct sigaction *sa_ig, struct sigaction *sa_def)
 void	handle_eof(t_env *envp)
 {
 	char	*status;
-	char	*trim_status;
 
-	printf("exit\n");
+	ft_putendl_fd("exit", 1);
 	status = get_env_var(envp, "?");
-	trim_status = ft_strtrim(status, "\"");
 	free(status);
-	exit(ft_atoi(trim_status));
+	exit(ft_atoi(status));
 }

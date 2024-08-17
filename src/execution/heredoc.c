@@ -6,7 +6,7 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/18 04:11:35 by mregrag           #+#    #+#             */
-/*   Updated: 2024/08/12 02:09:53 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/08/15 01:26:16 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ static void	heredoc_content(t_node *node, int fd, char *content, t_env *env)
 		ft_putendl_fd(content, fd);
 	else
 	{
-		new_content = expansion_content(content, env);
+		new_content = expand_content(content, env);
 		if (new_content)
 			(ft_putendl_fd(new_content, fd), free(new_content));
 	}
@@ -29,17 +29,15 @@ static void	heredoc_content(t_node *node, int fd, char *content, t_env *env)
 static int	process_heredoc_content(t_node *node, int *fd_heredoc, t_env *env)
 {
 	char	*content;
-	char	*dilim;
 
-	dilim = expansion_dilim(node->cmd[0]);
 	while (1)
 	{
 		content = readline("> ");
 		if (!ttyname(0))
-			return (free(content), free(dilim), -1);
+			return (free(content), -1);
 		if (!content)
-			return (free(dilim), 0);
-		if (!dilim || !ft_strcmp(content, dilim))
+			return (0);
+		if (!node->cmd[0] || !ft_strcmp(content, node->cmd[0]))
 		{
 			(free(content), exit_status(0, env));
 			break ;
@@ -47,7 +45,7 @@ static int	process_heredoc_content(t_node *node, int *fd_heredoc, t_env *env)
 		heredoc_content(node, fd_heredoc[1], content, env);
 		free(content);
 	}
-	return (free(dilim), 0);
+	return (0);
 }
 
 static int	heredoc(t_node *node, t_env *env)
