@@ -6,34 +6,11 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/11 23:05:33 by mregrag           #+#    #+#             */
-/*   Updated: 2024/08/14 07:33:08 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/08/18 04:22:13 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
-
-
-
-int	split_into_tokens(t_token **tokens, char *expanded_word)
-{
-	char	**split_words;
-	int		i;
-
-	i = 0;
-	split_words = NULL;
-	split_words = ft_splite_by_spaces(expanded_word);
-	if (ft_is_empty_string(expanded_word))
-	{
-		token_add_back(tokens, new_token(ft_strdup(expanded_word), T_CMD));
-		return (free(split_words), 1);
-	}
-	while (split_words[i])
-	{
-		token_add_back(tokens, new_token(split_words[i], T_CMD));
-		i++;
-	}
-	return (free(split_words), 1);
-}
 
 int	check_quotes(char *line)
 {
@@ -48,21 +25,6 @@ int	check_quotes(char *line)
 			i++;
 	}
 	return (1);
-}
-
-
-int	is_hase_qoutes(const char *str)
-{
-	size_t	len;
-
-	if (!str)
-		return (0);
-	len = ft_strlen(str);
-	if (len < 2)
-		return (0);
-	if (str[0] == '"' && str[len - 1] == '"')
-		return (1);
-	return (0);
 }
 
 t_type	get_operator_type(char *str)
@@ -80,3 +42,13 @@ t_type	get_operator_type(char *str)
 	return (T_CMD);
 }
 
+int	check_operators(char *str)
+{
+	while (*str)
+	{
+		if (is_operator(str))
+			return (1);
+		str++;
+	}
+	return (0);
+}

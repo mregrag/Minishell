@@ -6,7 +6,7 @@
 /*   By: mkoualil <mkoualil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/10 16:16:44 by mregrag           #+#    #+#             */
-/*   Updated: 2024/08/16 22:09:40 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/08/18 04:34:54 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,9 +66,7 @@ typedef struct s_node
 
 int	g_sig;
 
-char	*handle_final_case(char *ret);
-char	*remov_quotes(char *str);
-int is_only_double_space(const char *str);
+char	*remove_quotes(char *str);
 void	malloc_error(void);
 void	preorder_hearedoc(t_node *node, t_env *env);
 t_token	*tokenize_input(char *input, t_env *env);
@@ -135,7 +133,6 @@ int		ft_open_input(char *file);
 pid_t	ft_fork(void);
 
 char	*expand_content(char *str, t_env *env);
-char	*handle_dollar_her(char *ret, char *str, size_t *i, t_env *env);
 char	*expand_variable(char *str, int flag, t_env *env);
 char	*handle_quotes(char *ret, char *str, size_t *i, t_env *env);
 char	*expansion_input(char *str, t_env *env);
@@ -161,7 +158,6 @@ t_list	*find_env_var(t_env *env, char *var);
 char	*expansion_dollar(char *str, t_env *env);
 char	*get_env_var_list(t_env *env, char *var);
 int	is_hase_qoutes(const char *str);
-char	*remov_quotes(char *str);
 char	*handle_dollar_export(char *ret, char *str, size_t *i, t_env *env);
 char	*expand_export(char *str, int flag, t_env *env);
 

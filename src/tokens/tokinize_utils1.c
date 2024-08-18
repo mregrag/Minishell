@@ -6,7 +6,7 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 20:13:20 by mregrag           #+#    #+#             */
-/*   Updated: 2024/07/30 02:30:44 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/08/18 04:22:02 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,8 +40,6 @@ int	is_redirection(t_type type)
 
 int	is_operator(char *str)
 {
-	if (!str)
-		return (0);
 	return (!ft_strncmp(str, "<<", 2)
 		|| !ft_strncmp(str, ">>", 2)
 		|| *str == '<'
@@ -49,13 +47,3 @@ int	is_operator(char *str)
 		|| *str == '|');
 }
 
-int	check_operators(char *str)
-{
-	while (*str)
-	{
-		if (is_operator(str))
-			return (1);
-		str++;
-	}
-	return (0);
-}

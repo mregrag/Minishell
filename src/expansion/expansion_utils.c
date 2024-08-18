@@ -6,13 +6,13 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/18 21:49:59 by mregrag           #+#    #+#             */
-/*   Updated: 2024/08/17 01:45:51 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/08/18 05:56:56 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-char	*remov_quotes(char *str)
+char	*remove_quotes(char *str)
 {
 	char	*ret;
 	size_t	i;
@@ -56,48 +56,9 @@ char	*handle_final_case(char *ret)
 		free(ret);
 		ret = temp;
 	}
-	// if (!ft_strlen(ret))
-	// 	return (free(ret), NULL);
-	temp = remov_quotes(ret);
+	temp = remove_quotes(ret);
 	return (temp);
 }
-// int has_space_in_quotes(const char *str)
-// {
-// 	char quote_type = 0;
-// 	bool in_quotes = false;
-// 	bool escaped = false;
-// 	bool has_space = false;
-//
-// 	while (*str) {
-// 		if (*str == '\\' && !escaped) {
-// 			escaped = true;
-// 			str++;
-// 			continue;
-// 		}
-//
-// 		if ((*str == '\'' || *str == '"') && !escaped) {
-// 			if (!in_quotes) {
-// 				in_quotes = true;
-// 				quote_type = *str;
-// 				has_space = false;
-// 			} else if (*str == quote_type) {
-// 				in_quotes = false;
-// 				if (has_space)
-// 					return 1;
-// 			}
-// 		} else if (in_quotes) {
-// 			if (ft_isspace(*str))
-// 				has_space = true;
-// 		}
-//
-// 		escaped = false;
-// 		str++;
-// 	}
-//
-// 	return 0;
-// }
-//
-
 char	*handle_single_quotes(char *ret, char *str, size_t *i)
 {
 	size_t	start;
