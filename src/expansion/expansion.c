@@ -6,7 +6,7 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/30 15:10:09 by mregrag           #+#    #+#             */
-/*   Updated: 2024/08/18 04:47:21 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/08/18 23:43:27 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ char	*expand_variable(char *str, int flag, t_env *env)
 			ret = handle_single_quotes(ret, str, &i);
 		else if (str[i] == '"')
 			ret = handle_double_quotes(ret, str, &i, env);
-		else if (str[i] == '$' && flag)
+		else if (str[i] == '$' && flag == 5)
 			ret = handle_dilim(ret, str, &i);
 		else if (str[i] == '$')
 			ret = handle_dollar(ret, str, &i, env);

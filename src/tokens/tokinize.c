@@ -6,7 +6,7 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/14 23:26:40 by mregrag           #+#    #+#             */
-/*   Updated: 2024/08/18 06:17:10 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/08/19 00:50:46 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,16 +81,6 @@ static char	*extract_word(char **input)
 	return (ft_substr(start, 0, len));
 }
 
-int	dollar_position(const char *str)
-{
-	char	*equals;
-
-	equals = ft_strchr(str, '=');
-	if (!equals)
-		return (0);
-	return (equals[1] == '$');
-}
-
 static int	add_to_list_token(char *expand, bool dollar, t_token **tokens)
 {
 	char	*word;
@@ -112,33 +102,61 @@ static int	add_to_list_token(char *expand, bool dollar, t_token **tokens)
 	return (1);
 }
 
-static int	process_word(char *word, t_token **tokens, bool flag, t_env *env)
+int	contains_whitespace_before(const char *str)
+{
+	const char *equals_pos = strchr(str, '=');
+	if (equals_pos == NULL)
+		return (1);
+	while (str < equals_pos)
+	{
+		if (ft_isspace((unsigned char)*str))
+			return (1);
+		str++;
+	}
+	return (0);
+}
+
+int	is_empty(const char *str)
+{
+	if (str == NULL)
+		return (1);
+	while (*str) {
+		if (!ft_isspace((unsigned char)*str))
+			return (0);
+		str++;
+	}
+	return (1);
+}
+
+
+static int	process_word(char *word, t_token **tokens, int flag, t_env *env)
 {
 	char	*expand;
 
 	expand = expand_variable(word, flag, env);
-	if (flag && ft_strchr(word, '$'))
+	if (flag == 1)
 	{
-		if (dollar_position(word) == 1)
-			token_add_back(tokens, new_token(expand, get_operator_type(word)));
+		if (!contains_whitespace_before(expand))
+			token_add_back(tokens, new_token(remove_quotes(expand), 0));
+		else if (contains_whitespace_before(expand))
+			add_to_list_token(ft_strdup(expand), false, tokens);
 		else
-			add_to_list_token(expand, true, tokens);
+			token_add_back(tokens, new_token(remove_quotes(expand), 0));
 	}
+	else if (is_empty(expand))
+		token_add_back(tokens, new_token(NULL, 0));
+	else if (ft_strchr(word, '$'))
+		add_to_list_token(expand, true, tokens);
 	else
-	{
-		if (ft_strchr(word, '$'))
-			add_to_list_token(expand, true, tokens);
-		else
-			add_to_list_token(expand, false, tokens);
-	}
-	return (free(expand), 1);
+		add_to_list_token(expand, false, tokens);
+	return (1);
 }
 
 static int	create_tokens(char *input, t_token **tokens, t_env *env)
 {
 	char	*word;
 	t_type	type;
-	bool	flag;
+	int	flag;
 
 	flag = false;
 	while (*input)
@@ -149,8 +167,10 @@ static int	create_tokens(char *input, t_token **tokens, t_env *env)
 			word = extract_operator(&input, type);
 		else
 			word = extract_word(&input);
-		if (!ft_strcmp(word, "export") || type == T_HERDOC)
-			flag = true;
+		if (!ft_strcmp(word, "export"))
+			flag = 1;
+		else if (type == T_HERDOC)
+			flag = T_HERDOC;
 		process_word(word, tokens, flag, env);
 	}
 	return (free(word), 1);
@@ -164,7 +184,7 @@ t_token	*tokenize_input(char *input, t_env *env)
 	tokens = NULL;
 	new_input = ft_strtrim(input, " \t\n\f\r");
 	if (!check_quotes(new_input))
-		return (NULL);
+		return (free(input), free(new_input), NULL);
 	create_tokens(new_input, &tokens, env);
 	free(input);
 	free(new_input);
