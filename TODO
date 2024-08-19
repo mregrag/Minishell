@@ -1,6 +1,6 @@
 minish-1.0$ export x="     <tab>     "
 minish-1.0$ $x
-minishell:              : command not found 
+minishell:              : command not found
 
 --------------------------------------------------
 
@@ -12,9 +12,9 @@ l's              '
 
 minish-1.0$ export x="'"
 minish-1.0$ echo $x yassine $x
-yassine 
+yassine
 minish-1.0$ echo $x yassine $x
-yassine 
+yassine
 
 --------------------------------------------------
 
@@ -37,4 +37,22 @@ inish-1.0$ cd ..
 cd: error retrieving current directory: getcwd: cannot access parent directories: No such file or directory
 minish-1.0$ echo $?
 0
-minish-1.0$ 
+minish-1.0$
+-------------------------------------------------
+
+// if (flag == 1)
+{
+	// if (!whitespace_before_equal(expand))
+	// 	token_add_back(tokens, new_token(remove_quotes(expand), 0));
+	// else
+	// 	add_to_list_token(expand, false, tokens);
+}
+// else if (ft_strchr(word, '$') && flag == 1)
+// 	add_to_list_token(expand, true, tokens);
+// else if (ft_whitespace(expand) && flag == 3)
+// 	token_add_back(tokens, new_token(NULL, 0));
+// else if (ft_isempty(expand))
+	// 	token_add_back(tokens, new_token(NULL, 0))
+
+--------------------------------------------------
+export a="text  " //TODO

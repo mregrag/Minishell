@@ -6,29 +6,11 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/30 15:14:43 by mregrag           #+#    #+#             */
-/*   Updated: 2024/08/18 06:38:58 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/08/19 08:52:05 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
-
-static int	is_only_whitespace(const char *str)
-{
-	int	i;
-
-	if (!str || str[0] != '"')
-		return (0);
-	i = 1;
-	while (str[i] && str[i] != '"')
-	{
-		if (!ft_isspace(str[i]))
-			return (0);
-		i++;
-	}
-	if (str[i] != '"')
-		return (0);
-	return (1);
-}
 
 static char	*handle_special_cases(char *ret, char *str, size_t *i, t_env *env)
 {
@@ -44,7 +26,11 @@ static char	*handle_special_cases(char *ret, char *str, size_t *i, t_env *env)
 		return ((*i)++, new_ret);
 	}
 	else if (str[*i] == '_')
-		return ((*i)++, ret);
+	{
+		val = get_env_var(env, "_");
+		new_ret = ft_strjoin_free(ret, val);
+		return ((*i)++, new_ret);
+	}
 	else if (!ft_isalnum(str[*i]))
 	{
 		new_ret = ft_strjoin(ret, "$");
@@ -65,13 +51,12 @@ static char	*handle_env_var(char *ret, char *str, size_t *i, t_env *env)
 		(*i)++;
 	var = ft_substr(str, start, *i - start);
 	val = get_env_var(env, var);
-	val = ft_strtrim(val, " \t\n\v\f\r");
-	(free(var));
+	free(var);
 	if (!val)
 		return (ret);
-	else if (is_only_whitespace(val))
+	else if (ft_isempty(val))
 		return (ret);
-	new_ret = ft_strjoin(ret, val);
+	new_ret = ft_strjoin_free(ret, val);
 	return (new_ret);
 }
 

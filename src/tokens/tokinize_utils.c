@@ -6,7 +6,7 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/11 23:05:33 by mregrag           #+#    #+#             */
-/*   Updated: 2024/08/18 04:22:13 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/08/19 07:07:26 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,4 +51,19 @@ int	check_operators(char *str)
 		str++;
 	}
 	return (0);
+}
+
+int	count_quotes(const char *str)
+{
+	int	count;
+
+	count = 0;
+	if (str == NULL)
+		return 0;
+	while (*str == '"' || *str == '\'')
+	{
+		count++;
+		str++;
+	}
+	return (count);
 }

@@ -6,7 +6,7 @@
 #    By: mkoualil <mkoualil@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/05/10 16:12:48 by mregrag           #+#    #+#              #
-#    Updated: 2024/08/19 00:51:00 by mregrag          ###   ########.fr        #
+#    Updated: 2024/08/19 08:38:37 by mregrag          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -52,7 +52,8 @@ PARSING		:=	src/parsing/parcing_tokens.c \
 TOKENIZING	:=	src/tokens/tokinize.c \
 			src/tokens/tokinize_lst.c \
 			src/tokens/tokinize_utils.c \
-			src/tokens/tokinize_utils1.c
+			src/tokens/tokinize_utils1.c \
+			src/tokens/analyse_token.c
 
 UTILS		:=	src/utils/error_exit.c \
 			src/utils/syntax_errors.c\

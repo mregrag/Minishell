@@ -6,7 +6,7 @@
 /*   By: mkoualil <mkoualil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/10 16:16:44 by mregrag           #+#    #+#             */
-/*   Updated: 2024/08/18 04:34:54 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/08/19 06:24:58 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -160,5 +160,11 @@ char	*get_env_var_list(t_env *env, char *var);
 int	is_hase_qoutes(const char *str);
 char	*handle_dollar_export(char *ret, char *str, size_t *i, t_env *env);
 char	*expand_export(char *str, int flag, t_env *env);
+int	ft_whitespace(const char *str);
+int	ft_isempty(const char *str);
+int	whitespace_before_equal(const char *str);
+int	analyse_token(char *word, t_token **tokens, int flag, t_env *env);
+int	add_to_list_token(char *expand, bool dollar, t_token **tokens);
+int	count_quotes(const char *str);
 
 #endif

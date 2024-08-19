@@ -6,11 +6,12 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/18 21:49:59 by mregrag           #+#    #+#             */
-/*   Updated: 2024/08/18 05:56:56 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/08/19 08:13:41 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
+#include <stdio.h>
 
 char	*remove_quotes(char *str)
 {
@@ -38,27 +39,9 @@ char	*remove_quotes(char *str)
 			ret[j++] = str[i++];
 	}
 	ret[j] = '\0';
-	return (free(str), ret);
+	return (ret);
 }
 
-char	*handle_final_case(char *ret)
-{
-	size_t	i;
-	char	*temp;
-
-	i = 0;
-	if (ft_strchr(ret, '\'') || ft_strchr(ret, '"'))
-		while (ret[i] == '$')
-			i++;
-	if (i % 2 != 0)
-	{
-		temp = ft_substr(ret, 1, ft_strlen(ret) - 1);
-		free(ret);
-		ret = temp;
-	}
-	temp = remove_quotes(ret);
-	return (temp);
-}
 char	*handle_single_quotes(char *ret, char *str, size_t *i)
 {
 	size_t	start;
@@ -109,11 +92,11 @@ char	*handle_normal(char *ret, char *str, size_t *i)
 		(*i)++;
 	substr = ft_substr(str, start, *i - start);
 	if (!substr)
-		return (ret);
+		return (NULL);
 	new_ret = ft_strjoin(ret, substr);
 	free(substr);
 	if (new_ret)
-		return (free(ret), new_ret);
+		return (free(ret),  new_ret);
 	return (ret);
 }
 

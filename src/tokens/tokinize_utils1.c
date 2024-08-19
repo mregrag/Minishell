@@ -6,7 +6,7 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 20:13:20 by mregrag           #+#    #+#             */
-/*   Updated: 2024/08/18 04:22:02 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/08/19 02:37:01 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,3 +47,43 @@ int	is_operator(char *str)
 		|| *str == '|');
 }
 
+int	ft_whitespace(const char *str)
+{
+	if (str == NULL)
+		return (0);
+	while (*str)
+	{
+		if (ft_isspace((unsigned char)*str))
+			return (1);
+		str++;
+	}
+	return (0);
+}
+
+int	ft_isempty(const char *str)
+{
+	if (str == NULL)
+		return (1);
+	while (*str) {
+		if (!ft_isspace((unsigned char)*str))
+			return (0);
+		str++;
+	}
+	return (1);
+}
+
+int	whitespace_before_equal(const char *str)
+{
+	const char *pos;
+
+	pos = ft_strchr(str, '=');
+	if (pos == NULL)
+		return (1);
+	while (str < pos)
+	{
+		if (ft_isspace((unsigned char)*str))
+			return (1);
+		str++;
+	}
+	return (0);
+}
