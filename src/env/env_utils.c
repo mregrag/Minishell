@@ -6,7 +6,7 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 16:25:14 by mregrag           #+#    #+#             */
-/*   Updated: 2024/08/18 04:12:49 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/08/19 22:58:14 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ char	*get_env_var(t_env *env, char *var)
 	var_len = ft_strlen(var);
 	if (content[var_len] != '=')
 		return (NULL);
-	value = ft_strdup(content + var_len + 1);
+	value = ft_strtrim(content + var_len + 1, " \t\n\f\r");
 	if (!value)
 		malloc_error();
 	return (value);

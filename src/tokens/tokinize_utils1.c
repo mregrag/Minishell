@@ -6,7 +6,7 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 20:13:20 by mregrag           #+#    #+#             */
-/*   Updated: 2024/08/19 02:37:01 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/08/20 05:44:17 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,17 +27,6 @@ int	skip_quotes(char *line, size_t *i)
 	return (0);
 }
 
-void	skip_spaces(char **str)
-{
-	while (**str && ft_isspace(**str))
-		(*str)++;
-}
-
-int	is_redirection(t_type type)
-{
-	return (type >= T_IN && type <= T_HERDOC);
-}
-
 int	is_operator(char *str)
 {
 	return (!ft_strncmp(str, "<<", 2)
@@ -47,10 +36,12 @@ int	is_operator(char *str)
 		|| *str == '|');
 }
 
-int	ft_whitespace(const char *str)
+int	ft_whitespace(char *str)
 {
 	if (str == NULL)
 		return (0);
+	if (*str == '\0')
+		return (1);
 	while (*str)
 	{
 		if (ft_isspace((unsigned char)*str))
@@ -60,11 +51,12 @@ int	ft_whitespace(const char *str)
 	return (0);
 }
 
-int	ft_isempty(const char *str)
+int	ft_isempty(char *str)
 {
 	if (str == NULL)
 		return (1);
-	while (*str) {
+	while (*str)
+	{
 		if (!ft_isspace((unsigned char)*str))
 			return (0);
 		str++;
@@ -74,7 +66,7 @@ int	ft_isempty(const char *str)
 
 int	whitespace_before_equal(const char *str)
 {
-	const char *pos;
+	char	*pos;
 
 	pos = ft_strchr(str, '=');
 	if (pos == NULL)

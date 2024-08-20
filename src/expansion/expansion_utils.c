@@ -6,12 +6,11 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/18 21:49:59 by mregrag           #+#    #+#             */
-/*   Updated: 2024/08/19 08:13:41 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/08/20 06:48:34 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
-#include <stdio.h>
 
 char	*remove_quotes(char *str)
 {
@@ -46,6 +45,7 @@ char	*handle_single_quotes(char *ret, char *str, size_t *i)
 {
 	size_t	start;
 	char	*content;
+	char	*new_ret;
 
 	start = *i;
 	(*i)++;
@@ -53,7 +53,10 @@ char	*handle_single_quotes(char *ret, char *str, size_t *i)
 		(*i)++;
 	(*i) += (str[*i] == '"');
 	content = ft_substr(str, start, *i - start);
-	return (ft_strjoin_free(ret, content));
+	if (!content)
+		return (NULL);
+	new_ret = ft_strjoin_free(ret, content);
+	return (new_ret);
 }
 
 char	*handle_double_quotes(char *ret, char *str, size_t *i, t_env *env)
@@ -64,7 +67,7 @@ char	*handle_double_quotes(char *ret, char *str, size_t *i, t_env *env)
 	(*i)++;
 	content = ft_strdup("");
 	if (!content)
-		malloc_error();
+		return (NULL);
 	while (str[*i] && str[*i] != '"')
 	{
 		if (str[*i] == '$')
@@ -93,10 +96,8 @@ char	*handle_normal(char *ret, char *str, size_t *i)
 	substr = ft_substr(str, start, *i - start);
 	if (!substr)
 		return (NULL);
-	new_ret = ft_strjoin(ret, substr);
-	free(substr);
-	if (new_ret)
-		return (free(ret),  new_ret);
-	return (ret);
+	new_ret = ft_strjoin_free(ret, substr);
+	if (!new_ret)
+		return (NULL);
+	return (new_ret);
 }
-

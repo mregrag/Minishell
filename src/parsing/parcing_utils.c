@@ -6,7 +6,7 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/24 21:23:34 by mregrag           #+#    #+#             */
-/*   Updated: 2024/08/18 07:15:07 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/08/20 05:43:20 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,11 @@ t_node	*new_node(t_type type)
 	node->fd_in = 0;
 	node->fd_out = 1;
 	return (node);
+}
+
+int	is_redirection(t_type type)
+{
+	return (type >= T_IN && type <= T_HERDOC);
 }
 
 void	free_tree(t_node *node)

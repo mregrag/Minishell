@@ -6,7 +6,7 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/11 23:05:33 by mregrag           #+#    #+#             */
-/*   Updated: 2024/08/19 07:07:26 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/08/20 05:41:51 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,12 @@ int	check_operators(char *str)
 		str++;
 	}
 	return (0);
+}
+
+void	skip_spaces(char **str)
+{
+	while (**str && ft_isspace(**str))
+		(*str)++;
 }
 
 int	count_quotes(const char *str)

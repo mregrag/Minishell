@@ -6,13 +6,13 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/18 04:11:35 by mregrag           #+#    #+#             */
-/*   Updated: 2024/08/15 01:26:16 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/08/20 06:04:50 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-static void	heredoc_content(t_node *node, int fd, char *content, t_env *env)
+static void	write_content(t_node *node, int fd, char *content, t_env *env)
 {
 	char	*new_content;
 
@@ -20,49 +20,41 @@ static void	heredoc_content(t_node *node, int fd, char *content, t_env *env)
 		ft_putendl_fd(content, fd);
 	else
 	{
-		new_content = expand_content(content, env);
-		if (new_content)
-			(ft_putendl_fd(new_content, fd), free(new_content));
+		new_content = expand_heredoc(content, env);
+		(ft_putendl_fd(new_content, fd), free(new_content));
 	}
-}
-
-static int	process_heredoc_content(t_node *node, int *fd_heredoc, t_env *env)
-{
-	char	*content;
-
-	while (1)
-	{
-		content = readline("> ");
-		if (!ttyname(0))
-			return (free(content), -1);
-		if (!content)
-			return (0);
-		if (!node->cmd[0] || !ft_strcmp(content, node->cmd[0]))
-		{
-			(free(content), exit_status(0, env));
-			break ;
-		}
-		heredoc_content(node, fd_heredoc[1], content, env);
-		free(content);
-	}
-	return (0);
 }
 
 static int	heredoc(t_node *node, t_env *env)
 {
-	int	fd_heredoc[2];
+	int		fd[2];
+	char	*content;
+	char	*dilim;
 
-	if (ft_pipe(fd_heredoc) < 0)
+	if (ft_pipe(fd) < 0)
 		return (-1);
 	set_signal_heredoc();
 	node->flag = ft_strchr(node->cmd[0], '\'') || ft_strchr(node->cmd[0], '"');
-	if (process_heredoc_content(node, fd_heredoc, env) < 0)
-		return (close(fd_heredoc[0]), close(fd_heredoc[1]), -1);
-	close(fd_heredoc[1]);
-	return (fd_heredoc[0]);
+	dilim = remove_quotes(node->cmd[0]);
+	while (1)
+	{
+		content = readline("> ");
+		if (!ttyname(0))
+			return (free(content), free(dilim), close(fd[0]), close(fd[1]), -1);
+		if (!content)
+			break ;
+		if (!node->cmd[0] || !ft_strcmp(content, dilim))
+		{
+			free(content);
+			break ;
+		}
+		write_content(node, fd[1], content, env);
+		free(content);
+	}
+	return (free(dilim), close(fd[1]), exit_status(0, env), fd[0]);
 }
 
-static int	heredoc_redirection(t_node *node, t_env *env)
+static int	open_heredocs(t_node *node, t_env *env)
 {
 	if (node->right && node->right->cmd)
 	{
@@ -78,7 +70,7 @@ void	preorder_hearedoc(t_node *node, t_env *env)
 {
 	if (!node || g_sig == -1)
 		return ;
-	if (!heredoc_redirection(node, env))
+	if (!open_heredocs(node, env))
 		return ;
 	preorder_hearedoc(node->left, env);
 	preorder_hearedoc(node->right, env);

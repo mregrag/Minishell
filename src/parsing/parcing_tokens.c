@@ -6,12 +6,11 @@
 /*   By: mkoualil <mkoualil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/24 21:22:11 by mregrag           #+#    #+#             */
-/*   Updated: 2024/08/19 10:30:46 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/08/19 23:22:08 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
-#include <stdio.h>
 
 t_node	*parse_command(t_token *tokens)
 {

@@ -6,7 +6,7 @@
 /*   By: mkoualil <mkoualil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/10 16:16:44 by mregrag           #+#    #+#             */
-/*   Updated: 2024/08/19 06:24:58 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/08/20 05:39:44 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,8 +79,6 @@ int		skip_quotes(char *line, size_t *i);
 int		is_redirection(t_type type);
 int		ft_lstsize_token(t_token *lst);
 int		duplicat_file(t_node *node);
-int		split_into_tokens(t_token **tokens, char *expanded_word);
-char	**split_into_token(char *str, t_env *env);
 t_type	get_operator_type(char *str);
 int		check_operators(char *str);
 int		handle_operator(char **input, t_token **tokens);
@@ -115,6 +113,7 @@ void	free_env(t_env *env);
 void	set_std_fds(int in, int out);
 void	get_std_fds(int *in_out);
 void	append_env_var(t_env *env, char *var, char *value);
+t_list	*find_env_var(t_env *env, char *var);
 int		is_var_in_env(t_env *env, char *var_name);
 char	*get_env_var(t_env *env, char *name);
 char	*get_env_var_dollar(t_env *env, char *var);
@@ -132,16 +131,14 @@ int		ft_open_output(char *file);
 int		ft_open_input(char *file);
 pid_t	ft_fork(void);
 
-char	*expand_content(char *str, t_env *env);
+char	*expand_heredoc(char *str, t_env *env);
 char	*expand_variable(char *str, int flag, t_env *env);
 char	*handle_quotes(char *ret, char *str, size_t *i, t_env *env);
-char	*expansion_input(char *str, t_env *env);
 char	*handle_dollar(char *ret, char *str, size_t *i, t_env *env);
 char	*handle_single_quotes(char *ret, char *str, size_t *i);
 char	*handle_double_quotes(char *ret, char *str, size_t *i, t_env *env);
 char	*handle_normal(char *ret, char *str, size_t *i);
 char	*handle_dilim(char *ret, char *str, size_t *i);
-
 
 void	block_signals(struct sigaction *sa_ignore);
 void	restore_signals(struct sigaction *sa_default);
@@ -154,17 +151,11 @@ void	cleanup_fds(t_node *node);
 int		exec_err(char *path, char *cmd, t_env *env);
 int		check_syntax(t_token *tokens);
 int		ft_is_directory(char *path);
-t_list	*find_env_var(t_env *env, char *var);
-char	*expansion_dollar(char *str, t_env *env);
-char	*get_env_var_list(t_env *env, char *var);
-int	is_hase_qoutes(const char *str);
-char	*handle_dollar_export(char *ret, char *str, size_t *i, t_env *env);
-char	*expand_export(char *str, int flag, t_env *env);
-int	ft_whitespace(const char *str);
-int	ft_isempty(const char *str);
-int	whitespace_before_equal(const char *str);
-int	analyse_token(char *word, t_token **tokens, int flag, t_env *env);
-int	add_to_list_token(char *expand, bool dollar, t_token **tokens);
-int	count_quotes(const char *str);
+int		ft_whitespace(char *str);
+int		ft_isempty(char *str);
+int		whitespace_before_equal(const char *str);
+int		analyse_token(char *word, t_token **tokens, int flag, t_env *env);
+int		extract_dollar_tokens(char *expand, bool dollar, t_token **tokens);
+int		count_quotes(const char *str);
 
 #endif

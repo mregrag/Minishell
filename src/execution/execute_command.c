@@ -6,7 +6,7 @@
 /*   By: mkoualil <mkoualil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/17 22:58:39 by mregrag           #+#    #+#             */
-/*   Updated: 2024/08/06 00:12:10 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/08/20 04:00:54 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,13 +61,13 @@ static void	child_execute(t_node *node, t_env *env)
 	char	*path;
 	int		error;
 
+	error = 0;
 	envp = ft_list_to_arr(env->env);
 	if (!envp)
 		exit(1);
 	path = get_path(node->cmd[0], env);
-	if (path)
-		execve(path, node->cmd, envp);
-	error = exec_err(path, node->cmd[0], env);
+	if (execve(path, node->cmd, envp) == -1)
+		error = exec_err(path, node->cmd[0], env);
 	free(path);
 	ft_free_array(envp);
 	exit(error);

@@ -6,7 +6,7 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/14 23:26:40 by mregrag           #+#    #+#             */
-/*   Updated: 2024/08/19 10:49:50 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/08/20 06:52:41 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ static char	*extract_word(char **input)
 	char	*start;
 	size_t	len;
 	char	quote;
+	char	*result;
 
 	quote = 0;
 	start = *input;
@@ -52,15 +53,18 @@ static char	*extract_word(char **input)
 		(*input)++;
 	}
 	len = *input - start;
-	return (ft_substr(start, 0, len));
+	result = ft_substr(start, 0, len);
+	if (!result)
+		return (NULL);
+	return (result);
 }
 
-int	add_to_list_token(char *expand, bool dollar, t_token **tokens)
+int	extract_dollar_tokens(char *expand, bool dollar, t_token **tokens)
 {
 	char	*word;
 	t_type	type;
 
-	while (expand && *expand)
+	while (*expand)
 	{
 		skip_spaces(&expand);
 		type = get_operator_type(expand);
@@ -71,14 +75,15 @@ int	add_to_list_token(char *expand, bool dollar, t_token **tokens)
 		if (!word)
 			return (0);
 		if (dollar)
-			token_add_back(tokens, new_token(ft_strdup(word), 0));
+			token_add_back(tokens, new_token(ft_strtrim(word, "\""), 0));
 		else
 			token_add_back(tokens, new_token(remove_quotes(word), type));
+		free(word);
 	}
-	return (free(word), 1);
+	return (1);
 }
 
-int	create_tokens(char *input, t_token **tokens, t_env *env)
+static int	extract_tokens(char *input, t_token **tokens, t_env *env)
 {
 	char	*word;
 	t_type	type;
@@ -99,7 +104,7 @@ int	create_tokens(char *input, t_token **tokens, t_env *env)
 			flag = 1;
 		else if (type == T_HERDOC)
 			flag = 2;
-		else if (type >= T_IN && type <= T_HERDOC)
+		else if (type >= T_IN && type <= T_OUT)
 			flag = 3;
 		analyse_token(word, tokens, flag, env);
 		free(word);
@@ -120,7 +125,7 @@ t_token	*tokenize_input(char *input, t_env *env)
 		free(new_input);
 		return (NULL);
 	}
-	if (!create_tokens(new_input, &tokens, env))
+	if (!extract_tokens(new_input, &tokens, env))
 		return ((clear_tokens(&tokens), free(input), free(new_input), NULL));
 	free(input);
 	free(new_input);

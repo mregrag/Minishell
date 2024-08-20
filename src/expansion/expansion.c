@@ -6,7 +6,7 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/30 15:10:09 by mregrag           #+#    #+#             */
-/*   Updated: 2024/08/19 03:13:33 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/08/20 06:33:20 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ char	*expand_variable(char *str, int flag, t_env *env)
 
 	ret = ft_strdup("");
 	if (!ret)
-		malloc_error();
+		return (NULL);
 	i = 0;
 	while (str[i])
 	{
@@ -39,19 +39,17 @@ char	*expand_variable(char *str, int flag, t_env *env)
 	return (ret);
 }
 
-char	*expand_content(char *str, t_env *env)
+char	*expand_heredoc(char *str, t_env *env)
 {
 	size_t	i;
 	char	*ret;
-	char	*temp;
 
 	i = 0;
 	ret = strdup("");
 	if (!ret)
-		malloc_error();
+		return (NULL);
 	while (str[i])
 	{
-		temp = ret;
 		if (str[i] == '\'' || str[i] == '"')
 			ret = handle_quotes(ret, str, &i, env);
 		else if (str[i] == '$')
@@ -59,7 +57,7 @@ char	*expand_content(char *str, t_env *env)
 		else
 			ret = handle_normal(ret, str, &i);
 		if (!ret)
-			return (free(temp), NULL);
+			return (NULL);
 	}
 	return (ret);
 }

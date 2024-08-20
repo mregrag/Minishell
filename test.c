@@ -1,24 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_is_empty_string.c                               :+:      :+:    :+:   */
+/*   test.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/08/12 05:59:11 by mregrag           #+#    #+#             */
-/*   Updated: 2024/08/12 06:04:53 by mregrag          ###   ########.fr       */
+/*   Created: 2024/08/20 00:16:08 by mregrag           #+#    #+#             */
+/*   Updated: 2024/08/20 03:24:29 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include <unistd.h>
+#include <stdio.h>
+#include <errno.h>
 
-int	ft_is_empty_string(const char *str)
+int main(int agrc, char **argv, char **env)
 {
-	while (*str)
-	{
-		if (!ft_isspace((unsigned char)*str))
-			return (0);
-		str++;
+	char *test[] = {"hello", NULL};
+	if (execve("/bin/ls", &test[0], env) == -1) {
+		perror("execve failed");
+		printf("errno: %d\n", errno);
 	}
-	return (1);
+	return 0;
 }
