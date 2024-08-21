@@ -6,7 +6,7 @@
 /*   By: mkoualil <mkoualil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/10 16:16:44 by mregrag           #+#    #+#             */
-/*   Updated: 2024/08/20 05:39:44 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/08/21 00:20:15 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,7 @@ t_type	get_operator_type(char *str);
 int		check_operators(char *str);
 int		handle_operator(char **input, t_token **tokens);
 int		is_operator(char *str);
-int		check_quotes(char *line);
+int		if_closed_quotes(char *str);
 int		execute_redirections(t_node **node, t_env *env);
 t_node	*parse_command(t_token *tokens);
 t_node	*parse_expression(t_token *tokens, t_env *env);

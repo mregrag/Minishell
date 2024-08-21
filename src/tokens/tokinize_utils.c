@@ -6,21 +6,21 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/11 23:05:33 by mregrag           #+#    #+#             */
-/*   Updated: 2024/08/20 05:41:51 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/08/21 00:19:44 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-int	check_quotes(char *line)
+int	if_closed_quotes(char *str)
 {
 	size_t	i;
 
 	i = 0;
-	while ((line)[i])
+	while (str[i])
 	{
-		if (ft_isquotes(line[i]) && !skip_quotes(line, &i))
-			return (print_error("minish", "unexpected EOF `", NULL, NULL), 0);
+		if (ft_isquotes(str[i]) && !skip_quotes(str, &i))
+			return (print_error("minish", "Unclosed quoted string`", NULL, NULL), 0);
 		else
 			i++;
 	}
@@ -65,7 +65,7 @@ int	count_quotes(const char *str)
 
 	count = 0;
 	if (str == NULL)
-		return 0;
+		return (0);
 	while (*str == '"' || *str == '\'')
 	{
 		count++;

@@ -6,7 +6,7 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/14 23:26:40 by mregrag           #+#    #+#             */
-/*   Updated: 2024/08/20 06:52:41 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/08/21 00:20:36 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,7 +119,7 @@ t_token	*tokenize_input(char *input, t_env *env)
 
 	tokens = NULL;
 	new_input = ft_strtrim(input, " \t\n\f\r");
-	if (!check_quotes(new_input))
+	if (!if_closed_quotes(new_input))
 	{
 		free(input);
 		free(new_input);

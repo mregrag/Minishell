@@ -6,7 +6,7 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/18 21:49:59 by mregrag           #+#    #+#             */
-/*   Updated: 2024/08/20 06:48:34 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/08/20 23:24:39 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ char	*remove_quotes(char *str)
 
 	i = 0;
 	j = 0;
-	ret = ft_calloc(1 + ft_strlen(str), sizeof(char));
+	ret = malloc((1 + ft_strlen(str)) * sizeof(char));
 	if (!ret)
 		return (NULL);
 	while (str[i])

@@ -6,7 +6,7 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/01 16:51:41 by mregrag           #+#    #+#             */
-/*   Updated: 2024/08/20 06:49:48 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/08/20 23:33:52 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ char	*handle_dilim(char *ret, char *str, size_t *i)
 	char	*substr;
 	char	*new_ret;
 
-	if (ft_strchr(str, '\'') && *str == '$')
+	if ( *str == '$' && (*(str + 1) == '\'' || *(str + 1) == '\"'))
 		(*i)++;
 	start = *i;
 	while (str[*i])
@@ -55,7 +55,7 @@ char	*handle_dilim(char *ret, char *str, size_t *i)
 	if (!substr)
 		return (NULL);
 	new_ret = ft_strjoin_free(ret, substr);
-	if(!new_ret)
+	if (!new_ret)
 		return (NULL);
 	return (new_ret);
 }
