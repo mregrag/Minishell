@@ -6,7 +6,7 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/01 18:16:01 by mregrag           #+#    #+#             */
-/*   Updated: 2024/08/19 11:29:30 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/08/21 09:34:24 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ static void	increment_shlvl(t_env *env)
 		shlvl = ft_atoi(shlvl_str);
 	if (shlvl < 0 && shlvl != -1)
 		shlvl = 0;
-	else if (shlvl == -1 || shlvl >=999)
+	else if (shlvl == -1 || shlvl >= 999)
 		shlvl = 1;
 	else
 		shlvl++;
@@ -46,7 +46,7 @@ void	initialize_enviroment(t_env **env, char **envp)
 		malloc_error();
 	while (*envp)
 	{
-		if (!ft_strncmp(*envp, "OLDPWD=", 7))//TODO
+		if (!ft_strncmp(*envp, "OLDPWD=", 7))
 		{
 			set_env_var(*env, "OLDPWD", NULL);
 			envp++;

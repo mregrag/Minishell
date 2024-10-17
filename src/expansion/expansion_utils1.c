@@ -6,7 +6,7 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/01 16:51:41 by mregrag           #+#    #+#             */
-/*   Updated: 2024/08/20 23:33:52 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/08/21 09:39:11 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ char	*handle_dilim(char *ret, char *str, size_t *i)
 	char	*substr;
 	char	*new_ret;
 
-	if ( *str == '$' && (*(str + 1) == '\'' || *(str + 1) == '\"'))
+	if (*str == '$' && (*(str + 1) == '\'' || *(str + 1) == '\"'))
 		(*i)++;
 	start = *i;
 	while (str[*i])

@@ -6,7 +6,7 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/11 23:05:33 by mregrag           #+#    #+#             */
-/*   Updated: 2024/08/21 00:19:44 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/08/21 09:47:32 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ int	if_closed_quotes(char *str)
 	while (str[i])
 	{
 		if (ft_isquotes(str[i]) && !skip_quotes(str, &i))
-			return (print_error("minish", "Unclosed quoted string`", NULL, NULL), 0);
+			return (print_error("minish", "Unclosed quoted`", NULL, NULL), 0);
 		else
 			i++;
 	}

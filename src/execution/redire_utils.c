@@ -6,7 +6,7 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 05:26:24 by mregrag           #+#    #+#             */
-/*   Updated: 2024/08/13 02:40:13 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/08/21 09:38:30 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,10 +70,6 @@ int	duplicat_file(t_node *node)
 		if (node->fd_out != 1)
 			if (node->fd_out == -1 || ft_dup2(node->fd_out, STDOUT_FILENO) < 0)
 				return (0);
-		// if (node->fd_in != 0)
-		// 	close (node->fd_in);
-		// if (node->fd_out != 1)
-		// 	close (node->fd_out);
 		node = node->left;
 	}
 	return (1);

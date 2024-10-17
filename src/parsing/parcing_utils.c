@@ -6,7 +6,7 @@
 /*   By: mregrag <mregrag@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/24 21:23:34 by mregrag           #+#    #+#             */
-/*   Updated: 2024/08/20 05:43:20 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/08/21 09:46:46 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,9 +56,10 @@ void	free_tree(t_node *node)
 
 void	fill_cmd(t_node *node, t_token *tokens, int count)
 {
+	t_token	*tmp;
 	int		i;
 	int		j;
-	t_token	*tmp;
+
 	i = 0;
 	j = 0;
 	while (i < count)

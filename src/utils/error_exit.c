@@ -6,7 +6,7 @@
 /*   By: mkoualil <mkoualil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/12 18:33:04 by mregrag           #+#    #+#             */
-/*   Updated: 2024/08/21 00:14:58 by mregrag          ###   ########.fr       */
+/*   Updated: 2024/08/21 09:33:31 by mregrag          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,12 +39,6 @@ int	exec_err(char *path, char *cmd, t_env *env)
 	return (0);
 }
 
-void	malloc_error(void)
-{
-	print_error("minish", "malloc", strerror(errno), NULL);
-	exit(EXIT_FAILURE);
-}
-
 int	print_error(char *s1, char *s2, char *s3, char *message)
 {
 	if (s1)
@@ -69,4 +63,10 @@ int	print_error(char *s1, char *s2, char *s3, char *message)
 	}
 	ft_putchar_fd('\n', 2);
 	return (1);
+}
+
+void	malloc_error(void)
+{
+	print_error("minish", "malloc", strerror(errno), NULL);
+	exit(EXIT_FAILURE);
 }
